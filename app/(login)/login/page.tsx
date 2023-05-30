@@ -4,13 +4,13 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from "next/image";
 
 
-import moopiLogo from "../assets/logos/moopi.svg";
-import googleLogo from "../assets/logos/google.svg";
-import twitterLogo from "../assets/logos/twitter.svg";
-import discordLogo from "../assets/logos/discord.svg";
-import kakaoLogo from "../assets/logos/kakao.svg";
-import naverLogo from "../assets/logos/naver.svg";
-import offingLogo from "../assets/logos/offing text blue.svg";
+import moopiLogo from "../../assets/logos/moopi.svg";
+import googleLogo from "../../assets/logos/google.svg";
+import twitterLogo from "../../assets/logos/twitter.svg";
+import discordLogo from "../../assets/logos/discord.svg";
+import kakaoLogo from "../../assets/logos/kakao.svg";
+import naverLogo from "../../assets/logos/naver.svg";
+import offingLogo from "../../assets/logos/offing text blue.svg";
 
 
 export default function LoginPage() {
@@ -30,53 +30,7 @@ export default function LoginPage() {
         window.location.href = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_TWITTER_REDIRECT_URI}&scope=tweet.read%20users.read%20offline.access&state=state&code_challenge=challenge&code_challenge_method=plain`;
     }
 
-    let LOGIN_CODE = new URL(window.location.href).searchParams.get('code');
-
-    useEffect(() => {
-        console.log("pathname", pathName);
-        console.log("router", router);
-        console.log("searchParams", searchParams);
-    }, [pathName, router, searchParams]);
-
-
-    const requestUser = async (platform: any) => {
-        const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/oauth", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "platform": platform,
-                "code": LOGIN_CODE,
-            }),
-        });
-        const data = await res.json();
-
-        console.log(data);
-
-        // setCookie('user', data.USER_ID, {path: '/'})
-
-        if(res.status === 200)
-            navigate(`/user/${data.userId}`);
-    }
-
-    useEffect(() => {
-        if(LOGIN_CODE) {
-            
-            if(window.location.href.includes("kakao")) {
-                console.log("카카오 로그인 완료");
-                requestUser("kakao");
-
-            } else if(window.location.href.includes("discord")) {
-                console.log("디스코드 로그인 완료");
-                requestUser("discord");
-                
-            } else if(window.location.href.includes("twitter")) {
-                console.log("트위터 로그인 완료");
-                requestUser("twitter");
-            }
-        }
-    }, []);
+    
 
     return (
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
@@ -84,7 +38,7 @@ export default function LoginPage() {
             <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
                 <Image className="w-[106px] h-[30px]" src={moopiLogo} alt=""/>
                 <div className="sm:h-[95px] h-[40px]" />
-                <p className="font-semibold text-xl">moopi에 오신 것을 환영합니다</p>
+                <p className="font-semibold text-xl" onClick={() => router.push('/login/asdf')}>moopi에 오신 것을 환영합니다</p>
                 <div className="sm:h-[60px] h-[80px]" />
                 <div className="space-y-[18px] text-sm text-white">
                     <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={kakaoHandler}>
@@ -117,7 +71,7 @@ export default function LoginPage() {
                 <div className="sm:h-[279px] h-[83px]" />
                 <div className="flex flex-col items-center space-x-[8px] text-base">
                     <p className="font-semibold">From</p>
-                    <img className="w-[106px] h-[30px] m-[10px]" src={offingLogo}/>
+                    <Image className="w-[106px] h-[30px] m-[10px]" src={offingLogo} alt=""/>
                 </div>
             </div>
         </div>
