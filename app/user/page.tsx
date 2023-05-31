@@ -1,12 +1,12 @@
 'use client';
 import { useState } from "react";
 
-import Heart from "../assets/images/heart.png";
-import HoverHeart from "../assets/images/hoverHeart.png";
-import ActiveHeart from "../assets/images/activeHeart.png";
+import Heart from "@/app/assets/images/heart.png";
+import HoverHeart from "@/app/assets/images/hoverHeart.png";
+import ActiveHeart from "@/app/assets/images/activeHeart.png";
 import Image from "next/image";
 
-const IframeUrl = "https://moopi.offing.me/threejs"
+const IframeUrl = "http://localhost:5173/threejs"
 
 export default function UserPage() {
     const [page, setPage] = useState("설명");
