@@ -1,6 +1,5 @@
 "use client";
 
-import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
@@ -10,8 +9,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame } from "@react-three/fiber";
 
 const Model = () => {
-    const animationUrl = "http://localhost:5173/HipHopDancing.fbx";
-    const url = "http://localhost:5173/s2xyoon.vrm";
+    const animationUrl = "http://localhost:3000/HipHopDancing.fbx";
+    const url = "http://localhost:3000/s2xyoon.vrm";
     const [vrm, setVrm] = useState<VRM>(null!);
 
     const animationMixer = useMemo<THREE.AnimationMixer>(() => {

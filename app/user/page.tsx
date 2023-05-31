@@ -6,7 +6,7 @@ import HoverHeart from "@/app/assets/images/hoverHeart.png";
 import ActiveHeart from "@/app/assets/images/activeHeart.png";
 import Image from "next/image";
 
-const IframeUrl = "http://localhost:5173/threejs"
+const IframeUrl = "http://localhost:3000/threejs"
 
 export default function UserPage() {
     const [page, setPage] = useState("설명");

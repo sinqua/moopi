@@ -7,8 +7,6 @@ import axios from "axios";
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Circle, CameraControls, useGLTF } from '@react-three/drei'
 import { Color } from "three/src/math/Color.js";
-import { Box3, Vector3 } from "three";
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 import ResetBtn from '../app/assets/images/resetBtn.png';
 import HelpBtn from '../app/assets/images/helpBtn.png';
