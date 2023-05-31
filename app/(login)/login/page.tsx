@@ -26,7 +26,7 @@ export default function LoginPage() {
     console.log("session", session);
     return (
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
-            <div className="md:grow bg-[url('http://localhost:5173/loginBackground.png')] bg-no-repeat bg-cover"></div>
+            <div className="md:grow bg-[url('http://localhost:3000/loginBackground.png')] bg-no-repeat bg-cover"></div>
             <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
                 <Image className="w-[106px] h-[30px]" src={moopiLogo} alt=""/>
                 <div className="sm:h-[95px] h-[40px]" />
