@@ -4,13 +4,13 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from "next/image";
 
 
-import moopiLogo from "../../assets/logos/moopi.svg";
-import googleLogo from "../../assets/logos/google.svg";
-import twitterLogo from "../../assets/logos/twitter.svg";
-import discordLogo from "../../assets/logos/discord.svg";
-import kakaoLogo from "../../assets/logos/kakao.svg";
-import naverLogo from "../../assets/logos/naver.svg";
-import offingLogo from "../../assets/logos/offing text blue.svg";
+import moopiLogo from "@/app/assets/logos/moopi.svg";
+import googleLogo from "@/app/assets/logos/google.svg";
+import twitterLogo from "@/app/assets/logos/twitter.svg";
+import discordLogo from "@/app/assets/logos/discord.svg";
+import kakaoLogo from "@/app/assets/logos/kakao.svg";
+import naverLogo from "@/app/assets/logos/naver.svg";
+import offingLogo from "@/app/assets/logos/offing text blue.svg";
 
 
 export default function LoginPage() {
@@ -30,11 +30,9 @@ export default function LoginPage() {
         window.location.href = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_TWITTER_REDIRECT_URI}&scope=tweet.read%20users.read%20offline.access&state=state&code_challenge=challenge&code_challenge_method=plain`;
     }
 
-    
-
     return (
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
-            <div className="md:grow bg-[url('/assets/images/loginBackground.png')] bg-no-repeat bg-cover"></div>
+            <div className="md:grow bg-[url('http://localhost:5173/loginBackground.png')] bg-no-repeat bg-cover"></div>
             <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
                 <Image className="w-[106px] h-[30px]" src={moopiLogo} alt=""/>
                 <div className="sm:h-[95px] h-[40px]" />
