@@ -1,7 +1,8 @@
-import NextAuth, { Awaitable, Session } from "next-auth"
+import NextAuth, { } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 import TwitterProvider from "next-auth/providers/twitter"
 import KakaoProvider from "next-auth/providers/kakao"
+import { SupabaseAdapter } from "@next-auth/supabase-adapter"
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -16,22 +17,18 @@ export const authOptions = {
       version: "2.0",
     }),
   ],
+  adapter: SupabaseAdapter({
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    secret: process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+  }),
   callbacks: {
     async session({ session, token, user } : {session: any, token: any, user: any}) {
       // Send properties to the client, like an access_token and user id from a provider.
       console.log("session", session);
-      console.log("token", token)
-      console.log("user", user)
+      console.log("token", token);
+      console.log("user", user);
 
-      session.accessToken = token.accessToken
-      session.user.id = token.id
-      
-      return session
-    },
-    async jwt({ token } : { token: any}) {
-      console.log("jwt token", token);
-      // token.userRole = "admin"
-      return token
+      return user
     },
   },
   pages: {
