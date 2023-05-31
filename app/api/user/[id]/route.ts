@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-const db = require("../../../../db.ts");
+const db = require("../../../../utils/db");
 
 export async function GET(req: NextRequest, context: { params: any }) {
     // Add middleware here
