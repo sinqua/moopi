@@ -15,38 +15,13 @@ import offingLogo from "../../assets/logos/offing text blue.svg";
 
 
 export default function LoginPage() {
-    const pathName = usePathname();
-    const router = useRouter();
 
     const searchParams = useSearchParams()
-    // const callbackUrl = searchParams.get('callbackUrl') as string
-    const callbackUrl = "/login/asdfasdf"
-    // const twitterCallbackUrl = "/login/twitter"
+    const callbackUrl = searchParams.get('callbackUrl') as string
     
-
-    const kakaoHandler = () => {
-        window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
-    }
-
-    const discordHandler = () => {
-        window.location.href = `https://discord.com/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI}&response_type=code&scope=email`;
-    }
-
-    const twitterHandler = () => {
-        window.location.href = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_TWITTER_REDIRECT_URI}&scope=tweet.read%20users.read%20offline.access&state=state&code_challenge=challenge&code_challenge_method=plain`;
-    }
-
-    // const { data: session } = useSession({
-    //     required: true,
-    //     onUnauthenticated() {
-    //         redirect('/login')
-    //     }
-    // })
     const {data: session} = useSession();
 
     console.log("session", session);
-    
-
     return (
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
             <div className="md:grow bg-[url('./assets/images/loginBackground.png')] bg-no-repeat bg-cover"></div>
@@ -56,7 +31,7 @@ export default function LoginPage() {
                 <p className="font-semibold text-xl" onClick={() => signOut()}>moopi에 오신 것을 환영합니다</p>
                 <div className="sm:h-[60px] h-[80px]" />
                 <div className="space-y-[18px] text-sm text-white">
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={kakaoHandler}>
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={() => signIn('kakao', {callbackUrl})}>
                         <Image className="w-[22px] h-[22px] m-[21px] absolute left-0" src={kakaoLogo} alt=""/>
                         <p className="text-black">Start with Kakao</p>
                     </div>
@@ -68,7 +43,7 @@ export default function LoginPage() {
                         <Image className="w-[23px] h-[23px] m-[19px] absolute left-0" src={googleLogo} alt=""/>
                         <p className="text-black">Start with Google</p>
                     </div>
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#5865F2] cursor-pointer" onClick={() => signIn('discord', {callbackUrl})}>
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#5865F2] cursor-pointer" onClick={() => signIn('discord')}>
                         <Image className="w-[24px] h-[24px] m-[20px] absolute left-0" src={discordLogo} alt=""/>
                         <p>Start with Discord</p>
                     </div>
