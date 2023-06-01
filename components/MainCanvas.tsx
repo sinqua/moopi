@@ -3,7 +3,6 @@
 import Image from "next/image";
 
 import { lazy, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Circle, CameraControls, useGLTF } from '@react-three/drei'
 import { Color } from "three/src/math/Color.js";
@@ -12,25 +11,20 @@ import ResetBtn from '../app/assets/images/resetBtn.png';
 import HelpBtn from '../app/assets/images/helpBtn.png';
 import VRBtn from '../app/assets/images/vrBtn.png';
 import FullScreenBtn from '../app/assets/images/fullscreenBtn.png';
+import { ModelProps } from "./Model";
 
 const ModelComponent = lazy(() => import('./Model'));
 
 export default function MainCanvas() {
-    const [ modelUrl, setModelUrl ] = useState("");
 
-    const PresignedUrl = async (bucket: string, key: string) => {
-        let result = "";
-        
-        await axios.post(`https://moopi.offing.me/api/model`,{
-            bucket: bucket,
-            key: key
+    const [modelInfo, setModelInfo] = useState<ModelProps>();
+
+    useEffect(() => {
+        setModelInfo({
+            modelUrl: "http://localhost:3000/s2xyoon.vrm"
         })
-        .then((res) => {
-            result =  res.data;
-        })
-    
-        setModelUrl(result);
-    }
+    }, []);
+
 
     const gradientShader = {
         uniforms: {
@@ -59,13 +53,11 @@ export default function MainCanvas() {
 
     const cameraControlsRef = useRef<CameraControls>(null);
 
-
     const resetCamera = () => {
         cameraControlsRef.current?.reset(true);
     };
 
     const postMessage = () => {
-        // window.parent.postMessage('fullScreen', '*'); // 메시지 전송
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen()
         } else {
@@ -75,41 +67,23 @@ export default function MainCanvas() {
         }
     }
 
-    useEffect(() => {
-        // PresignedUrl("moopi-model-bucket", "choyang2_DevilHood.vrm");
-    }, []);
-
     return (
         <div className="w-full h-full">
             <Canvas camera={{ position: [0.25, 0.5, 1]}} style={{backgroundColor: '#FAF9F6'}} shadows  >
                 <group position-y={-0.8}>
                     <CameraControls
                         ref={cameraControlsRef}
-                        // minDistance={1}
                         maxDistance={5}
-                        // enabled={enabled}
-                        // verticalDragToForward={verticalDragToForward}
-                        // dollyToCursor={dollyToCursor}
-                        // infinityDolly={infinityDolly}
                     />
 
                     <directionalLight position={[3.3, 1.0, 4.4]} castShadow />
-                    {/* <primitive
-                        object={gltf.scene}
-                        position={[0, 0, 0]}
-                        children-0-castShadow
-                    /> */}
-                    
-                    {/* <Model path={"../src/assets/models/zxcv.fbx"} /> */}
-                    {/* <Model path={'https://moopi-model-bucket.s3.ap-northeast-2.amazonaws.com/model/Girl.fbx'} /> */}
-                    <ModelComponent />
+
+                    <ModelComponent {...modelInfo!}/>
+
                     <Circle args={[0.5]} rotation-x={-Math.PI / 2} receiveShadow renderOrder={2}>
-                        {/* <meshStandardMaterial color={new Color('#eeeeee')} /> */}
                         <shaderMaterial attach="material" args={[gradientShader]} />
                     </Circle>
-                    {/* <axesHelper /> */}
                 </group>
-                {/* <OrbitControls target={[0, 1, 0]} /> */}
             </Canvas>
             <div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] p-[20px]">
                 <Image className="sm:w-[25px] sm:h-[25px] w-[20px] h-[20px] cursor-pointer" src={ResetBtn} onClick={resetCamera} alt=""/>
