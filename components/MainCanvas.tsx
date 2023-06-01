@@ -7,12 +7,18 @@ import { Canvas, useLoader } from '@react-three/fiber'
 import { Circle, CameraControls, useGLTF } from '@react-three/drei'
 import { Color } from "three/src/math/Color.js";
 
-import ResetBtn from '../app/assets/images/resetBtn.png';
-import HelpBtn from '../app/assets/images/helpBtn.png';
-import VRBtn from '../app/assets/images/vrBtn.png';
-import FullScreenBtn from '../app/assets/images/fullscreenBtn.png';
-import { ModelProps } from "./Model";
-import { CreateModelUrl } from "@/lib/storage";
+
+import cancelImg from '@/app/assets/images/cancel.svg';
+import rotateImg from '@/app/assets/images/rotate.svg';
+import zoomImg from '@/app/assets/images/zoom.svg';
+import moveImg from '@/app/assets/images/move.svg';
+
+import refreshImg from '@/app/assets/images/refresh.svg';
+import helpImg from '@/app/assets/images/help.svg';
+import descriptionImg from '@/app/assets/images/description.svg';
+import fullscreenImg from '@/app/assets/images/fullscreen.svg';
+import originalscreenImg from '@/app/assets/images/originalscreen.svg';
+import powerImg from '@/app/assets/images/power.svg';
 
 const ModelComponent = lazy(() => import('./Model'));
 
@@ -33,6 +39,12 @@ const MainCanvas : FC<MainCanvasProps> = ({ userId, filename }) => {
 
     }, []);
 
+    const isMobile = () => ('ontouchstart' in document.documentElement);
+
+    // Prevent the default right-click behavior
+    const handleContextMenu = (event: any) => {
+        event.preventDefault(); 
+    };
 
     const gradientShader = {
         uniforms: {
@@ -67,16 +79,49 @@ const MainCanvas : FC<MainCanvasProps> = ({ userId, filename }) => {
 
     const postMessage = () => {
         if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen()
+            document.documentElement.requestFullscreen();
+            setFullScreen(true);
         } else {
             if (document.exitFullscreen) {
-                document.exitFullscreen()
+                document.exitFullscreen();
+                setFullScreen(false);
             }
         }
     }
 
     return (
-        <div className="w-full h-full">
+        <div className="relative w-full h-full overflow-hidden" onContextMenu={handleContextMenu}>
+            { helpViewer ?
+                <div className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[#00000080] z-10">
+                    <Image className="absolute top-[20px] right-[20px] w-[28px] h-[28px] cursor-pointer" src={cancelImg} alt="" onClick={() => setHelpViewer(false)}/>
+                    <div className="flex mc_sm:flex-row flex-col mc_sm:space-x-[60px] space-x-0 mc_sm:space-y-0 space-y-[48px] text-white text-center">
+                        <div className="flex flex-col items-center">
+                            <Image className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none" src={rotateImg} alt=""/>
+                            <p className="text-[18px] font-semibold mb-[10px]">회전</p>
+                            { isMobile() ?
+                                <p className="text-[14px]">한 손가락으로 드래그</p> :
+                                <p className="text-[14px]">마우스 좌클릭 후 드래그</p>
+                            }
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <Image className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none" src={zoomImg} alt=""/>
+                            <p className="text-[18px] font-semibold mb-[10px]">확대</p>
+                            { isMobile() ?
+                                <p className="text-[14px]">두 손가락을 동시에<br/>바깥/안쪽으로 드래그</p> :
+                                <p className="text-[14px]">마우스 스크롤</p>
+                            }
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <Image className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none" src={moveImg} alt=""/>
+                            <p className="text-[18px] font-semibold mb-[10px]">이동</p>
+                            { isMobile() ?
+                                <p className="text-[14px]">두 손가락으로 드래그</p> :
+                                <p className="text-[14px]">마우스 우클릭 후 드래그</p>
+                            }
+                        </div>
+                    </div>
+                </div> : <></>
+            }
             <Canvas camera={{ position: [0.25, 0.5, 1]}} style={{backgroundColor: '#FAF9F6'}} shadows  >
                 <group position-y={-0.8}>
                     <CameraControls
@@ -93,11 +138,22 @@ const MainCanvas : FC<MainCanvasProps> = ({ userId, filename }) => {
                     </Circle>
                 </group>
             </Canvas>
-            <div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] p-[20px]">
-                <Image className="sm:w-[25px] sm:h-[25px] w-[20px] h-[20px] cursor-pointer" src={ResetBtn} onClick={resetCamera} alt=""/>
-                <Image className="sm:w-[25px] sm:h-[25px] w-[20px] h-[20px] cursor-pointer" src={HelpBtn} alt=""/>
-                <Image className="sm:w-[25px] sm:h-[25px] w-[20px] h-[20px] cursor-pointer" src={VRBtn} alt=""/>
-                <Image className="sm:w-[25px] sm:h-[25px] w-[20px] h-[20px] cursor-pointer" src={FullScreenBtn} onClick={postMessage} alt=""/>
+            <div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] px-[30px] py-[20px]">
+                <div className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer" onClick={resetCamera}>
+                    <Image className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]" src={refreshImg} alt=""/>
+                </div>
+                <div className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer" onClick={(() => setHelpViewer(true))}>
+                    <Image className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]" src={helpImg} alt=""/>
+                </div>
+                <div className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer" onClick={resetCamera}>
+                    <Image className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]" src={descriptionImg} alt=""/>
+                </div>
+                <div className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer" onClick={postMessage}>
+                    <Image className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]" src={fullScreen ? originalscreenImg : fullscreenImg} alt=""/>
+                </div>
+                <div className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer" onClick={resetCamera}>
+                    <Image className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]" src={powerImg} alt=""/>
+                </div>
             </div>
         </div>
     );

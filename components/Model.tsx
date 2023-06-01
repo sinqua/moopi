@@ -56,7 +56,6 @@ const Model: FC<ModelProps> = ({
         (error) => console.log("Error loading model", error));
     }, [modelUrl]);
 
-
     useFrame((state, delta) => {
         animationMixer?.update(delta);
         vrm?.update(delta);
