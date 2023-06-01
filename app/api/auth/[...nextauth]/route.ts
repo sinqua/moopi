@@ -16,6 +16,10 @@ export const authOptions = {
       clientSecret: process.env.NEXT_PUBLIC_TWITTER_CLIENT_SECRET as string,
       version: "2.0",
     }),
+    KakaoProvider({
+      clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID as string,
+      clientSecret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET as string,    
+    })
   ],
   adapter: SupabaseAdapter({
     url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -24,6 +28,8 @@ export const authOptions = {
   callbacks: {
     async session({ session, token, user } : {session: any, token: any, user: any}) {
       // Send properties to the client, like an access_token and user id from a provider.
+      // console.log("session", session);
+
       return user
     },
   },
