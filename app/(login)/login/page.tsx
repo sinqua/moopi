@@ -37,7 +37,7 @@ export default function LoginPage() {
                 <p className="font-semibold text-xl" onClick={() => signOut()}>moopi에 오신 것을 환영합니다</p>
                 <div className="sm:h-[60px] h-[80px]" />
                 <div className="space-y-[18px] text-sm text-white">
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={() => signIn('kakao')}>
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={() => signIn('kakao', {callbackUrl})}>
                         <Image className="w-[22px] h-[22px] m-[21px] absolute left-0" src={kakaoLogo} alt=""/>
                         <p className="text-black">Start with Kakao</p>
                     </div>
@@ -45,7 +45,7 @@ export default function LoginPage() {
                         <Image className="w-[22px] h-[22px] m-[21px] absolute left-0" src={twitterLogo} alt=""/>
                         <p>Start with Twitter</p>
                     </div>
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-white border-[1px] border-s2xyoon-gray cursor-pointer">
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-white border-[1px] border-s2xyoon-gray cursor-pointer" onClick={() => signIn('google', {callbackUrl})}>
                         <Image className="w-[23px] h-[23px] m-[19px] absolute left-0" src={googleLogo} alt=""/>
                         <p className="text-black">Start with Google</p>
                     </div>
@@ -53,7 +53,7 @@ export default function LoginPage() {
                         <Image className="w-[24px] h-[24px] m-[20px] absolute left-0" src={discordLogo} alt=""/>
                         <p>Start with Discord</p>
                     </div>
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#03C75A] cursor-pointer">
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#03C75A] cursor-pointer" onClick={() => signIn('naver', {callbackUrl})}>
                         <Image className="w-[19px] h-[19px] m-[22px] absolute left-0" src={naverLogo} alt=""/>
                         <p>Start with Naver</p>
                     </div>

@@ -2,6 +2,8 @@ import NextAuth, { } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 import TwitterProvider from "next-auth/providers/twitter"
 import KakaoProvider from "next-auth/providers/kakao"
+import NaverProvider from "next-auth/providers/naver"
+import GoogleProvider from "next-auth/providers/google"
 import { SupabaseAdapter } from "@next-auth/supabase-adapter"
 
 export const authOptions = {
@@ -19,7 +21,15 @@ export const authOptions = {
     KakaoProvider({
       clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID as string,
       clientSecret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET as string,    
-    })
+    }),
+    NaverProvider({
+      clientId: process.env.NEXT_PUBLIC_NAVER_CLIENT_ID as string,
+      clientSecret: process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET as string,
+    }),
+    GoogleProvider({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET as string,
+    }),
   ],
   adapter: SupabaseAdapter({
     url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
