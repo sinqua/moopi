@@ -20,7 +20,7 @@ const Model = () => {
     
         LoadMixamoAnimation(animationUrl, vrm).then((clip) => {
           mixer.clipAction(clip).play();
-          console.log("AnimationClip", mixer.clipAction(clip));
+        //   console.log("AnimationClip", mixer.clipAction(clip));
         });
     
         return mixer;
@@ -45,10 +45,11 @@ const Model = () => {
             });
 
             VRMUtils.rotateVRM0(vrm);
-            console.log(vrm);
+            // console.log(vrm);
         },
-        (progress) => console.log("Loading model...", 100.0 * (progress.loaded / progress.total), "%"),
-        (error) => console.log("Error loading model", error));
+        // (progress) => console.log("Loading model...", 100.0 * (progress.loaded / progress.total), "%"),
+        // (error) => console.log("Error loading model", error)
+        );
     }, [url]);
 
     // useImperativeHandle(ref, () => ({ vrm, animationMixer }), [vrm, animationMixer]);

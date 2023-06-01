@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     console.log(session);
     
     if (!session) {
-      const { data, error } = await supabase.from('models').select();
+      const { data, error } = await supabase.from('users').select();
 
       return NextResponse.json({ 
         message: 'You are not logged in.',
