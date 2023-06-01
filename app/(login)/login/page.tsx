@@ -19,11 +19,15 @@ import offingLogo from "@/app/assets/logos/offing text blue.svg";
 export default function LoginPage() {
 
     const searchParams = useSearchParams()
-    const callbackUrl = searchParams.get('callbackUrl') as string
+    const callbackUrl = (searchParams.get('callbackUrl') ?? "http://localhost:3000/login?hihi") as string
     
+    console.log(callbackUrl);
+
     const {data: session} = useSession();
 
     console.log("session", session);
+
+
     return (
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
             <div className="md:grow bg-[url('http://localhost:3000/loginBackground.png')] bg-no-repeat bg-cover"></div>
@@ -33,7 +37,7 @@ export default function LoginPage() {
                 <p className="font-semibold text-xl" onClick={() => signOut()}>moopi에 오신 것을 환영합니다</p>
                 <div className="sm:h-[60px] h-[80px]" />
                 <div className="space-y-[18px] text-sm text-white">
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={() => signIn('kakao', {callbackUrl})}>
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#FEE500] cursor-pointer" onClick={() => signIn('kakao')}>
                         <Image className="w-[22px] h-[22px] m-[21px] absolute left-0" src={kakaoLogo} alt=""/>
                         <p className="text-black">Start with Kakao</p>
                     </div>
@@ -45,7 +49,7 @@ export default function LoginPage() {
                         <Image className="w-[23px] h-[23px] m-[19px] absolute left-0" src={googleLogo} alt=""/>
                         <p className="text-black">Start with Google</p>
                     </div>
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#5865F2] cursor-pointer" onClick={() => signIn('discord')}>
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#5865F2] cursor-pointer" onClick={() => signIn('discord', {callbackUrl})}>
                         <Image className="w-[24px] h-[24px] m-[20px] absolute left-0" src={discordLogo} alt=""/>
                         <p>Start with Discord</p>
                     </div>
