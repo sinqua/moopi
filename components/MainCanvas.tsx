@@ -20,6 +20,9 @@ import fullscreenImg from '@/app/assets/images/fullscreen.svg';
 import originalscreenImg from '@/app/assets/images/originalscreen.svg';
 import powerImg from '@/app/assets/images/power.svg';
 
+import { ModelProps } from "./Model";
+import { CreateModelUrl } from "@/lib/storage";
+
 const ModelComponent = lazy(() => import('./Model'));
 
 interface MainCanvasProps {
@@ -30,7 +33,9 @@ interface MainCanvasProps {
 const MainCanvas : FC<MainCanvasProps> = ({ userId, filename }) => {
 
     const [modelInfo, setModelInfo] = useState<ModelProps>();
-
+    const [ fullScreen, setFullScreen ] = useState(false);
+    const [ helpViewer, setHelpViewer ] = useState(false);
+    
     useEffect(() => {
         CreateModelUrl(userId, filename)
             .then((url) => {
