@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { lazy, useEffect, useRef, useState } from "react";
+import { lazy, useEffect, useRef, useState, FC } from "react";
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Circle, CameraControls, useGLTF } from '@react-three/drei'
 import { Color } from "three/src/math/Color.js";
@@ -12,17 +12,25 @@ import HelpBtn from '../app/assets/images/helpBtn.png';
 import VRBtn from '../app/assets/images/vrBtn.png';
 import FullScreenBtn from '../app/assets/images/fullscreenBtn.png';
 import { ModelProps } from "./Model";
+import { CreateModelUrl } from "@/lib/storage";
 
 const ModelComponent = lazy(() => import('./Model'));
 
-export default function MainCanvas() {
+interface MainCanvasProps {
+    userId: string;
+    filename: string;
+}
+
+const MainCanvas : FC<MainCanvasProps> = ({ userId, filename }) => {
 
     const [modelInfo, setModelInfo] = useState<ModelProps>();
 
     useEffect(() => {
-        setModelInfo({
-            modelUrl: "http://localhost:3000/s2xyoon.vrm"
-        })
+        CreateModelUrl(userId, filename)
+            .then((url) => {
+                setModelInfo({ modelUrl: url!.signedUrl })
+            })
+
     }, []);
 
 
@@ -78,7 +86,7 @@ export default function MainCanvas() {
 
                     <directionalLight position={[3.3, 1.0, 4.4]} castShadow />
 
-                    <ModelComponent {...modelInfo!}/>
+                    {modelInfo && <ModelComponent {...modelInfo!}/>}
 
                     <Circle args={[0.5]} rotation-x={-Math.PI / 2} receiveShadow renderOrder={2}>
                         <shaderMaterial attach="material" args={[gradientShader]} />
@@ -94,3 +102,5 @@ export default function MainCanvas() {
         </div>
     );
 }
+
+export default MainCanvas;
