@@ -4,6 +4,7 @@ import { Database } from './database.types'
 const options = {
     db: {
         schema: 'next_auth'
+
     },
 }
 

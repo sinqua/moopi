@@ -43,6 +43,7 @@ export default function LoginPage() {
                     </div>
                     <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-white border-[1px] border-s2xyoon-gray cursor-pointer">
                         <Image className="w-[23px] h-[23px] ml-[19px] absolute left-0" src={googleLogo} alt=""/>
+
                         <p className="text-black">Start with Google</p>
                     </div>
                     <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#5865F2] cursor-pointer" onClick={() => signIn('discord', {callbackUrl})}>
@@ -51,6 +52,7 @@ export default function LoginPage() {
                     </div>
                     <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#03C75A] cursor-pointer">
                         <Image className="w-[19px] h-[19px] ml-[22px] absolute left-0" src={naverLogo} alt=""/>
+
                         <p>Start with Naver</p>
                     </div>
                 </div>

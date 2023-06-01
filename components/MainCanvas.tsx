@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 
-import { lazy, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { lazy, useEffect, useRef, useState, FC } from "react";
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Circle, CameraControls, useGLTF } from '@react-three/drei'
 import { Color } from "three/src/math/Color.js";
+
 
 import cancelImg from '@/app/assets/images/cancel.svg';
 import rotateImg from '@/app/assets/images/rotate.svg';
@@ -20,28 +20,24 @@ import fullscreenImg from '@/app/assets/images/fullscreen.svg';
 import originalscreenImg from '@/app/assets/images/originalscreen.svg';
 import powerImg from '@/app/assets/images/power.svg';
 
-
 const ModelComponent = lazy(() => import('./Model'));
 
-export default function MainCanvas() {
-    const [ modelUrl, setModelUrl ] = useState("");
+interface MainCanvasProps {
+    userId: string;
+    filename: string;
+}
 
-    const [ fullScreen, setFullScreen ] = useState(false);
-    const [ helpViewer, setHelpViewer ] = useState(false);
+const MainCanvas : FC<MainCanvasProps> = ({ userId, filename }) => {
 
-    const PresignedUrl = async (bucket: string, key: string) => {
-        let result = "";
-        
-        await axios.post(`https://moopi.offing.me/api/model`,{
-            bucket: bucket,
-            key: key
-        })
-        .then((res) => {
-            result =  res.data;
-        })
-    
-        setModelUrl(result);
-    }
+    const [modelInfo, setModelInfo] = useState<ModelProps>();
+
+    useEffect(() => {
+        CreateModelUrl(userId, filename)
+            .then((url) => {
+                setModelInfo({ modelUrl: url!.signedUrl })
+            })
+
+    }, []);
 
     const isMobile = () => ('ontouchstart' in document.documentElement);
 
@@ -77,13 +73,11 @@ export default function MainCanvas() {
 
     const cameraControlsRef = useRef<CameraControls>(null);
 
-
     const resetCamera = () => {
         cameraControlsRef.current?.reset(true);
     };
 
     const postMessage = () => {
-        // window.parent.postMessage('fullScreen', '*'); // 메시지 전송
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
             setFullScreen(true);
@@ -94,10 +88,6 @@ export default function MainCanvas() {
             }
         }
     }
-
-    useEffect(() => {
-        // PresignedUrl("moopi-model-bucket", "choyang2_DevilHood.vrm");
-    }, []);
 
     return (
         <div className="relative w-full h-full overflow-hidden" onContextMenu={handleContextMenu}>
@@ -136,26 +126,14 @@ export default function MainCanvas() {
                 <group position-y={-0.8}>
                     <CameraControls
                         ref={cameraControlsRef}
-                        // minDistance={1}
                         maxDistance={5}
-                        // enabled={enabled}
-                        // verticalDragToForward={verticalDragToForward}
-                        // dollyToCursor={dollyToCursor}
-                        // infinityDolly={infinityDolly}
                     />
 
                     <directionalLight position={[3.3, 1.0, 4.4]} castShadow />
-                    {/* <primitive
-                        object={gltf.scene}
-                        position={[0, 0, 0]}
-                        children-0-castShadow
-                    /> */}
-                    
-                    {/* <Model path={"../src/assets/models/zxcv.fbx"} /> */}
-                    {/* <Model path={'https://moopi-model-bucket.s3.ap-northeast-2.amazonaws.com/model/Girl.fbx'} /> */}
-                    <ModelComponent />
+
+                    {modelInfo && <ModelComponent {...modelInfo!}/>}
+
                     <Circle args={[0.5]} rotation-x={-Math.PI / 2} receiveShadow renderOrder={2}>
-                        {/* <meshStandardMaterial color={new Color('#eeeeee')} /> */}
                         <shaderMaterial attach="material" args={[gradientShader]} />
                     </Circle>
                 </group>
@@ -180,3 +158,5 @@ export default function MainCanvas() {
         </div>
     );
 }
+
+export default MainCanvas;

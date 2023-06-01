@@ -17,18 +17,12 @@ export function LoadMixamoAnimation(url: any, vrm: any) {
 		const _quatA = new THREE.Quaternion();
 		const _vec3 = new THREE.Vector3();
 
-		console.log("vrm", vrm);
-
-		console.log("asset", asset);
-
 		// Adjust with reference to hips height.
 		const motionHipsHeight =
 			asset.getObjectByName("mixamorigHips").position.y;
-		console.log("humanoid", vrm.humanoid);
 		const vrmHipsY = vrm.humanoid
 			?.getNormalizedBoneNode("hips")
 			.getWorldPosition(_vec3).y;
-		console.log("vrmHipsY", vrmHipsY);
 		const vrmRootY = vrm.scene.getWorldPosition(_vec3).y;
 		const vrmHipsHeight = Math.abs(vrmHipsY - vrmRootY);
 		const hipsPositionScale = vrmHipsHeight / motionHipsHeight;

@@ -1,16 +1,23 @@
 "use client";
 
 import * as THREE from "three";
-import { useEffect, useImperativeHandle, useMemo, useState } from "react";
+import { FC, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame } from "@react-three/fiber";
 
-const Model = () => {
-    const animationUrl = "http://localhost:3000/HipHopDancing.fbx";
-    const url = "http://localhost:3000/s2xyoon.vrm";
+export interface ModelProps {
+    animationUrl?: string;
+    modelUrl: string;
+}
+
+const Model: FC<ModelProps> = ({
+    animationUrl = "http://localhost:3000/Thankful.fbx",
+    modelUrl 
+}) => {
+
     const [vrm, setVrm] = useState<VRM>(null!);
 
     const animationMixer = useMemo<THREE.AnimationMixer>(() => {
@@ -20,7 +27,6 @@ const Model = () => {
     
         LoadMixamoAnimation(animationUrl, vrm).then((clip) => {
           mixer.clipAction(clip).play();
-        //   console.log("AnimationClip", mixer.clipAction(clip));
         });
     
         return mixer;
@@ -34,7 +40,7 @@ const Model = () => {
             return new VRMLoaderPlugin(parser);
         });
 
-        loader.load(url, (gltf) => {
+        loader.load(modelUrl, (gltf) => {
             const vrm = gltf.userData.vrm;
 
             setVrm(vrm);
@@ -45,14 +51,10 @@ const Model = () => {
             });
 
             VRMUtils.rotateVRM0(vrm);
-            // console.log(vrm);
         },
-        // (progress) => console.log("Loading model...", 100.0 * (progress.loaded / progress.total), "%"),
-        // (error) => console.log("Error loading model", error)
-        );
-    }, [url]);
-
-    // useImperativeHandle(ref, () => ({ vrm, animationMixer }), [vrm, animationMixer]);
+        (progress) => {},
+        (error) => console.log("Error loading model", error));
+    }, [modelUrl]);
 
     useFrame((state, delta) => {
         animationMixer?.update(delta);
