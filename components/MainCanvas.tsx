@@ -1,12 +1,10 @@
 "use client";
 
 import Image from "next/image";
-
 import { lazy, useEffect, useRef, useState, FC } from "react";
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Circle, CameraControls, useGLTF } from '@react-three/drei'
 import { Color } from "three/src/math/Color.js";
-
 
 import cancelImg from '@/app/assets/images/cancel.svg';
 import rotateImg from '@/app/assets/images/rotate.svg';
