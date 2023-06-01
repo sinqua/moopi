@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: 'user',
+    basePath: '/user',
 }
 module.exports = nextConfig
