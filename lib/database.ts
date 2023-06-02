@@ -7,10 +7,13 @@ const options = {
     },
 }
 
-const supabase = createClient(
+export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-  process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string,
   options
 )
 
-export default supabase
+export const supabasePublic = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+)

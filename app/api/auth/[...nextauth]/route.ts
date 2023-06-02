@@ -33,7 +33,7 @@ export const authOptions = {
   ],
   adapter: SupabaseAdapter({
     url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-    secret: process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+    secret: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string,
   }),
   callbacks: {
     async session({ session, token, user } : {session: any, token: any, user: any}) {
