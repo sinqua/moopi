@@ -1,7 +1,7 @@
 "use client";
 
 import * as THREE from "three";
-import { FC, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import { FC, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
@@ -11,13 +11,15 @@ import { Circle } from "@react-three/drei";
 import { Color } from "three";
 
 export interface ModelProps {
-	animationUrl?: string;
-	modelUrl: string;
+    animationUrl?: string;
+    modelUrl: string;
+    setProgress: (done: boolean) => void
 }
 
 const Model: FC<ModelProps> = ({
-	animationUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/Thankful.fbx`,
-	modelUrl,
+    animationUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/Thankful.fbx`,
+    modelUrl ,
+    setProgress
 }) => {
 	const [vrm, setVrm] = useState<VRM>(null!);
 
@@ -33,32 +35,23 @@ const Model: FC<ModelProps> = ({
 		return mixer;
 	}, [animationUrl, vrm]);
 
-	useEffect(() => {
-		const loader = new GLTFLoader();
-		loader.crossOrigin = "anonymous";
+    useEffect(() => {
+        const loader = new GLTFLoader();
+        loader.crossOrigin = "anonymous";
 
-		loader.register((parser) => {
-			return new VRMLoaderPlugin(parser);
-		});
+        loader.register((parser) => {
+            return new VRMLoaderPlugin(parser);
+        });
 
-		loader.load(
-			modelUrl,
-			(gltf) => {
-				const vrm = gltf.userData.vrm;
+        loader.load(modelUrl, (gltf) => {
+            setProgress(true);
 
-				setVrm(vrm);
-				VRMUtils.deepDispose(vrm.scene);
-
-				vrm.scene.traverse((obj: THREE.Object3D) => {
-					obj.frustumCulled = false;
-				});
-
-				VRMUtils.rotateVRM0(vrm);
-			},
-			(progress) => {},
-			(error) => console.log("Error loading model", error)
-		);
-	}, [modelUrl]);
+            const vrm = gltf.userData.vrm;
+            setVrm(vrm);
+        },
+        (progress) => {},
+        (error) => console.log("Error loading model", error));
+    }, [modelUrl]);
 
 	useFrame((state, delta) => {
 		animationMixer?.update(delta);

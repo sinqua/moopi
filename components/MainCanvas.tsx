@@ -19,6 +19,7 @@ import powerImg from "@/app/assets/images/power.svg";
 
 import { ModelProps } from "./Model";
 import { CreateModelUrl } from "@/lib/storage";
+import BounceLoader from "react-spinners/BounceLoader";
 
 const ModelComponent = lazy(() => import("./Model"));
 interface MainCanvasProps {
@@ -31,13 +32,20 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 	const [fullScreen, setFullScreen] = useState(false);
 	const [helpViewer, setHelpViewer] = useState(false);
 	const [thumbnailViewer, setThumbnailViewer] = useState(false);
+    const [progress, setProgress] = useState(false);
+
 	const cameraControlsRef = useRef<CameraControls>(null);
 
 	useEffect(() => {
 		CreateModelUrl(userId, filename).then((url) => {
-			setModelInfo({ modelUrl: url!.signedUrl });
+			setModelInfo({ modelUrl: url!.signedUrl, setProgress });
 		});
 	}, []);
+
+    useEffect(() => {
+        if(thumbnailViewer)
+            setProgress(false);
+	}, [thumbnailViewer]);
 
 	const isMobile = () => "ontouchstart" in document.documentElement;
 
@@ -91,6 +99,11 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 						/>
                         {modelInfo && <ModelComponent {...modelInfo!} />}
 					</Canvas>
+                    { !progress &&
+                        <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
+                            <BounceLoader color="#2778C7" />
+                        </div>
+                    }
 					{MenuButton(
 						resetCamera,
 						setHelpViewer,
