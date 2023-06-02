@@ -15,7 +15,6 @@ export default function RootLayout({
   return (
     <>
         {children}
-        <div>heeleo</div>
     </>
   )
 }
