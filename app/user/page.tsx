@@ -74,6 +74,9 @@ export default function UserPage() {
                                 <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">VRC</div>
                                 <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">blender</div>
                                 <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">이세계아이돌</div>
+                                <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">VRC</div>
+                                <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">blender</div>
+                                <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">이세계아이돌</div>
                             </div>
                             {session?.user.id === userId ?
                                 <div className="flex w-full h-[47px] space-x-[16px]">
