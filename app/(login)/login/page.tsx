@@ -18,10 +18,10 @@ import offingLogo from "@/app/assets/logos/offing text blue.svg";
 
 export default function LoginPage() {
     const searchParams = useSearchParams()
-    const callbackUrl = (searchParams.get('callbackUrl') ?? "http://localhost:3000/user?id=29010302-e915-450a-aec8-d036c261a9ad") as string
+    const callbackUrl = ("/login/verifying?callbackUrl=" + (searchParams.get('callbackUrl') ?? "/")) as string
     console.log("callbackUrl", callbackUrl);
 
-    const {data: session} = useSession();
+    const {data: session, status} = useSession();
     console.log("session", session);
 
     return (
