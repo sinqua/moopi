@@ -6,12 +6,12 @@ export async function GET(req: NextRequest, context: { params: any }) {
     // response with "Hello World!" for all requests
 
     
-    db.query("SELECT * FROM user", function (err: any, result: any) {
-        if (err) console.log(err);
-        console.log(result);
-    })
+    // db.query("SELECT * FROM user", function (err: any, result: any) {
+    //     if (err) console.log(err);
+    //     console.log(result);
+    // })
 
-    console.log(context.params);
+    // console.log(context.params);
 
     return NextResponse.json({
         status: 200,

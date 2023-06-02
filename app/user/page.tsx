@@ -31,6 +31,8 @@ export default function UserPage() {
     const searchParams = useSearchParams()
     const userId = searchParams.get('id');
 
+    console.log("user page session", session);
+
     // console.log("myId", session?.user.id);
     // console.log("userId", userId);
 
@@ -78,7 +80,7 @@ export default function UserPage() {
                             </div>
                             {session?.user.id === userId ?
                                 <div className="flex w-full h-[47px] space-x-[16px]">
-                                    <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer">프로필 수정</div>
+                                    <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer" onClick={() => console.log("zzzz", session.user)}>프로필 수정</div>
                                     <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer">게시하기</div>
                                 </div>
                                 :
