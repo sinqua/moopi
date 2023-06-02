@@ -17,7 +17,7 @@ export interface ModelProps {
 }
 
 const Model: FC<ModelProps> = ({
-    animationUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/Thankful.fbx`,
+    animationUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/PutYourHandsUp.fbx`,
     modelUrl ,
     setProgress
 }) => {
