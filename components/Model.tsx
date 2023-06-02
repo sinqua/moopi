@@ -14,7 +14,7 @@ export interface ModelProps {
 }
 
 const Model: FC<ModelProps> = ({
-    animationUrl = "http://localhost:3000/Thankful.fbx",
+    animationUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/Thankful.fbx`,
     modelUrl 
 }) => {
 
