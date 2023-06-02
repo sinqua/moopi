@@ -18,7 +18,7 @@ import offingLogo from "@/app/assets/logos/offing text blue.svg";
 
 export default function LoginPage() {
     const searchParams = useSearchParams()
-    const callbackUrl = (searchParams.get('callbackUrl') ?? "http://localhost:3000/user?id=29010302-e915-450a-aec8-d036c261a9ad") as string
+    const callbackUrl = (searchParams.get('callbackUrl') ?? `${process.env.NEXT_PUBLIC_WEBSITE}/user?id=29010302-e915-450a-aec8-d036c261a9ad`) as string
     console.log("callbackUrl", callbackUrl);
 
     const {data: session} = useSession();
@@ -26,7 +26,7 @@ export default function LoginPage() {
 
     return (
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
-            <div className="md:grow bg-[url('http://localhost:3000/loginBackground.png')] bg-no-repeat bg-cover"></div>
+            <div className="md:grow bg-login bg-no-repeat bg-cover"></div>
             <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
                 <Image className="w-[106px] h-[30px]" src={moopiLogo} alt=""/>
                 <div className="sm:h-[95px] h-[40px]" />
