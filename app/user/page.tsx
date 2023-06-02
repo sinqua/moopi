@@ -43,7 +43,7 @@ export default function UserPage() {
                 
                 <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
                     {/* <div className="md:w-[814px] md:h-[526px] h-[640px] rounded-[10px] bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover shadow-[0px_3px_10px_rgba(0,0,0,0.16)]"> */}
-                    <div className="md:w-[814px] md:h-[526px] h-[640px] rounded-[10px] bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
+                    <div className="md:w-[814px] md:h-[526px] h-[470px] rounded-[10px] bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
                         {/* <MainCanvas /> */}
                         {!modelActive ?
                             <div className="w-full h-full rounded-[10px] bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover cursor-pointer" onClick={() => setModelActive(true)}/> : 
