@@ -2,11 +2,8 @@
 
 import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
-import * as THREE from "three";
-import { Canvas, useLoader } from "@react-three/fiber";
-import { Circle, CameraControls, useGLTF } from "@react-three/drei";
-import { Color } from "three/src/math/Color.js";
-import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { CameraControls, useGLTF } from "@react-three/drei";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
 import rotateImg from "@/app/assets/images/rotate.svg";
@@ -40,10 +37,7 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 		CreateModelUrl(userId, filename).then((url) => {
 			setModelInfo({ modelUrl: url!.signedUrl });
 		});
-
 	}, []);
-
-
 
 	const isMobile = () => "ontouchstart" in document.documentElement;
 
@@ -51,32 +45,6 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 	const handleContextMenu = (event: any) => {
 		event.preventDefault();
 	};
-
-	const gradientShader = {
-		uniforms: {
-			color1: { value: new Color("#A0A0A0") }, // Start color
-			color2: { value: new Color("#FAF9F6") }, // End color
-		},
-		vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-		fragmentShader: `
-            uniform vec3 color1;
-            uniform vec3 color2;
-            varying vec2 vUv;
-            void main() {
-                vec2 center = vec2(0.5, 0.5);
-                float dist = distance(vUv, center);
-                float alpha = 1.34 - dist; // Calculate alpha value based on distance
-                gl_FragColor = vec4(mix(color1, color2, dist), alpha);
-              }
-        `,
-	};
-
 
 	const resetCamera = () => {
 		cameraControlsRef.current?.reset(true);
@@ -108,36 +76,20 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 				>
 					{helpViewer && HelpViewer(setHelpViewer, isMobile)}
 					<Canvas
-						camera={{ position: [0, 1, 1] }}
+						camera={{ position: [0, 0, 1] }}
 						style={{ backgroundColor: "#FAF9F6" }}
 						shadows
 					>
-                        <CameraControls
-                            ref={cameraControlsRef}
-                            maxDistance={5}
-                            // polarAngle={Math.PI / 4}
-                            // set moveto to the center of the model
-                        />
-
-                        <directionalLight
-                            position={[3.3, 1.0, 4.4]}
-                            castShadow
-                        />
-
+						<CameraControls
+							ref={cameraControlsRef}
+							maxDistance={5}
+							polarAngle={1.2}
+						/>
+						<directionalLight
+							position={[3.3, 1.0, 4.4]}
+							castShadow
+						/>
                         {modelInfo && <ModelComponent {...modelInfo!} />}
-
-                        <Circle
-                            args={[0.35]}
-                            rotation-x={-Math.PI / 2}
-                            receiveShadow
-                            renderOrder={2}
-                        >
-                            <shaderMaterial
-                                attach="material"
-                                args={[gradientShader]}
-                            />
-                        </Circle>
-                        <axesHelper args={[1]} />
 					</Canvas>
 					{MenuButton(
 						resetCamera,
