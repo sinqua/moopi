@@ -9,7 +9,7 @@ import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs"`
+const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
 
 export default function UserPage() {
     const [page, setPage] = useState("설명");
