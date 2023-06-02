@@ -1,7 +1,7 @@
 "use client";
 
 import * as THREE from "three";
-import { FC, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import { FC, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
@@ -11,11 +11,13 @@ import { useFrame } from "@react-three/fiber";
 export interface ModelProps {
     animationUrl?: string;
     modelUrl: string;
+    setProgress: (done: boolean) => void
 }
 
 const Model: FC<ModelProps> = ({
     animationUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/Thankful.fbx`,
-    modelUrl 
+    modelUrl ,
+    setProgress
 }) => {
 
     const [vrm, setVrm] = useState<VRM>(null!);
@@ -41,16 +43,10 @@ const Model: FC<ModelProps> = ({
         });
 
         loader.load(modelUrl, (gltf) => {
+            setProgress(true);
+
             const vrm = gltf.userData.vrm;
-
             setVrm(vrm);
-            VRMUtils.deepDispose(vrm.scene);
-
-            vrm.scene.traverse((obj: THREE.Object3D) => {
-                obj.frustumCulled = false;
-            });
-
-            VRMUtils.rotateVRM0(vrm);
         },
         (progress) => {},
         (error) => console.log("Error loading model", error));
@@ -61,15 +57,31 @@ const Model: FC<ModelProps> = ({
         vrm?.update(delta);
     });
 
+    const Box = () => {
+        const boxRef = useRef<any>();
+      
+        useFrame(() => {
+          boxRef.current.rotation.x += 0.01;
+          boxRef.current.rotation.y += 0.01;
+        });
+      
+        return (
+          <mesh ref={boxRef} rotation-x={Math.PI * 0.25} rotation-y={Math.PI * 0.25}>
+            <boxBufferGeometry args={[0.2, 0.2, 0.2]} />
+            <meshStandardMaterial color={"red"} />
+          </mesh>
+        );
+    };
+
     return (
         <>
-            {vrm && (
-                <primitive 
+            {vrm &&
+                (<primitive 
                 object={vrm.scene}
                 rotation={[0, 135, 0]}
                 children-0-castShadow
-            />
-            )}
+            /> )
+            }
         </>
     )
 }

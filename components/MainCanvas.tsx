@@ -4,7 +4,7 @@ import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
 import * as THREE from "three";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { Circle, CameraControls, useGLTF } from "@react-three/drei";
+import { Circle, CameraControls, useGLTF, Loader } from "@react-three/drei";
 import { Color } from "three/src/math/Color.js";
 import { OrbitControls } from "@react-three/drei";
 
@@ -22,6 +22,7 @@ import powerImg from "@/app/assets/images/power.svg";
 
 import { ModelProps } from "./Model";
 import { CreateModelUrl } from "@/lib/storage";
+import BounceLoader from "react-spinners/BounceLoader";
 
 const ModelComponent = lazy(() => import("./Model"));
 interface MainCanvasProps {
@@ -34,15 +35,21 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 	const [fullScreen, setFullScreen] = useState(false);
 	const [helpViewer, setHelpViewer] = useState(false);
 	const [thumbnailViewer, setThumbnailViewer] = useState(false);
+    const [progress, setProgress] = useState(false);
+
 	const cameraControlsRef = useRef<CameraControls>(null);
 
 	useEffect(() => {
 		CreateModelUrl(userId, filename).then((url) => {
-			setModelInfo({ modelUrl: url!.signedUrl });
+			setModelInfo({ modelUrl: url!.signedUrl, setProgress });
 		});
 
 	}, []);
 
+    useEffect(() => {
+        if(thumbnailViewer)
+            setProgress(false);
+	}, [thumbnailViewer]);
 
 
 	const isMobile = () => "ontouchstart" in document.documentElement;
@@ -51,32 +58,6 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 	const handleContextMenu = (event: any) => {
 		event.preventDefault();
 	};
-
-	const gradientShader = {
-		uniforms: {
-			color1: { value: new Color("#A0A0A0") }, // Start color
-			color2: { value: new Color("#FAF9F6") }, // End color
-		},
-		vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-		fragmentShader: `
-            uniform vec3 color1;
-            uniform vec3 color2;
-            varying vec2 vUv;
-            void main() {
-                vec2 center = vec2(0.5, 0.5);
-                float dist = distance(vUv, center);
-                float alpha = 1.34 - dist; // Calculate alpha value based on distance
-                gl_FragColor = vec4(mix(color1, color2, dist), alpha);
-              }
-        `,
-	};
-
 
 	const resetCamera = () => {
 		cameraControlsRef.current?.reset(true);
@@ -125,20 +106,12 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
                         />
 
                         {modelInfo && <ModelComponent {...modelInfo!} />}
-
-                        <Circle
-                            args={[0.35]}
-                            rotation-x={-Math.PI / 2}
-                            receiveShadow
-                            renderOrder={2}
-                        >
-                            <shaderMaterial
-                                attach="material"
-                                args={[gradientShader]}
-                            />
-                        </Circle>
-                        <axesHelper args={[1]} />
 					</Canvas>
+                    { !progress &&
+                        <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
+                            <BounceLoader color="#2778C7" />
+                        </div>
+                    }
 					{MenuButton(
 						resetCamera,
 						setHelpViewer,

@@ -1,5 +1,6 @@
 'use client';
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useDraggable } from "react-use-draggable-scroll";
 
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
@@ -36,6 +37,12 @@ export default function UserPage() {
     // console.log("myId", session?.user.id);
     // console.log("userId", userId);
 
+    const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+    const { events } = useDraggable(ref, {
+        applyRubberBandEffect: true,
+      }); // Now we pass the reference to the useDraggable hook:
+
+
     return (
         <>
             <div className="w-full flex flex-col items-center font-sans grow" onContextMenu={handleContextMenu}>
@@ -45,14 +52,14 @@ export default function UserPage() {
                 
                 <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
                     {/* <div className="md:w-[814px] md:h-[526px] h-[640px] rounded-[10px] bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover shadow-[0px_3px_10px_rgba(0,0,0,0.16)]"> */}
-                    <div className="md:w-[814px] md:h-[526px] h-[470px] rounded-[10px] bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
+                    <div className="md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
                         {/* <MainCanvas /> */}
                         {!modelActive ?
-                            <div className="w-full h-full rounded-[10px] bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover cursor-pointer" onClick={() => setModelActive(true)}/> : 
-                            <iframe src={modelActive ? IframeUrl : ""} className="relative w-full h-full top-0 left-0 rounded-[10px]" allowFullScreen/>
+                            <div className="w-full h-full md:rounded-[10px] rounded-none bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover cursor-pointer" onClick={() => setModelActive(true)}/> : 
+                            <iframe src={modelActive ? IframeUrl : ""} className="relative w-full h-full top-0 left-0 md:rounded-[10px] rounded-none" allowFullScreen/>
                         }
                     </div>
-                    <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col rounded-[10px] shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
+                    <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
                         <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
                             <div className="h-[100px] w-[100px] bg-gray-200 rounded-full"></div>
                             <div className="flex flex-col justify-center space-y-[25px] grow">
@@ -73,10 +80,10 @@ export default function UserPage() {
                             <p>🚩 맞짱 신청은 정중하게 DM으로 부탁드립니다🙏🙏🙏🙏</p>
                         </div>
                         <div className="text-[14px] space-y-[20px]">
-                            <div className="flex flex-row space-x-[10px] justify-end text-[14px]">
-                                <div className="h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full">VRC</div>
-                                <div className="h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full">blender</div>
-                                <div className="h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full">이세계아이돌</div>
+                            <div className="flex flex-row space-x-[10px] overflow-x-scroll scrollbar-hide text-[14px]" {...events} ref={ref}>
+                                <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">VRC</div>
+                                <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">blender</div>
+                                <div className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap">이세계아이돌</div>
                             </div>
                             {session?.user.id === userId ?
                                 <div className="flex w-full h-[47px] space-x-[16px]">
