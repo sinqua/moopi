@@ -6,6 +6,8 @@ export async function POST(req: NextRequest, context: { params: any }) {
 
     const { data, error } = await supabase.from('users').select().eq('nickname', json.nickname);
 
+    console.log(data);
+
     return NextResponse.json({
         status: 200,
         body: {"result" : data!.length > 0 ? true : false},
