@@ -24,14 +24,20 @@ module.exports = {
 
       // '2xl': '1536px',
       // // => @media (min-width: 1536px) { ... }
+
+      // 'mc_md': '375px'
+      'mc_sm': '768px'
+
     },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'slot': 'url("./assets/images/slot.png")',
+        'login': 'url("./assets/images/loginBackground.png")',
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 }

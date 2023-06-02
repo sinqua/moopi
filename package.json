@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next-auth/supabase-adapter": "^0.2.1",
     "@pixiv/three-vrm": "^1.0.9",
     "@react-three/drei": "^9.70.0",
     "@react-three/fiber": "^8.13.0",
-    "@next-auth/supabase-adapter": "^0.2.1",
     "@supabase/supabase-js": "^2.24.0",
     "@types/node": "20.2.5",
     "@types/react": "18.2.7",
@@ -28,8 +28,15 @@
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-spinners": "^0.13.8",
+    "react-use-draggable-scroll": "^0.4.7",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "3.3.2",
     "three": "^0.149.0",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "encoding": "^0.1.13",
+    "supabase": "^1.64.8"
   }
 }
