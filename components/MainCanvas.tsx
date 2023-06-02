@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
+import * as THREE from "three";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { Circle, CameraControls, useGLTF } from "@react-three/drei";
 import { Color } from "three/src/math/Color.js";
+import { OrbitControls } from "@react-three/drei";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
 import rotateImg from "@/app/assets/images/rotate.svg";
@@ -22,7 +24,6 @@ import { ModelProps } from "./Model";
 import { CreateModelUrl } from "@/lib/storage";
 
 const ModelComponent = lazy(() => import("./Model"));
-
 interface MainCanvasProps {
 	userId: string;
 	filename: string;
@@ -33,12 +34,16 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 	const [fullScreen, setFullScreen] = useState(false);
 	const [helpViewer, setHelpViewer] = useState(false);
 	const [thumbnailViewer, setThumbnailViewer] = useState(false);
+	const cameraControlsRef = useRef<CameraControls>(null);
 
 	useEffect(() => {
 		CreateModelUrl(userId, filename).then((url) => {
 			setModelInfo({ modelUrl: url!.signedUrl });
 		});
+
 	}, []);
+
+
 
 	const isMobile = () => "ontouchstart" in document.documentElement;
 
@@ -49,7 +54,7 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 
 	const gradientShader = {
 		uniforms: {
-			color1: { value: new Color("#B2B2B2") }, // Start color
+			color1: { value: new Color("#A0A0A0") }, // Start color
 			color2: { value: new Color("#FAF9F6") }, // End color
 		},
 		vertexShader: `
@@ -66,13 +71,12 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
             void main() {
                 vec2 center = vec2(0.5, 0.5);
                 float dist = distance(vUv, center);
-                float alpha = 1.23 - dist; // Calculate alpha value based on distance
+                float alpha = 1.34 - dist; // Calculate alpha value based on distance
                 gl_FragColor = vec4(mix(color1, color2, dist), alpha);
               }
         `,
 	};
 
-	const cameraControlsRef = useRef<CameraControls>(null);
 
 	const resetCamera = () => {
 		cameraControlsRef.current?.reset(true);
@@ -104,35 +108,36 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 				>
 					{helpViewer && HelpViewer(setHelpViewer, isMobile)}
 					<Canvas
-						camera={{ position: [0.25, 0.5, 1] }}
+						camera={{ position: [0, 1, 1] }}
 						style={{ backgroundColor: "#FAF9F6" }}
 						shadows
 					>
-						<group position-y={-0.8}>
-							<CameraControls
-								ref={cameraControlsRef}
-								maxDistance={5}
-							/>
+                        <CameraControls
+                            ref={cameraControlsRef}
+                            maxDistance={5}
+                            // polarAngle={Math.PI / 4}
+                            // set moveto to the center of the model
+                        />
 
-							<directionalLight
-								position={[3.3, 1.0, 4.4]}
-								castShadow
-							/>
+                        <directionalLight
+                            position={[3.3, 1.0, 4.4]}
+                            castShadow
+                        />
 
-							{modelInfo && <ModelComponent {...modelInfo!} />}
+                        {modelInfo && <ModelComponent {...modelInfo!} />}
 
-							<Circle
-								args={[0.5]}
-								rotation-x={-Math.PI / 2}
-								receiveShadow
-								renderOrder={2}
-							>
-								<shaderMaterial
-									attach="material"
-									args={[gradientShader]}
-								/>
-							</Circle>
-						</group>
+                        <Circle
+                            args={[0.35]}
+                            rotation-x={-Math.PI / 2}
+                            receiveShadow
+                            renderOrder={2}
+                        >
+                            <shaderMaterial
+                                attach="material"
+                                args={[gradientShader]}
+                            />
+                        </Circle>
+                        <axesHelper args={[1]} />
 					</Canvas>
 					{MenuButton(
 						resetCamera,
