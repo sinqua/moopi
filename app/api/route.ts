@@ -8,7 +8,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     // response with "Hello World!" for all requests
 
     const session = await getServerSession(authOptions)
-
     console.log(session);
     
     if (!session) {
