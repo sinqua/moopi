@@ -8,16 +8,16 @@ import activeHeartImg from "@/app/assets/images/activeheart.svg";
 
 import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
 
 export default function UserPage() {
+    const router = useRouter();
+    
     const [page, setPage] = useState("설명");
-
     const [like, setLike] = useState(false);
     const [hover, setHover] = useState(false);
-
     const [modelActive, setModelActive] = useState(true);
 
     const normalBtn = "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
@@ -34,26 +34,16 @@ export default function UserPage() {
 
     console.log("user page session", session);
 
-    // console.log("myId", session?.user.id);
-    // console.log("userId", userId);
-
     const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
     const { events } = useDraggable(ref, {
         applyRubberBandEffect: true,
       }); // Now we pass the reference to the useDraggable hook:
 
-
     return (
         <>
             <div className="w-full flex flex-col items-center font-sans grow" onContextMenu={handleContextMenu}>
-                {/* <div className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[#00000080] z-10">
-                    <iframe src={modelActive ? IframeUrl : ""} className="relative md:w-[1221px] md:h-[789px] w-full h-full top-0 left-0 rounded-[10px]" allowFullScreen/>
-                </div> */}
-                
                 <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
-                    {/* <div className="md:w-[814px] md:h-[526px] h-[640px] rounded-[10px] bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover shadow-[0px_3px_10px_rgba(0,0,0,0.16)]"> */}
                     <div className="md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
-                        {/* <MainCanvas /> */}
                         {!modelActive ?
                             <div className="w-full h-full md:rounded-[10px] rounded-none bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover cursor-pointer" onClick={() => setModelActive(true)}/> : 
                             <iframe src={modelActive ? IframeUrl : ""} className="relative w-full h-full top-0 left-0 md:rounded-[10px] rounded-none" allowFullScreen/>
@@ -87,8 +77,8 @@ export default function UserPage() {
                             </div>
                             {session?.user.id === userId ?
                                 <div className="flex w-full h-[47px] space-x-[16px]">
-                                    <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer" onClick={() => console.log("zzzz", session.user)}>프로필 수정</div>
-                                    <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer">게시하기</div>
+                                    <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer" onClick={() => router.push('/profile')}>프로필 수정</div>
+                                    <div className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer" onClick={() => router.push('/upload')}>게시하기</div>
                                 </div>
                                 :
                                 <div className="relative h-[93px]">
@@ -104,7 +94,7 @@ export default function UserPage() {
                     </div>
                     
                 </div>
-                {/* <div className="h-[100px] w-screen border-y-[1px] border-s2xyoon-gray"></div> */}
+
                 <div className="md:mt-0 mt-[40px] mb-[50px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
                     <div className="w-full h-full flex justify-center border-solid border-[1px] border-[#E7E7E7]">
                         <div className={page === "설명" ? selectedBtn : normalBtn} onClick={() => setPage("설명")}>설명</div>

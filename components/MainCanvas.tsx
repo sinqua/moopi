@@ -2,11 +2,8 @@
 
 import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
-import * as THREE from "three";
-import { Canvas, useLoader } from "@react-three/fiber";
-import { Circle, CameraControls, useGLTF, Loader } from "@react-three/drei";
-import { Color } from "three/src/math/Color.js";
-import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { CameraControls, useGLTF } from "@react-three/drei";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
 import rotateImg from "@/app/assets/images/rotate.svg";
@@ -43,14 +40,12 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 		CreateModelUrl(userId, filename).then((url) => {
 			setModelInfo({ modelUrl: url!.signedUrl, setProgress });
 		});
-
 	}, []);
 
     useEffect(() => {
         if(thumbnailViewer)
             setProgress(false);
 	}, [thumbnailViewer]);
-
 
 	const isMobile = () => "ontouchstart" in document.documentElement;
 
@@ -89,22 +84,19 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 				>
 					{helpViewer && HelpViewer(setHelpViewer, isMobile)}
 					<Canvas
-						camera={{ position: [0, 1, 1] }}
+						camera={{ position: [0, 0, 1] }}
 						style={{ backgroundColor: "#FAF9F6" }}
 						shadows
 					>
-                        <CameraControls
-                            ref={cameraControlsRef}
-                            maxDistance={5}
-                            // polarAngle={Math.PI / 4}
-                            // set moveto to the center of the model
-                        />
-
-                        <directionalLight
-                            position={[3.3, 1.0, 4.4]}
-                            castShadow
-                        />
-
+						<CameraControls
+							ref={cameraControlsRef}
+							maxDistance={5}
+							polarAngle={1.2}
+						/>
+						<directionalLight
+							position={[3.3, 1.0, 4.4]}
+							castShadow
+						/>
                         {modelInfo && <ModelComponent {...modelInfo!} />}
 					</Canvas>
                     { !progress &&
