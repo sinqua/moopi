@@ -19,10 +19,10 @@ export default function JoinPage() {
     const [ empty, setEmpty ] = useState(true);
     const [ duplication, setDuplication ] = useState(false);
 
-    const onChangeNickname = (nickname: string) => {
+    const onChangeNickname = async (nickname: string) => {
         setEmpty(nickname.length === 0 ? true : false);
 
-        fetch('/api/join/duplicate', {
+        await fetch('/api/join/duplicate', {
             method: 'POST',
             body: JSON.stringify({
                 "nickname": nickname
@@ -34,10 +34,10 @@ export default function JoinPage() {
         });
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if(status !== "loading") {
             if(!duplication) {
-                fetch('/api/join', {
+                await fetch('/api/join', {
                     method: 'POST',
                     body: JSON.stringify({
                         "id": session?.user.id,
@@ -45,10 +45,21 @@ export default function JoinPage() {
                     })
                 })
                 .then((res) => res.json())
-                .then((data) => {
+                .then(async (data) => {
                     if(data.status === 200) {
-                        update();
-                        router.push(callbackUrl);
+                        await fetch('/api/join/profile', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                "user_id": data.body.user.id,
+                            })
+                        })
+                        .then((res) => res.json())
+                        .then((data) => {
+                            if(data.status === 200) {
+                                update();
+                                router.push(callbackUrl);
+                            }
+                        });
                     }
                 });
             }

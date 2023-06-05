@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 
 import heartImg from "@/app/assets/images/heart.svg";
@@ -23,6 +23,8 @@ export default function UserPage() {
     const normalBtn = "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
     const selectedBtn = "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow text-white bg-[#333333] cursor-pointer";
 
+    const [nickname, setNickname] = useState("");
+
     // Prevent the default right-click behavior
     const handleContextMenu = (event: any) => {
         event.preventDefault(); 
@@ -32,12 +34,47 @@ export default function UserPage() {
     const searchParams = useSearchParams()
     const userId = searchParams.get('id');
 
-    console.log("user page session", session);
 
     const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
     const { events } = useDraggable(ref, {
         applyRubberBandEffect: true,
-      }); // Now we pass the reference to the useDraggable hook:
+    }); // Now we pass the reference to the useDraggable hook:
+
+
+
+    const getUserNickname = async () => {
+        await fetch('/api/user/nickname', {
+            method: 'POST',
+            body: JSON.stringify({
+                "user_id": session?.user.id,
+            })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            setNickname(data.body.user.nickname);
+        });
+    }
+
+
+    const getUserProfile = async () => {
+        await fetch('/api/user/profile', {
+            method: 'POST',
+            body: JSON.stringify({
+                "user_id": session?.user.id,
+            })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            // setNickname(data.body.user.nickname);
+        });
+    }
+
+
+    useEffect(() => {
+        getUserNickname();
+        getUserProfile();
+    }, [])
 
     return (
         <>
@@ -53,7 +90,7 @@ export default function UserPage() {
                         <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
                             <div className="h-[100px] w-[100px] bg-gray-200 rounded-full"></div>
                             <div className="flex flex-col justify-center space-y-[25px] grow">
-                                <p className="font-semibold text-[18px]">shinQua</p>
+                                <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
                                 <div className="flex flex-row text-[14px] flex-wrap md:justify-between md:space-x-0 sm:space-x-[50px] space-x-[30px]">
                                     <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]"><p>포트폴리오</p><p className="font-semibold">123</p></div>
                                     <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]"><p>커미션</p><p className="font-semibold">123</p></div>
@@ -95,7 +132,6 @@ export default function UserPage() {
                             }
                         </div>
                     </div>
-                    
                 </div>
 
                 <div className="md:mt-0 mt-[40px] mb-[50px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
