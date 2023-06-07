@@ -4,15 +4,19 @@ import { supabase, supabasePublic } from "@/lib/database";
 export async function POST(req: NextRequest, context: { params: any }) {
     const json = await req.json();
 
-
-    const { data, error } = await supabasePublic
+    const { data: profileData, error: error1 } = await supabasePublic
                                 .from('profiles')
-                                .select(`id, description, image, tags (tag)`)
+                                .select(`image`)
                                 .eq('user_id', json.user_id);
-        
+
+    const { data: authData, error: error2 } = await supabase
+                                .from('users')
+                                .select(`image`)
+                                .eq('id', json.user_id);
+
     return NextResponse.json({
         status: 200,
-        body: {"user" : data![0]},
+        body: {"profile" : profileData![0], "auth" : authData![0]},
         headers: {
             "content-type": "text/plain",
         },
