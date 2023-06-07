@@ -10,6 +10,13 @@ export async function CreateModelUrl(userId: string, filename: any) {
   return data
 }
 
+// Create file url
+export async function CreateImageUrl(filepath: any) {
+  const { data, error } = await supabasePublic.storage.from('moopi-model-bucket').createSignedUrl(filepath, 60)
+
+  return data
+}
+
 // Upload file using standard upload
 export async function UploadModel(userId: any, filename: any, file: any) {
   const filepath = `${userId}/${filename}`
