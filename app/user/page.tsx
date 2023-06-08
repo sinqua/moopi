@@ -12,7 +12,8 @@ import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CreateImageUrl } from "@/lib/storage";
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+// const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+const IframeUrl = `http://${window.location.hostname}:3000/threejs`
 
 export default function UserPage() {
     const router = useRouter();
