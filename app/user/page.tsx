@@ -13,7 +13,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { CreateImageUrl } from "@/lib/storage";
 
 // const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
-const IframeUrl = `http://0.0.0.0:3000/threejs`
+const IframeUrl = `http://${window.location.hostname}:3000/threejs`
 
 export default function UserPage() {
     const router = useRouter();
