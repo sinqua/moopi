@@ -9,7 +9,7 @@ export default function useProfileHook() {
     const {data: session, status, update} = useSession();
 
     const [userInfo, setUserInfo] = useState<any>(null);
-    const [page, setPage] = useState("프로필 카드");
+    const [page, setPage] = useState("설명");
     const [imgFile, setImgFile] = useState<any>(null);
     const [duplication, setDuplication] = useState(false);
     const [tags, setTags] = useState<any>([]);
