@@ -10,7 +10,8 @@ import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+// const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+const IframeUrl = `http://0.0.0.0:3000/threejs`
 
 export default function UserPage() {
     const router = useRouter();
@@ -31,8 +32,6 @@ export default function UserPage() {
     const {data: session, status } = useSession();
     const searchParams = useSearchParams()
     const userId = searchParams.get('id');
-
-    console.log("user page session", session);
 
     const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
     const { events } = useDraggable(ref, {
