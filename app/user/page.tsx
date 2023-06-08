@@ -52,7 +52,7 @@ export default function UserPage() {
         await fetch('/api/user/image', {
             method: 'POST',
             body: JSON.stringify({
-                "user_id": session?.user.id,
+                "user_id": userId,
             })
         })
         .then((res) => res.json())
@@ -73,7 +73,7 @@ export default function UserPage() {
         await fetch('/api/user/nickname', {
             method: 'POST',
             body: JSON.stringify({
-                "user_id": session?.user.id,
+                "user_id": userId,
             })
         })
         .then((res) => res.json())
@@ -87,7 +87,7 @@ export default function UserPage() {
         await fetch('/api/user/profile', {
             method: 'POST',
             body: JSON.stringify({
-                "user_id": session?.user.id,
+                "user_id": userId,
             })
         })
         .then((res) => res.json())
