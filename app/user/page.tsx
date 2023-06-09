@@ -12,12 +12,10 @@ import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CreateImageUrl } from "@/lib/storage";
 
-// const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
 
 export default function UserPage() {
   const router = useRouter();
-
-  const [IframeUrl, setIframeUrl] = useState<string>();
 
   const [userInfo, setUserInfo] = useState<any>(null);
   const [profileImg, setProfileImg] = useState<any>(null);
@@ -33,10 +31,6 @@ export default function UserPage() {
     "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
   const selectedBtn =
     "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow text-white bg-[#333333] cursor-pointer";
-
-  useEffect(() => {
-    setIframeUrl(`http://${window.location.hostname}:3000/threejs`);
-  }, []);
 
   // Prevent the default right-click behavior
   const handleContextMenu = (event: any) => {
