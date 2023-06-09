@@ -9,14 +9,13 @@ export default function useProfileHook() {
     const {data: session, status, update} = useSession();
 
     const [userInfo, setUserInfo] = useState<any>(null);
-    const [page, setPage] = useState("설명");
+    const [page, setPage] = useState("프로필 카드");
     const [imgFile, setImgFile] = useState<any>(null);
     const [duplication, setDuplication] = useState(false);
     const [tags, setTags] = useState<any>([]);
 
     const inputNicknameRef = useRef<any>(null);
     const inputDescriptionRef = useRef<any>(null);
-    const inputTagRef = useRef<any>(null);
 
     const getUserProfile = async () => {
         await fetch('/api/user/profile', {
@@ -28,6 +27,9 @@ export default function useProfileHook() {
         .then((res) => res.json())
         .then((data) => {
             setUserInfo(data.body.user);
+
+            setTags(data.body.user.tags.map((tag: any) => { return {value: tag.tag, label: tag.tag}; }));
+
         });
     }
 
@@ -83,7 +85,7 @@ export default function useProfileHook() {
                             method: 'POST',
                             body: JSON.stringify({
                                 "profile_id": profile.body.profile.id,
-                                "tags": tags
+                                "tags": tags.map((tag: any) => { return tag.value; })
                             })
                         })
                         .then((res) => res.json())
@@ -105,5 +107,5 @@ export default function useProfileHook() {
         }
     }, [session]);
 
-    return { userInfo, setUserInfo, page, setPage, imgFile, setImgFile, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, inputTagRef, onSubmit };
+    return { userInfo, setUserInfo, page, setPage, imgFile, setImgFile, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, onSubmit };
 }
