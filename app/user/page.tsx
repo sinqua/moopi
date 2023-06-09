@@ -17,7 +17,7 @@ import { CreateImageUrl } from "@/lib/storage";
 export default function UserPage() {
   const router = useRouter();
 
-  const [IframeUrl, setIframeUrl] = useState();
+  const [IframeUrl, setIframeUrl] = useState<string>();
 
   const [userInfo, setUserInfo] = useState<any>(null);
   const [profileImg, setProfileImg] = useState<any>(null);
