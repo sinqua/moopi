@@ -14,7 +14,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Circle, useHelper } from "@react-three/drei";
 import { Color } from "three";
-import { mixamoVRMRigMapValues } from "../utils/HumanoidBones";
+
 export interface ModelProps {
   animationUrl?: string;
   modelUrl: string;
