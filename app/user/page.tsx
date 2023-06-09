@@ -94,7 +94,7 @@ export default function UserPage() {
         .then((res) => res.json())
         .then((data) => {
             setUserInfo(data.body.user);
-            setTags(data.body.user.tags.map((tag: any) => { return tag.tag; }));
+            setTags(data.body.user.tags.map((tag: any) => { return tag.tag }));
         });
     }
 
