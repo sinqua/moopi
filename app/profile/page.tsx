@@ -7,12 +7,12 @@ import { ProfileImage } from "@/components/profile/profileImage";
 import { Nickname } from "@/components/profile/nickname";
 import { Description } from "@/components/profile/description";
 import { Tag } from "@/components/profile/tag";
-import Editor from "@/components/editor";
+// import Editor from "@/components/editor";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 
-// const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
+const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
 
 export default function ProfilePage() {
     const { userInfo, setUserInfo, page, setPage, imgFile, setImgFile, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, inputTagRef, onSubmit } = useProfileHook();
@@ -30,6 +30,9 @@ export default function ProfilePage() {
             viewContainerRef.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
             viewContainerRef.current.innerHTML += htmlStr;
         }
+
+        // console.log(htmlStr);
+
     }, [htmlStr])
 
     return (
@@ -37,15 +40,29 @@ export default function ProfilePage() {
             <div className="flex flex-col w-full max-w-[1312px] space-y-[60px]">
                 <Navbar page={page} setPage={setPage} />
                 <div className="flex flex-col w-full max-w-[1312px] sm:p-[50px] p-0 sm:space-y-[80px] space-y-[60px] rounded-[10px] sm:border-solid border-none border-[1px] border-[#CCCCCC]">
-                    {/* <ProfileImage session={session} imgFile={imgFile} setImgFile={setImgFile}/>
-                    <Nickname session={session} inputNicknameRef={inputNicknameRef} duplication={duplication} setDuplication={setDuplication} />
-                    <Description session={session} userInfo={userInfo} inputDescriptionRef={inputDescriptionRef} />
-                    <Tag session={session} userInfo={userInfo} inputTagRef={inputTagRef} tags={tags} setTags={setTags} /> */}
+                    {
+                        page === "프로필 카드" &&
+                        <>
+                            <ProfileImage session={session} imgFile={imgFile} setImgFile={setImgFile}/>
+                            <Nickname session={session} inputNicknameRef={inputNicknameRef} duplication={duplication} setDuplication={setDuplication} />
+                            <Description session={session} userInfo={userInfo} inputDescriptionRef={inputDescriptionRef} />
+                            <Tag session={session} userInfo={userInfo} inputTagRef={inputTagRef} tags={tags} setTags={setTags} />
+                            <div className="flex justify-center pt-[40px] space-x-[15px]">
+                                <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">미리보기</div>
+                                <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={onSubmit}>저장하기</div>
+                            </div>
+                        </>
+                    }
+                    
                     {   
                         page === "설명" &&
                         <>
-                            <div className="h-[500px]">
-                                <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+                            <div>
+                                <p className="mb-[15px] text-[20px] font-semibold">상품 설명</p>
+                                <p className="mb-[30px] text-[#7B7B7B] leading-[25px]">크리에이터님이 제공하는 서비스에  대해 자유롭게 설명해주세요</p>
+                                <div className="h-[500px]">
+                                    <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+                                </div>
                             </div>
                             <div className="flex justify-center pt-[40px] space-x-[15px]">
                                 <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">미리보기</div>
