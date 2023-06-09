@@ -202,10 +202,10 @@ function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
 				alt=""
 				onClick={() => setHelpViewer(false)}
 			/>
-			<div className="flex mc_sm:flex-row flex-col mc_sm:space-x-[60px] space-x-0 mc_sm:space-y-0 space-y-[48px] text-white text-center">
+			<div className="flex mc_sm:flex-row flex-col mc_sm:space-x-[60px] space-x-0 mc_sm:space-y-0 space-y-[16px] text-white text-center">
 				<div className="flex flex-col items-center">
 					<Image
-						className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none"
+						className="mc_sm:w-[80px] w-[50px] mc_sm:h-[80px] h-[50px] mb-[20px] pointer-events-none"
 						src={rotateImg}
 						alt=""
 					/>
@@ -218,7 +218,7 @@ function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
 				</div>
 				<div className="flex flex-col items-center">
 					<Image
-						className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none"
+						className="mc_sm:w-[80px] w-[50px] mc_sm:h-[80px] h-[50px] mb-[20px] pointer-events-none"
 						src={zoomImg}
 						alt=""
 					/>
@@ -235,7 +235,7 @@ function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
 				</div>
 				<div className="flex flex-col items-center">
 					<Image
-						className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none"
+						className="mc_sm:w-[80px] w-[50px] mc_sm:h-[80px] h-[50px] mb-[20px] pointer-events-none"
 						src={moveImg}
 						alt=""
 					/>

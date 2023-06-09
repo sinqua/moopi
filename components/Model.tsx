@@ -1,20 +1,20 @@
 "use client";
 
 import * as THREE from "three";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import {
-  FC,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { VRM, VRMLoaderPlugin, VRMUtils, VRMHumanoidHelper } from "@pixiv/three-vrm";
+  VRM,
+  VRMLoaderPlugin,
+  VRMUtils,
+  VRMHumanoidHelper,
+} from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Circle, useHelper } from "@react-three/drei";
 import { Color } from "three";
+import { mixamoVRMRigMapValues } from "../utils/HumanoidBones";
 export interface ModelProps {
   animationUrl?: string;
   modelUrl: string;
@@ -22,7 +22,7 @@ export interface ModelProps {
 }
 
 const Model: FC<ModelProps> = ({
-  animationUrl = 'PutYourHandsUp.fbx',
+  animationUrl = "PutYourHandsUp.fbx",
   modelUrl,
   setProgress,
 }) => {
@@ -57,14 +57,20 @@ const Model: FC<ModelProps> = ({
       modelUrl,
       (gltf) => {
         setProgress(true);
-
-        const vrm = gltf.userData.vrm;
+        const vrm: VRM = gltf.userData.vrm;
+        console.log("VRM", vrm);
+        console.log("Humanoid", vrm.humanoid);
 
         VRMUtils.deepDispose(vrm.scene);
         VRMUtils.removeUnnecessaryJoints(vrm.scene);
         VRMUtils.removeUnnecessaryVertices(vrm.scene);
-        console.log(vrm)
-        const utils = new VRMHumanoidHelper(vrm.humanoid);
+
+        let bones: THREE.Bone[] = [];
+        vrm.scene.traverse((child: any) => {
+          if (child instanceof THREE.Bone) {
+            bones.push(child);
+          }
+        });
 
         setVrm(vrm);
       },
@@ -82,7 +88,7 @@ const Model: FC<ModelProps> = ({
     <>
       {vrm && (
         <primitive
-        ref={vrmRef}
+          ref={vrmRef}
           object={vrm.scene}
           position={[0, -0.67, 0]}
           rotation={[0, 135, 0]}
@@ -128,3 +134,24 @@ const gradientShader = {
           }
     `,
 };
+
+function traverseJson(jsonData: any, bonesArray: any[]): void {
+  if (typeof jsonData === 'object' && jsonData !== null) {
+    if (Array.isArray(jsonData)) {
+      for (const item of jsonData) {
+        traverseJson(item, bonesArray); // Recursively traverse each item in the array
+      }
+    } else {
+      for (const key in jsonData) {
+        if (key === 'name' && jsonData[key] === 'bone') {
+          bonesArray.push(jsonData); // Push the current node to the bones array
+        }
+        traverseJson(jsonData[key], bonesArray); // Recursively traverse the value
+      }
+    }
+  }
+}
+
+const bones: any[] = [];
+
+console.log(bones);
