@@ -53,7 +53,6 @@ export default function ProfilePage() {
                             </div>
                         </>
                     }
-                    
                     {   
                         page === "설명" &&
                         <>
