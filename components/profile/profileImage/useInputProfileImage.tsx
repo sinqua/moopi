@@ -14,7 +14,7 @@ export default function useInputProfileImage(props: any) {
         })
         .then((res) => res.json())
         .then((data) => {
-            if(data.body.profile.image) {
+            if(data.body.profile?.image) {
                 CreateImageUrl(data.body.profile.image).then((url) => {
                     setProfileImg(url!.signedUrl);
                 });
