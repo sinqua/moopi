@@ -9,18 +9,25 @@ import searchImg from '@/app/assets/images/search.svg'
 import messageImg from '@/app/assets/images/message.svg'
 import alertImg from '@/app/assets/images/alert.svg'
 import profileImg from '@/app/assets/images/profile.svg'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
     const router = useRouter();
 
     const {data: session, status} = useSession();
 
-    const callbackUrl = window.location.pathname + window.location.search;
+    const [callbackUrl, setCallbackUrl] = useState<any>("");
+
+    useEffect(()=>{
+        // 안에서 window 객체를 사용
+        setCallbackUrl(window.location.pathname + window.location.search);
+    }, [])
 
     return (
         <div className='relative md:max-w-[1312px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm'>
-            <Image src={moopiLogo} className="w-auto sm:h-[40px] h-[30px]" alt="" />
+            <a href="/" title="Go to homepage">
+                <Image src={moopiLogo} className="w-auto sm:h-[40px] h-[30px]" alt=""/>
+            </a>
             <div className='h-[30px] flex flex-row items-center sm:space-x-[30px] space-x-[20px]'>
                 <div className='sm:relative absolute grow sm:w-auto w-full flex justify-end sm:top-0 bottom-[0] sm:px-0 px-[20px] left-0 md:text-right sm:text-center'>
                     <div className='flex items-center md:w-[450px] sm:w-[335px] w-full h-[40px] px-[25px] rounded-full bg-white border-solid border-[1px] border-[#CCCCCC]'>
@@ -35,7 +42,7 @@ export default function Header() {
                     <>
                         <Image src={messageImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" />
                         <Image src={alertImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" />
-                        <Image src={profileImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" />
+                        <Image src={profileImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" onClick={()=>router.push('/profile')} />
                     </>
                 }
             </div>
