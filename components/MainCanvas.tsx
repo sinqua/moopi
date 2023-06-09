@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, useGLTF } from "@react-three/drei";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
@@ -22,12 +22,17 @@ import { CreateModelUrl } from "@/lib/storage";
 import BounceLoader from "react-spinners/BounceLoader";
 
 const ModelComponent = lazy(() => import("./Model"));
+const defaultModel = {
+	modelUrl: "s2xyoon.vrm",
+	animationUrl: "HipHopDancing.fbx",
+}
 interface MainCanvasProps {
-	userId: string;
-	filename: string;
+	userId?: string;
+	filename?: string;
 }
 
-const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
+const MainCanvas = (props: MainCanvasProps) => {
+	const { userId, filename } = props;
 	const [modelInfo, setModelInfo] = useState<ModelProps>();
 	const [fullScreen, setFullScreen] = useState(false);
 	const [helpViewer, setHelpViewer] = useState(false);
@@ -37,9 +42,14 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 	const cameraControlsRef = useRef<CameraControls>(null);
 
 	useEffect(() => {
-		CreateModelUrl(userId, filename).then((url) => {
-			setModelInfo({ modelUrl: url!.signedUrl, setProgress });
-		});
+		if (userId && filename){
+			CreateModelUrl(userId, filename).then((url) => {
+				setModelInfo({ modelUrl: url!.signedUrl, setProgress });
+			});
+		}
+		
+		setModelInfo({ ...defaultModel, setProgress });
+		
 	}, []);
 
     useEffect(() => {
@@ -56,6 +66,7 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 
 	const resetCamera = () => {
 		cameraControlsRef.current?.reset(true);
+		cameraControlsRef.current!.polarAngle = 1.35;
 	};
 
 	const postMessage = () => {
@@ -84,17 +95,17 @@ const MainCanvas: FC<MainCanvasProps> = ({ userId, filename }) => {
 				>
 					{helpViewer && HelpViewer(setHelpViewer, isMobile)}
 					<Canvas
-						camera={{ position: [0, 0, 1] }}
+						camera={{ position: [0, 0, 1.1] }}
 						style={{ backgroundColor: "#FAF9F6" }}
 						shadows
 					>
 						<CameraControls
 							ref={cameraControlsRef}
 							maxDistance={5}
-							polarAngle={1.2}
+							polarAngle={1.35}
 						/>
 						<directionalLight
-							position={[3.3, 1.0, 4.4]}
+							position={[0, 1, 0]}
 							castShadow
 						/>
                         {modelInfo && <ModelComponent {...modelInfo!} />}
@@ -191,10 +202,10 @@ function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
 				alt=""
 				onClick={() => setHelpViewer(false)}
 			/>
-			<div className="flex mc_sm:flex-row flex-col mc_sm:space-x-[60px] space-x-0 mc_sm:space-y-0 space-y-[48px] text-white text-center">
+			<div className="flex mc_sm:flex-row flex-col mc_sm:space-x-[60px] space-x-0 mc_sm:space-y-0 space-y-[16px] text-white text-center">
 				<div className="flex flex-col items-center">
 					<Image
-						className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none"
+						className="mc_sm:w-[80px] w-[50px] mc_sm:h-[80px] h-[50px] mb-[20px] pointer-events-none"
 						src={rotateImg}
 						alt=""
 					/>
@@ -207,7 +218,7 @@ function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
 				</div>
 				<div className="flex flex-col items-center">
 					<Image
-						className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none"
+						className="mc_sm:w-[80px] w-[50px] mc_sm:h-[80px] h-[50px] mb-[20px] pointer-events-none"
 						src={zoomImg}
 						alt=""
 					/>
@@ -224,7 +235,7 @@ function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
 				</div>
 				<div className="flex flex-col items-center">
 					<Image
-						className="mc_sm:w-[80px] w-[60px] mc_sm:h-[80px] h-[60px] mb-[20px] pointer-events-none"
+						className="mc_sm:w-[80px] w-[50px] mc_sm:h-[80px] h-[50px] mb-[20px] pointer-events-none"
 						src={moveImg}
 						alt=""
 					/>
