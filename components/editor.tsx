@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 // import styled from 'styled-components';
 import axios from 'axios';
 import { NextPage } from 'next';
@@ -9,6 +9,7 @@ import { RangeStatic } from 'quill';
 
 /* 추가된 코드 */
 import { ImageResize } from 'quill-image-resize-module-ts';
+import { CreateImageUrl2 } from '@/lib/storage';
 Quill.register('modules/ImageResize', ImageResize);
 
 var Image = Quill.import('formats/image');
@@ -16,16 +17,52 @@ Image.className = 'inline-block';
 Quill.register(Image, true);
 
 interface IEditor {
-    htmlStr: string;
-    setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
+    session: any;
+    userDetail: any;
+    htmlStr: any;
+    setHtmlStr: any;
+    imgFiles: any;
+    setImgFiles: any;
+    tempPaths: any;
+    setTempPaths: any;
 }
 
-const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
+const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, imgFiles, setImgFiles, tempPaths, setTempPaths }) => {
+    const quillRef = useRef<ReactQuill>(null);
 
-    const quillRef = React.useRef<ReactQuill>(null);
+    useEffect(() => {
+        async function loadDescription() {
+            if (userDetail) {
+                const descriptionObject = JSON.parse(userDetail.description);
+    
+                const arr: any[] = [];
+                Object.keys(descriptionObject).forEach(key => arr.push(descriptionObject[key]))
+
+                for(let i = 0; i < arr.length; i++) {
+                    if (Object.keys(arr[i].insert).includes('image')) {
+                        await CreateImageUrl2(arr[i].insert.image).then(async (url) => {  
+                            arr[i].insert.image = url!.signedUrl;
+                        });
+                    }
+                }
+    
+                setHtmlStr({'ops': arr});
+
+                // var cfg = {};
+     
+                // var converter = new QuillDeltaToHtmlConverter(arr, cfg);
+                // var html = converter.convert();
+            }
+        }
+
+        loadDescription();
+        
+    }, [userDetail])
+
 
     // 이미지 업로드 핸들러, modules 설정보다 위에 있어야 정상 적용
     const imageHandler = () => {
+        console.log("session", session);
         // file input 임의 생성
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
@@ -35,47 +72,30 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
             const file = input.files;
             const formData = new FormData();
 
-
             if(file) {
                 const reader = new FileReader();
                 reader.readAsDataURL(file[0]);
                 reader.onloadend = () => {
-                    // setProfileImg(reader.result);
                     if(quillRef.current) {
                         // 현재 Editor 커서 위치에 서버로부터 전달받은 이미지 불러오는 url을 이용하여 이미지 태그 추가
                         const index = (quillRef.current.getEditor().getSelection() as RangeStatic).index;
         
                         const quillEditor = quillRef.current.getEditor();
-                        quillEditor.setSelection(index, 1);
         
-                        // var data = `<p><div><img src=${reader.result} alt="" style="display: inline-block;"/></div><span style="color: red;">Hello World!</span></p>`
-
-
                         quillEditor.insertEmbed(index, 'image', reader.result);
-
-
-                        // quillEditor.clipboard.dangerouslyPasteHTML(
-                        //     index,
-                        //     // `<img src=${reader.result} alt=${'alt text'} style="display: inline-block"/>`
-                        //     // `<p style="display: inline-block;">zzzzzzz</p>`
-                        //     data
-                        // );
+                        quillEditor.setSelection(index + 1, 1);
                     }
                 };
             }
-            // if(file) {
-            //     formData.append("multipartFiles", file[0]);
-            // }
-
-            // file 데이터 담아서 서버에 전달하여 이미지 업로드
-            // const res = await axios.post('http://localhost:8080/uploadImage', formData);
-
-            
         }
     }
 
+    useEffect(() => {
+        // console.log("htmlStr", htmlStr);
+    }, [htmlStr])
+
     // useMemo를 사용하지 않고 handler를 등록할 경우 타이핑 할때마다 focus가 벗어남
-    const modules = React.useMemo(() => ({
+    const modules = useMemo(() => ({
             toolbar: {
                 // container에 등록되는 순서대로 tool 배치
                 // container: [
@@ -126,7 +146,8 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
             formats={formats} 
             value={htmlStr} 
             placeholder='내용을 입력하세요.'
-            onChange={(content, delta, source, editor) => setHtmlStr(editor.getHTML())} />
+            onChange={(content, delta, source, editor) => setHtmlStr(editor.getContents())} />
+            // onChange={(content, delta, source, editor) => {console.log("edtior", editor.getContents())}} />
     )
 }
 

@@ -93,6 +93,9 @@ export default function UserPage() {
         })
         .then((res) => res.json())
         .then((data) => {
+            console.log("Data", data);
+            console.log(data.body.user);
+
             setUserInfo(data.body.user);
             setTags(data.body.user.tags.map((tag: any) => { return tag.tag }));
         });
