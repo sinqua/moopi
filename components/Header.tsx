@@ -9,19 +9,18 @@ import searchImg from '@/app/assets/images/search.svg'
 import messageImg from '@/app/assets/images/message.svg'
 import alertImg from '@/app/assets/images/alert.svg'
 import profileImg from '@/app/assets/images/profile.svg'
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export default function Header() {
+    const [callbackUrl, setCallbackUrl] = useState<string>();
     const router = useRouter();
 
     const {data: session, status} = useSession();
 
-    const [callbackUrl, setCallbackUrl] = useState<any>("");
-
-    useEffect(()=>{
-        // 안에서 window 객체를 사용
+    useEffect(() => {
         setCallbackUrl(window.location.pathname + window.location.search);
-    }, [])
+    }, []);
+
 
     return (
         <div className='relative md:max-w-[1312px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm'>
