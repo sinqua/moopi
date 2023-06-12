@@ -1,11 +1,9 @@
-'use client';
-import { useEffect } from "react";
-import { redirect, usePathname, useRouter, useSearchParams } from 'next/navigation';
+'use client'
+import { useSearchParams } from 'next/navigation';
 
 import { signIn, signOut, useSession } from 'next-auth/react'
 
 import Image from "next/image";
-
 
 import moopiLogo from "@/app/assets/logos/moopi.svg";
 import googleLogo from "@/app/assets/logos/google.svg";
@@ -19,7 +17,6 @@ import offingLogo from "@/app/assets/logos/offing text blue.svg";
 export default function LoginPage() {
     const searchParams = useSearchParams()
     const callbackUrl = ("/login/verifying?callbackUrl=" + (searchParams.get('callbackUrl') ?? "/")) as string
-    console.log("callbackUrl", callbackUrl);
 
     const {data: session, status} = useSession();
     console.log("session", session);
@@ -41,7 +38,7 @@ export default function LoginPage() {
                         <Image className="w-[22px] h-[22px] ml-[21px] absolute left-0" src={twitterLogo} alt=""/>
                         <p>Start with Twitter</p>
                     </div>
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-white border-[1px] border-s2xyoon-gray cursor-pointer">
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-white border-[1px] border-s2xyoon-gray cursor-pointer" onClick={() => signIn('google', {callbackUrl})}>
                         <Image className="w-[23px] h-[23px] ml-[19px] absolute left-0" src={googleLogo} alt=""/>
 
                         <p className="text-black">Start with Google</p>
@@ -50,7 +47,7 @@ export default function LoginPage() {
                         <Image className="w-[24px] h-[24px] ml-[20px] absolute left-0" src={discordLogo} alt=""/>
                         <p>Start with Discord</p>
                     </div>
-                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#03C75A] cursor-pointer">
+                    <div className="w-[320px] h-[40px] rounded-[5px] relative flex flex-row justify-center items-center bg-[#03C75A] cursor-pointer" onClick={() => signIn('naver', {callbackUrl})}>
                         <Image className="w-[19px] h-[19px] ml-[22px] absolute left-0" src={naverLogo} alt=""/>
 
                         <p>Start with Naver</p>
