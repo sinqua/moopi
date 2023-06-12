@@ -19,22 +19,19 @@ import { Stepper, Step, Button } from "@material-tailwind/react";
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
 
 export default function ProfilePage() {
-    const { userInfo, setUserInfo, page, setPage, imgFile, setImgFile, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, onSubmit } = useProfileHook();
+    const { userInfo, setUserInfo, userDetail, setUserDetail, page, setPage, imgFile, setImgFile, imgFiles, setImgFiles, tempPaths, setTempPaths, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, htmlStr, setHtmlStr, onSaveProfileCard, onSaveDescription } = useProfileHook();
     const {data: session, status, update} = useSession();
-
-    // state
-    const [htmlStr, setHtmlStr] = useState<string>('');
 
     // ref
     const viewContainerRef = useRef<HTMLDivElement>(null);
 
-    // useEffect
-    useEffect(() => {
-        if(viewContainerRef.current) {
-            viewContainerRef.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
-            viewContainerRef.current.innerHTML += htmlStr;
-        }
-    }, [htmlStr])
+    // // useEffect
+    // useEffect(() => {
+    //     if(viewContainerRef.current) {
+    //         viewContainerRef.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
+    //         viewContainerRef.current.innerHTML += htmlStr;
+    //     }
+    // }, [htmlStr])
 
 
     const [activeStep, setActiveStep] = useState<any>(0);
@@ -105,7 +102,7 @@ export default function ProfilePage() {
                             </div>
                             <div className="flex justify-center pt-[40px] space-x-[15px]">
                                 <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">미리보기</div>
-                                <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={onSubmit}>저장하기</div>
+                                <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={onSaveProfileCard}>저장하기</div>
                             </div>
                         </>
                     }
@@ -116,12 +113,12 @@ export default function ProfilePage() {
                                 <p className="mb-[15px] text-[20px] font-semibold">상품 설명</p>
                                 <p className="mb-[30px] text-[#7B7B7B] leading-[25px]">크리에이터님이 제공하는 서비스에  대해 자유롭게 설명해주세요</p>
                                 <div className="h-[500px]">
-                                    <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+                                    <Editor session={session} userDetail={userDetail} htmlStr={htmlStr} setHtmlStr={setHtmlStr} imgFiles={imgFiles} setImgFiles={setImgFiles} tempPaths={tempPaths} setTempPaths={setTempPaths} />
                                 </div>
                             </div>
                             <div className="flex justify-center pt-[40px] space-x-[15px]">
                                 <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">미리보기</div>
-                                <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={() => console.log("asdf")}>저장하기</div>
+                                <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={onSaveDescription}>저장하기</div>
                             </div>
                         </>
                     }

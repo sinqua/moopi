@@ -1,21 +1,34 @@
 'use client';
-import { UploadModel } from "@/lib/storage";
+import { UploadModel, UploadBase64Image } from "@/lib/storage";
+import { decode } from "base64-arraybuffer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 
 export default function useProfileHook() {
     const router = useRouter();
     const {data: session, status, update} = useSession();
 
     const [userInfo, setUserInfo] = useState<any>(null);
-    const [page, setPage] = useState("프로필 카드");
+    const [userDetail, setUserDetail] = useState<any>(null);
+
+    const [page, setPage] = useState("설명");
     const [imgFile, setImgFile] = useState<any>(null);
+
+    const [imgFiles, setImgFiles] = useState<any>([]);
+    const [tempPaths, setTempPaths] = useState<any>([]);
+
     const [duplication, setDuplication] = useState(false);
     const [tags, setTags] = useState<any>([]);
 
     const inputNicknameRef = useRef<any>(null);
     const inputDescriptionRef = useRef<any>(null);
+
+
+    const [htmlStr, setHtmlStr] = useState<any>(null);
+
 
     const getUserProfile = async () => {
         await fetch('/api/user/profile', {
@@ -33,7 +46,32 @@ export default function useProfileHook() {
         });
     }
 
-    const onSubmit = async () => {
+    const getUserDetail = async () => {
+        await fetch('/api/user/detail', {
+            method: 'POST',
+            body: JSON.stringify({
+                "user_id": session?.user.id,
+            })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            setUserDetail(data.body.detail);
+
+            // const descriptionObject = JSON.parse(data.body.detail.description);
+
+            // const arr: any[] = [];
+            // Object.keys(descriptionObject).forEach(key => arr.push(descriptionObject[key]))
+
+            // var cfg = {};
+ 
+            // var converter = new QuillDeltaToHtmlConverter(arr, cfg);
+            // var html = converter.convert();
+
+            // console.log(html);
+        });
+    }
+
+    const onSaveProfileCard = async () => {
         if (status !== "loading") {
             if (!duplication) {
                 if (imgFile) {
@@ -101,11 +139,47 @@ export default function useProfileHook() {
         }
     }
 
+
+    const onSaveDescription = async () => {
+        for(let i = 0; i < htmlStr.ops.length; i++) {
+
+            if (Object.keys(htmlStr.ops[i].insert).includes('image')) {
+                if(htmlStr.ops[i].insert.image.includes('base64')) {
+                    var uuid = uuidv4();
+
+                    await UploadBase64Image(session?.user.id, `${uuid}.png`, htmlStr.ops[i].insert.image).then(async (data) => {
+                        htmlStr.ops[i].insert.image = data?.path;
+                    });
+                }
+                else {
+                    console.log(htmlStr.ops[i].insert.image.split('/image/')[1].split('?')[0]);
+
+                    htmlStr.ops[i].insert.image = htmlStr.ops[i].insert.image.split('/image/')[1].split('?')[0];
+                }
+            }
+        }
+
+        await fetch('/api/detail/description', {
+            method: 'POST',
+            body: JSON.stringify({
+                "user_id": session?.user.id,
+                "description": JSON.stringify({...htmlStr.ops})
+            })
+        })
+        .then((res) => res.json())
+        .then(async (data) => {
+            console.log("success data", data);
+
+            // router.back();
+        });
+    }
+
     useEffect(() => {
         if(session) {
             getUserProfile();
+            getUserDetail();
         }
     }, [session]);
 
-    return { userInfo, setUserInfo, page, setPage, imgFile, setImgFile, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, onSubmit };
+    return { userInfo, setUserInfo, userDetail, setUserDetail, page, setPage, imgFile, setImgFile, imgFiles, setImgFiles, tempPaths, setTempPaths, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, htmlStr, setHtmlStr, onSaveProfileCard, onSaveDescription };
 }
