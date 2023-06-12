@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 
 import heartImg from "@/app/assets/images/heart.svg";
@@ -11,6 +11,7 @@ import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CreateImageUrl } from "@/lib/storage";
+import useSWR from "swr";
 
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
 
@@ -97,7 +98,7 @@ export default function UserPage() {
       });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getUserProfileImage();
     getUserNickname();
     getUserProfile();
