@@ -10,7 +10,13 @@ import emptyImg from "@/app/assets/images/empty.png";
 import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { CreateImageUrl } from "@/lib/storage";
+import { CreateImageUrl, CreateImageUrl2 } from "@/lib/storage";
+import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+
+import parse from "html-react-parser";
+
+import 'react-quill/dist/quill.snow.css';
+
 
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
 
@@ -26,6 +32,8 @@ export default function UserPage() {
   const [like, setLike] = useState(false);
   const [hover, setHover] = useState(false);
   const [modelActive, setModelActive] = useState(true);
+
+  const [description, setDescription] = useState<any>(null);
 
   const normalBtn =
     "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
@@ -97,10 +105,46 @@ export default function UserPage() {
       });
   };
 
+  const getUserDetail = async () => {
+    await fetch("/api/user/detail", {
+        method: "POST",
+        body: JSON.stringify({
+            user_id: userId,
+        }),
+    })
+        .then((res) => res.json())
+        .then(async (data) => {
+            const descriptionObject = JSON.parse(data.body.detail.description);
+
+            const arr: any[] = [];
+            Object.keys(descriptionObject).forEach(key => arr.push(descriptionObject[key]))
+
+
+            for(let i = 0; i < arr.length; i++) {
+                if (Object.keys(arr[i].insert).includes('image')) {
+                    await CreateImageUrl2(arr[i].insert.image).then(async (url) => {  
+                        arr[i].insert.image = url!.signedUrl;
+                        arr[i].attributes = {'display': 'inline-block'};
+                    });
+                }
+            }
+
+            console.log("arr", arr);
+
+            var cfg = {};
+
+            var converter = new QuillDeltaToHtmlConverter(arr, cfg);
+            var html = converter.convert();
+
+            setDescription(html);
+        });
+  };
+
   useEffect(() => {
     getUserProfileImage();
     getUserNickname();
     getUserProfile();
+    getUserDetail();
   }, []);
 
   return (
@@ -185,7 +229,7 @@ export default function UserPage() {
                     className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer"
                     onClick={() => router.push("/profile")}
                   >
-                    프로필 수정
+                    슬롯 설정
                   </div>
                   <div
                     className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer"
@@ -210,7 +254,7 @@ export default function UserPage() {
           </div>
         </div>
 
-        <div className="md:mt-0 mt-[40px] mb-[50px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
+        <div className="md:mt-0 mt-[40px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
           <div className="w-full h-full flex justify-center border-solid border-[1px] border-[#E7E7E7]">
             <div
               className={page === "설명" ? selectedBtn : normalBtn}
@@ -237,6 +281,9 @@ export default function UserPage() {
               리뷰
             </div>
           </div>
+        </div>
+        <div className="ql-editor w-full md:w-[1312px] md:!px-0 sm:!px-[30px] !px-[20px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px]">
+            {description && parse(description)}
         </div>
       </div>
     </>
