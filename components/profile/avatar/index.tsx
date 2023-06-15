@@ -16,7 +16,11 @@ export const Avatar = (props: AvatarProps) => {
     // const { textareaCount, setTextareaCount } = useInputDescription(props);
     const [avatarTags, setAvatarTags] = useState<any>(["VRC", "blender", "트위치 방송", "이세계아이돌"]);
 
-    const { dragRef, dragEvents } = useDrag();
+    const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
+
+    useEffect(() => {
+        setMountedStatus(true);
+    }, []);
 
     return (
         <div>

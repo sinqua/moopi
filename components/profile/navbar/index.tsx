@@ -1,4 +1,5 @@
 import useDrag from "@/app/hooks/dragHook";
+import { useEffect } from "react";
 
 interface NavbarProps {
     page: any;
@@ -7,7 +8,11 @@ interface NavbarProps {
 
 export const Navbar = (props: NavbarProps) => {
     const { page, setPage } = props;
-    let { dragRef, dragEvents } = useDrag();
+    let { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
+
+    useEffect(() => {
+        setMountedStatus(true);
+    }, []);
 
     return (
         <div className="w-full flex flex-col items-start sm:space-y-[30px] space-y-[20px]">

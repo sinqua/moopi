@@ -5,7 +5,6 @@ import { useDraggable } from "react-use-draggable-scroll";
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
 import activeHeartImg from "@/app/assets/images/activeheart.svg";
-import emptyImg from "@/app/assets/images/empty.png";
 
 import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
@@ -15,10 +14,15 @@ import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 import parse from "html-react-parser";
 
-import 'react-quill/dist/quill.snow.css';
+import ClipLoader from "react-spinners/ClipLoader";
 
+import "react-quill/dist/quill.snow.css";
+import useDrag from "../hooks/dragHook";
+import { count } from "console";
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`;
+
+const defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
 
 export default function UserPage() {
   const router = useRouter();
@@ -40,6 +44,8 @@ export default function UserPage() {
   const selectedBtn =
     "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow text-white bg-[#333333] cursor-pointer";
 
+  const [profileImgLoad, setProfileImgLoad] = useState(false);
+
   // Prevent the default right-click behavior
   const handleContextMenu = (event: any) => {
     event.preventDefault();
@@ -49,11 +55,7 @@ export default function UserPage() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
 
-  const ref =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref, {
-    applyRubberBandEffect: true,
-  }); // Now we pass the reference to the useDraggable hook:
+  const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
   const getUserProfileImage = async () => {
     await fetch("/api/user/image", {
@@ -105,39 +107,57 @@ export default function UserPage() {
       });
   };
 
+  const [descriptionImgCount, setDescriptionImgCount] = useState(-1);
+  const [loadedCount, setLoadedCount] = useState(0);
+
+  // image 개수 찾기
+  const countOccurrences = (str: any, word: any) => {
+    const regex = new RegExp(`\\"${word}\\"`, "gi");
+    const matches = str.match(regex);
+
+    return matches ? matches.length : 0;
+  };
+
   const getUserDetail = async () => {
     await fetch("/api/user/detail", {
-        method: "POST",
-        body: JSON.stringify({
-            user_id: userId,
-        }),
+      method: "POST",
+      body: JSON.stringify({
+        user_id: userId,
+      }),
     })
-        .then((res) => res.json())
-        .then(async (data) => {
-            const descriptionObject = JSON.parse(data.body.detail.description);
+      .then((res) => res.json())
+      .then(async (data) => {
+        const wordCount = countOccurrences(
+          data.body.detail.description,
+          "image"
+        );
+        setDescriptionImgCount(wordCount);
 
-            const arr: any[] = [];
-            Object.keys(descriptionObject).forEach(key => arr.push(descriptionObject[key]))
+        const descriptionObject = JSON.parse(data.body.detail.description);
 
+        const arr: any[] = [];
+        Object.keys(descriptionObject).forEach((key) =>
+          arr.push(descriptionObject[key])
+        );
 
-            for(let i = 0; i < arr.length; i++) {
-                if (Object.keys(arr[i].insert).includes('image')) {
-                    await CreateImageUrl2(arr[i].insert.image).then(async (url) => {  
-                        arr[i].insert.image = url!.signedUrl;
-                        arr[i].attributes = {'display': 'inline-block'};
-                    });
-                }
-            }
+        for (let i = 0; i < arr.length; i++) {
+          if (Object.keys(arr[i].insert).includes("image")) {
+            await CreateImageUrl2(arr[i].insert.image).then(async (url) => {
+              arr[i].insert.image = url!.signedUrl;
+              arr[i].attributes = {
+                display: "inline-block",
+                onload: setLoadedCount((count) => count + 1),
+              };
+            });
+          }
+        }
 
-            console.log("arr", arr);
+        var cfg = {};
+        var converter = new QuillDeltaToHtmlConverter(arr, cfg);
+        var html = converter.convert();
 
-            var cfg = {};
-
-            var converter = new QuillDeltaToHtmlConverter(arr, cfg);
-            var html = converter.convert();
-
-            setDescription(html);
-        });
+        setDescription(html);
+      });
   };
 
   useEffect(() => {
@@ -147,6 +167,13 @@ export default function UserPage() {
     getUserDetail();
   }, []);
 
+  useEffect(() => {
+    if (dragRef.current) {
+      setMountedStatus(true);
+    }
+  }, [dragRef.current]);
+
+
   return (
     <>
       <div
@@ -155,7 +182,7 @@ export default function UserPage() {
       >
         <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
           <div className="md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
-            {!modelActive ? (
+            {/* {!modelActive ? (
               <div
                 className="w-full h-full md:rounded-[10px] rounded-none bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover cursor-pointer"
                 onClick={() => setModelActive(true)}
@@ -166,16 +193,22 @@ export default function UserPage() {
                 className="relative w-full h-full top-0 left-0 md:rounded-[10px] rounded-none"
                 allowFullScreen
               />
-            )}
+            )} */}
           </div>
-          <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
+          <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
             <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
               <Image
-                src={profileImg ? profileImg : emptyImg}
+                src={
+                  profileImg
+                    ? profileImg
+                    : defaultImage
+                }
                 width={100}
                 height={100}
                 className="h-[100px] w-[100px] rounded-full border-none"
                 alt=""
+                onLoad={() => {setProfileImgLoad(true); console.log("시작")}}
+                onLoadingComplete={() => console.log("끝!")}
               />
               <div className="flex flex-col justify-center space-y-[25px] grow">
                 <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
@@ -209,13 +242,13 @@ export default function UserPage() {
             <div className="text-[14px] space-y-[20px]">
               <div
                 className="flex flex-row space-x-[10px] overflow-x-scroll scrollbar-hide text-[14px]"
-                {...events}
-                ref={ref}
+                {...dragEvents}
+                ref={dragRef}
               >
                 {tags.map((tag: any, index: any) => {
                   return (
                     <div
-                      className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap"
+                      className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap cursor-grabbing"
                       key={tag}
                     >
                       {tag}
@@ -251,6 +284,11 @@ export default function UserPage() {
                 </div>
               )}
             </div>
+            {!profileImgLoad && (
+              <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-gray-200">
+                <ClipLoader size={50} color="#2778C7" />
+              </div>
+            )}
           </div>
         </div>
 
@@ -282,8 +320,29 @@ export default function UserPage() {
             </div>
           </div>
         </div>
-        <div className="ql-editor w-full md:w-[1312px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px]">
+        <div className="ql-editor relative w-full md:w-[1312px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px] grow">
+          <div className={page !== "설명" ? "hidden" : ""}>
             {description && parse(description)}
+            {descriptionImgCount !== -1 &&
+              descriptionImgCount !== loadedCount &&
+              descriptionImgCount !== 0 && (
+                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-white">
+                  <ClipLoader size={100} color="#2778C7" />
+                </div>
+              )}
+          </div>
+          {/* {page === "설명" && (
+            <div>
+              {description && parse(description)}
+              {descriptionImgCount !== -1 &&
+                descriptionImgCount !== loadedCount &&
+                descriptionImgCount !== 0 && (
+                  <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-white">
+                    <ClipLoader size={100} color="#2778C7" />
+                  </div>
+                )}
+            </div>
+          )} */}
         </div>
       </div>
     </>

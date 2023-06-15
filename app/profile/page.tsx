@@ -12,8 +12,6 @@ import { Tag } from "@/components/profile/tag";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
-import { useDraggable } from "react-use-draggable-scroll";
-import useDrag from "@/app/hooks/dragHook";
 import { Avatar } from "@/components/profile/avatar";
 
 
@@ -23,15 +21,19 @@ export default function ProfilePage() {
     const { userInfo, setUserInfo, userDetail, setUserDetail, page, setPage, imgFile, setImgFile, imgFiles, setImgFiles, tempPaths, setTempPaths, duplication, setDuplication, tags, setTags, inputNicknameRef, inputDescriptionRef, htmlStr, setHtmlStr, onSaveProfileCard, onSaveDescription } = useProfileHook();
     const {data: session, status, update} = useSession();
 
-    // let ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-    // let { events } = useDraggable(ref, { applyRubberBandEffect: true }); // Now we pass the reference to the useDraggable hook:
+    const [modal, setModal] = useState(false);
 
-    // let { dragRef: dragRef1, dragEvents: dragEvents1 } = useDrag();
-    // const { dragRef: dragRef2, dragEvents: dragEvents2 } = useDrag();
+    const savePofile = () => {
+        if(page === "프로필 카드") {
+            onSaveProfileCard();
+        }
+        else if(page === "설명") {
+            onSaveDescription();
+        }
+    }
 
     return (
         <>
-            {/* <div className="absolute w-full h-full bg-gray-200 z-0"></div> */}
             <div className="w-full flex flex-col items-center font-sans grow md:px-0 px-[30px] sm:pt-[50px] pt-[20px] sm:pb-[80px] pb-[50px] text-[#333333] text-[14px]">
                 <div className="flex flex-col w-full max-w-[1312px] space-y-[60px]">
                     <Navbar page={page} setPage={setPage} />
@@ -44,10 +46,9 @@ export default function ProfilePage() {
                                 <Nickname session={session} inputNicknameRef={inputNicknameRef} duplication={duplication} setDuplication={setDuplication} />
                                 <Description session={session} userInfo={userInfo} inputDescriptionRef={inputDescriptionRef} />
                                 <Tag session={session} userInfo={userInfo} tags={tags} setTags={setTags} />
-                                {/* <Avatar session={session} userInfo={userInfo} dragRef={ref} dragEvents={events} /> */}
                                 <Avatar session={session} userInfo={userInfo} />
                                 <div className="flex justify-center pt-[40px] space-x-[15px]">
-                                    <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={onSaveProfileCard}>저장하기</div>
+                                    <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={() => setModal(true)}>저장하기</div>
                                 </div>
                             </>
                         }
@@ -63,13 +64,32 @@ export default function ProfilePage() {
                                 </div>
                                 <div className="flex justify-center pt-[40px] space-x-[15px]">
                                     <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">미리보기</div>
-                                    <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={onSaveDescription}>저장하기</div>
+                                    <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer" onClick={() => setModal(true)}>저장하기</div>
                                 </div>
                             </>
                         }
                     </div>
                 </div>
             </div>
+
+            {
+                modal &&
+                <div className="absolute w-full h-full bg-[#00000050] z-0">
+                    <div className="sticky top-0 w-full h-screen px-[50px] flex justify-center items-center">
+                        <div className="relative max-w-[400px] w-full flex flex-col box-border bg-white rounded-[10px]">
+                            <div className="flex flex-col justify-center items-center grow space-y-[15px] box-border px-[60px] py-[30px]">
+                                <p className="text-[16px] font-semibold text-center">게시물을 저장하시겠습니까?</p>
+                                <p className="text-[#7B7B7B] text-center">게시물이 마이페이지에 게시됩니다.</p>
+                            </div>
+                            <div className="flex">
+                                <div className="flex justify-center basis-1/2 py-[20px] text-[#7B7B7B] cursor-pointer" onClick={() => setModal(false)}>취소</div>
+                                <div className="flex justify-center basis-1/2 py-[20px] text-[#2778C7] cursor-pointer" onClick={savePofile}>저장</div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                </div>
+            }
         </>
     )
 }
