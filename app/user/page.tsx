@@ -12,8 +12,9 @@ import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CreateImageUrl } from "@/lib/storage";
 import useSWR from "swr";
+import ContentLoader, { Facebook } from "react-content-loader";
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`
+const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`;
 
 export default function UserPage() {
   const router = useRouter();
@@ -27,6 +28,8 @@ export default function UserPage() {
   const [like, setLike] = useState(false);
   const [hover, setHover] = useState(false);
   const [modelActive, setModelActive] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const normalBtn =
     "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
@@ -48,8 +51,8 @@ export default function UserPage() {
     applyRubberBandEffect: true,
   }); // Now we pass the reference to the useDraggable hook:
 
-  const getUserProfileImage = async () => {
-    await fetch("/api/user/image", {
+  const getUserProfileImage = () => {
+    fetch("/api/user/image", {
       method: "POST",
       body: JSON.stringify({
         user_id: userId,
@@ -67,8 +70,8 @@ export default function UserPage() {
       });
   };
 
-  const getUserNickname = async () => {
-    await fetch("/api/user/nickname", {
+  const getUserNickname = () => {
+    fetch("/api/user/nickname", {
       method: "POST",
       body: JSON.stringify({
         user_id: userId,
@@ -80,8 +83,8 @@ export default function UserPage() {
       });
   };
 
-  const getUserProfile = async () => {
-    await fetch("/api/user/profile", {
+  const getUserProfile = () => {
+    fetch("/api/user/profile", {
       method: "POST",
       body: JSON.stringify({
         user_id: userId,
@@ -102,6 +105,12 @@ export default function UserPage() {
     getUserProfileImage();
     getUserNickname();
     getUserProfile();
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
   }, []);
 
   return (
@@ -125,43 +134,53 @@ export default function UserPage() {
               />
             )}
           </div>
+
           <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
-            <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
-              <Image
-                src={profileImg ? profileImg : emptyImg}
-                width={100}
-                height={100}
-                className="h-[100px] w-[100px] rounded-full border-none"
-                alt=""
-              />
-              <div className="flex flex-col justify-center space-y-[25px] grow">
-                <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
-                <div className="flex flex-row text-[14px] flex-wrap md:justify-between md:space-x-0 sm:space-x-[50px] space-x-[30px]">
-                  <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
-                    <p>포트폴리오</p>
-                    <p className="font-semibold">123</p>
-                  </div>
-                  <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
-                    <p>커미션</p>
-                    <p className="font-semibold">123</p>
-                  </div>
-                  <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
-                    <p>팔로우</p>
-                    <p className="font-semibold">123</p>
+            <div className="relative">
+              {isLoading && <Facebook
+                className="absolute z-40 h-full w-full md:w-[422px] bg-white"
+                viewBox="0 0 250 150"
+                preserveAspectRatio="xMinYMin slice"
+              />}
+              <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative z-30">
+                <Image
+                  priority={true}
+                  loading="eager"
+                  src={profileImg ?? emptyImg}
+                  width={100}
+                  height={100}
+                  className="h-[100px] w-[100px] rounded-full border-none"
+                  alt=""
+                />
+                <div className="flex flex-col justify-center space-y-[25px] grow">
+                  <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
+                  <div className="flex flex-row text-[14px] flex-wrap md:justify-between md:space-x-0 sm:space-x-[50px] space-x-[30px]">
+                    <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
+                      <p>포트폴리오</p>
+                      <p className="font-semibold">123</p>
+                    </div>
+                    <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
+                      <p>커미션</p>
+                      <p className="font-semibold">123</p>
+                    </div>
+                    <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
+                      <p>팔로우</p>
+                      <p className="font-semibold">123</p>
+                    </div>
                   </div>
                 </div>
+                <Image
+                  className="sm:h-[30px] h-[24px] sm:w-[30px] w-[24px] absolute border-none top-0 right-0 cursor-pointer"
+                  src={like ? activeHeartImg : hover ? hoverHeartImg : heartImg}
+                  onMouseOver={() => setHover(true)}
+                  onMouseOut={() => setHover(false)}
+                  onClick={() => setLike(!like)}
+                  alt=""
+                />
               </div>
-              <Image
-                className="sm:h-[30px] h-[24px] sm:w-[30px] w-[24px] absolute border-none top-0 right-0 cursor-pointer"
-                src={like ? activeHeartImg : hover ? hoverHeartImg : heartImg}
-                onMouseOver={() => setHover(true)}
-                onMouseOut={() => setHover(false)}
-                onClick={() => setLike(!like)}
-                alt=""
-              />
-            </div>
-            <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px]">
-              {userInfo && userInfo.description}
+              <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] min-h-[300px] sm:min-h-[240px]">
+                {userInfo && userInfo.description}
+              </div>
             </div>
             <div className="text-[14px] space-y-[20px]">
               <div
