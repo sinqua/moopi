@@ -3,7 +3,6 @@ import { useDraggable } from "react-use-draggable-scroll";
 
 
 export default function useDrag() {
-
     // draggable
     const dragRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
     const { events: dragEvents } = useDraggable(dragRef, {

@@ -282,7 +282,7 @@ export default function UserPage() {
             </div>
           </div>
         </div>
-        <div className="ql-editor w-full md:w-[1312px] md:!px-0 sm:!px-[30px] !px-[20px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px]">
+        <div className="ql-editor w-full md:w-[1312px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px]">
             {description && parse(description)}
         </div>
       </div>
