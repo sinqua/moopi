@@ -7,7 +7,6 @@ export default function useInputDescription(props: any) {
     useEffect(() => {
         inputDescriptionRef.current.value = userInfo ? userInfo.description : "";
         setTextareaCount(inputDescriptionRef.current.value.length);
-
     }, [userInfo]);
 
     return { textareaCount, setTextareaCount };

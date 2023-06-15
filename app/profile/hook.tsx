@@ -14,7 +14,7 @@ export default function useProfileHook() {
     const [userInfo, setUserInfo] = useState<any>(null);
     const [userDetail, setUserDetail] = useState<any>(null);
 
-    const [page, setPage] = useState("설명");
+    const [page, setPage] = useState("프로필 카드");
     const [imgFile, setImgFile] = useState<any>(null);
 
     const [imgFiles, setImgFiles] = useState<any>([]);
@@ -56,18 +56,6 @@ export default function useProfileHook() {
         .then((res) => res.json())
         .then((data) => {
             setUserDetail(data.body.detail);
-
-            // const descriptionObject = JSON.parse(data.body.detail.description);
-
-            // const arr: any[] = [];
-            // Object.keys(descriptionObject).forEach(key => arr.push(descriptionObject[key]))
-
-            // var cfg = {};
- 
-            // var converter = new QuillDeltaToHtmlConverter(arr, cfg);
-            // var html = converter.convert();
-
-            // console.log(html);
         });
     }
 
@@ -152,8 +140,6 @@ export default function useProfileHook() {
                     });
                 }
                 else {
-                    console.log(htmlStr.ops[i].insert.image.split('/image/')[1].split('?')[0]);
-
                     htmlStr.ops[i].insert.image = htmlStr.ops[i].insert.image.split('/image/')[1].split('?')[0];
                 }
             }
