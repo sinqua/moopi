@@ -6,6 +6,7 @@ const nextConfig = {
       "tpwylybqvkzcsrmbctnj.supabase.co",
       "cdn.discordapp.com",
       "ssl.pstatic.net",
+      "lh3.googleusercontent.com"
     ],
   },
 };
