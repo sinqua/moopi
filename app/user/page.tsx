@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 
 import heartImg from "@/app/assets/images/heart.svg";
@@ -9,6 +9,7 @@ import activeHeartImg from "@/app/assets/images/activeheart.svg";
 import Image from "next/image";
 import { getSession, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
+
 import { CreateImageUrl, CreateImageUrl2 } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
@@ -57,8 +58,8 @@ export default function UserPage() {
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
-  const getUserProfileImage = async () => {
-    await fetch("/api/user/image", {
+  const getUserProfileImage = () => {
+    fetch("/api/user/image", {
       method: "POST",
       body: JSON.stringify({
         user_id: userId,
@@ -76,8 +77,8 @@ export default function UserPage() {
       });
   };
 
-  const getUserNickname = async () => {
-    await fetch("/api/user/nickname", {
+  const getUserNickname = () => {
+    fetch("/api/user/nickname", {
       method: "POST",
       body: JSON.stringify({
         user_id: userId,
@@ -89,8 +90,8 @@ export default function UserPage() {
       });
   };
 
-  const getUserProfile = async () => {
-    await fetch("/api/user/profile", {
+  const getUserProfile = () => {
+    fetch("/api/user/profile", {
       method: "POST",
       body: JSON.stringify({
         user_id: userId,
@@ -173,7 +174,6 @@ export default function UserPage() {
     }
   }, [dragRef.current]);
 
-
   return (
     <>
       <div
@@ -226,18 +226,18 @@ export default function UserPage() {
                     <p className="font-semibold">123</p>
                   </div>
                 </div>
+                <Image
+                  className="sm:h-[30px] h-[24px] sm:w-[30px] w-[24px] absolute border-none top-0 right-0 cursor-pointer"
+                  src={like ? activeHeartImg : hover ? hoverHeartImg : heartImg}
+                  onMouseOver={() => setHover(true)}
+                  onMouseOut={() => setHover(false)}
+                  onClick={() => setLike(!like)}
+                  alt=""
+                />
               </div>
-              <Image
-                className="sm:h-[30px] h-[24px] sm:w-[30px] w-[24px] absolute border-none top-0 right-0 cursor-pointer"
-                src={like ? activeHeartImg : hover ? hoverHeartImg : heartImg}
-                onMouseOver={() => setHover(true)}
-                onMouseOut={() => setHover(false)}
-                onClick={() => setLike(!like)}
-                alt=""
-              />
-            </div>
-            <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px]">
-              {userInfo && userInfo.description}
+              <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] min-h-[300px] sm:min-h-[240px]">
+                {userInfo && userInfo.description}
+              </div>
             </div>
             <div className="text-[14px] space-y-[20px]">
               <div
