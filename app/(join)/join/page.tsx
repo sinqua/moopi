@@ -47,17 +47,30 @@ export default function JoinPage() {
                 .then((res) => res.json())
                 .then(async (data) => {
                     if(data.status === 200) {
+                        const userId = data.body.user.id;
+
                         await fetch('/api/join/profile', {
                             method: 'POST',
                             body: JSON.stringify({
-                                "user_id": data.body.user.id,
+                                "user_id": userId,
                             })
                         })
                         .then((res) => res.json())
-                        .then((data) => {
+                        .then(async (data) => {
                             if(data.status === 200) {
-                                update();
-                                router.push(callbackUrl);
+                                await fetch('/api/join/detail', {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                        "user_id": userId,
+                                    })
+                                })
+                                .then((res) => res.json())
+                                .then((data) => {
+                                    if(data.status === 200) {
+                                        update();
+                                        router.push(callbackUrl);
+                                    }
+                                });
                             }
                         });
                     }

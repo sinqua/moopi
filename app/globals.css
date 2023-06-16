@@ -11,8 +11,8 @@ body {
   height: 100%;
 }
 
-::-webkit-slider-thumb {
-  height: 20px;
+.ql-editor img {
+  display: inline-block;
 }
 
 /* :root {
