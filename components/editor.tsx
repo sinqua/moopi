@@ -32,7 +32,7 @@ const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, i
 
     useEffect(() => {
         async function loadDescription() {
-            if (userDetail) {
+            if (userDetail.description) {
                 const descriptionObject = JSON.parse(userDetail.description);
     
                 const arr: any[] = [];

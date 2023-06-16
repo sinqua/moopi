@@ -23,7 +23,8 @@ import { count } from "console";
 
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`;
 
-const defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
+const defaultImage =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
 
 export default function UserPage() {
   const router = useRouter();
@@ -158,10 +159,13 @@ export default function UserPage() {
         var html = converter.convert();
 
         setDescription(html);
+      })
+      .catch((err) => {
+        console.log("user does not have description");
       });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getUserProfileImage();
     getUserNickname();
     getUserProfile();
@@ -182,7 +186,7 @@ export default function UserPage() {
       >
         <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
           <div className="md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)] z-[1]">
-            {/* {!modelActive ? (
+            {!modelActive ? (
               <div
                 className="w-full h-full md:rounded-[10px] rounded-none bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover cursor-pointer"
                 onClick={() => setModelActive(true)}
@@ -193,21 +197,20 @@ export default function UserPage() {
                 className="relative w-full h-full top-0 left-0 md:rounded-[10px] rounded-none"
                 allowFullScreen
               />
-            )} */}
+            )}
           </div>
           <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
             <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
               <Image
-                src={
-                  profileImg
-                    ? profileImg
-                    : defaultImage
-                }
+                src={profileImg ? profileImg : defaultImage}
                 width={100}
                 height={100}
                 className="h-[100px] w-[100px] rounded-full border-none"
                 alt=""
-                onLoad={() => {setProfileImgLoad(true); console.log("시작")}}
+                onLoad={() => {
+                  setProfileImgLoad(true);
+                  console.log("시작");
+                }}
                 onLoadingComplete={() => console.log("끝!")}
               />
               <div className="flex flex-col justify-center space-y-[25px] grow">
@@ -235,9 +238,9 @@ export default function UserPage() {
                   alt=""
                 />
               </div>
-              <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] min-h-[300px] sm:min-h-[240px]">
-                {userInfo && userInfo.description}
-              </div>
+            </div>
+            <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] min-h-[300px] sm:min-h-[240px]">
+              {userInfo && userInfo.description}
             </div>
             <div className="text-[14px] space-y-[20px]">
               <div
@@ -248,7 +251,7 @@ export default function UserPage() {
                 {tags.map((tag: any, index: any) => {
                   return (
                     <div
-                      className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap cursor-grabbing"
+                      className="inline-flex h-[31px] px-[18px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap cursor-grabbing items-center"
                       key={tag}
                     >
                       {tag}
