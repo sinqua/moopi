@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`;
 
 const getUserNickname = async (id: string) => {
-  const res = await fetch("http://localhost:3000" + "/api/user/nickname", {
+  const res = await fetch(process.env.NEXT_PUBLIC_WEBSITE + "/api/user/nickname", {
     method: "POST",
     body: JSON.stringify({
       user_id: id,
@@ -48,7 +48,7 @@ const getUserNickname = async (id: string) => {
 };
 
 const getUserProfileImage = async (id: string) => {
-  const res = await fetch("http://localhost:3000" + "/api/user/image", {
+  const res = await fetch(process.env.NEXT_PUBLIC_WEBSITE + "/api/user/image", {
     method: "POST",
     body: JSON.stringify({
       user_id: id,
@@ -58,7 +58,7 @@ const getUserProfileImage = async (id: string) => {
 };
 
 const getUserProfile = async (id: string) => {
-  const res = await fetch("http://localhost:3000" + "/api/user/profile", {
+  const res = await fetch(process.env.NEXT_PUBLIC_WEBSITE + "/api/user/profile", {
     method: "POST",
     body: JSON.stringify({
       user_id: id,
@@ -68,7 +68,7 @@ const getUserProfile = async (id: string) => {
 };
 
 const getUserDetail = async (id: string) => {
-  const res = await fetch("http://localhost:3000" + "/api/user/detail", {
+  const res = await fetch(process.env.NEXT_PUBLIC_WEBSITE + "/api/user/detail", {
     method: "POST",
     body: JSON.stringify({
       user_id: id,
