@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import heartImg from "@/app/assets/images/heart.svg";
@@ -69,8 +69,8 @@ export default function ProfileCard(props: ProfileCardProps) {
           />
         </div>
       </div>
-      <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] min-h-[300px] sm:min-h-[240px]">
-        {profile.body.user && profile.body.user.description}
+      <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px]">
+        {profile && description}
       </div>
       <div className="text-[14px] space-y-[20px]">
         <div
