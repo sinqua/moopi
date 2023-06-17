@@ -35,7 +35,7 @@ export default function ProfileCard(props: ProfileCardProps) {
     <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         <Image
-          src={profileImage ? profileImage : defaultImage}
+          src={profileImage}
           width={100}
           height={100}
           className="h-[100px] w-[100px] rounded-full border-none"
