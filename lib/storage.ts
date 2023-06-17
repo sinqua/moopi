@@ -69,12 +69,3 @@ export async function UploadBase64Image(userId: any, filename: any, file: any) {
 
   return data;
 }
-
-// Create file url
-export async function CreateImageUrl2(filepath: any) {
-  const { data, error } = await supabase.storage
-    .from("image")
-    .createSignedUrl(filepath, 60);
-
-  return data;
-}

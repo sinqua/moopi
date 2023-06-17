@@ -1,4 +1,4 @@
-import { CreateImageUrl2 } from "@/lib/storage";
+import { CreateImageUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 import Avatar from "@/components/user/Avatar";
@@ -53,7 +53,6 @@ const getUserProfile = async (id: string) => {
     .select(`id, description, image, tags (tag)`)
     .eq("user_id", id);
 
-  console.log("data", data);
   return data![0];
 };
 
@@ -69,16 +68,17 @@ const getUserProfileImage = async (id: string) => {
     .eq("id", id);
 
   if (profileData![0].image) {
-    return profileData![0];
+    const url = await CreateImageUrl(profileData![0].image);
+    return { image: url!.signedUrl };
   }
   return authData![0];
 };
 
 const getUserDetail = async (id: string) => {
   const { data, error } = await supabase
-  .from('user_details')
-  .select()
-  .eq('user_id', id);
+    .from("user_details")
+    .select()
+    .eq("user_id", id);
 
   return data![0];
 };
@@ -93,7 +93,7 @@ const CreateHtml = async (descriptionObject: any) => {
 
   for (let i = 0; i < arr.length; i++) {
     if (Object.keys(arr[i].insert).includes("image")) {
-      await CreateImageUrl2(arr[i].insert.image).then(async (url) => {
+      await CreateImageUrl(arr[i].insert.image).then(async (url) => {
         arr[i].insert.image = url!.signedUrl;
         arr[i].attributes = {
           display: "inline-block",
