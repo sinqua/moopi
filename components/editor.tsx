@@ -9,7 +9,7 @@ import { RangeStatic } from 'quill';
 
 /* 추가된 코드 */
 // import { ImageResize } from 'quill-image-resize-module-ts';
-import { CreateImageUrl2 } from '@/lib/storage';
+import { CreateImageUrl } from '@/lib/storage';
 // Quill.register('modules/ImageResize', ImageResize);
 
 var Image = Quill.import('formats/image');
@@ -40,7 +40,7 @@ const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, i
 
                 for(let i = 0; i < arr.length; i++) {
                     if (Object.keys(arr[i].insert).includes('image')) {
-                        await CreateImageUrl2(arr[i].insert.image).then(async (url) => {  
+                        await CreateImageUrl(arr[i].insert.image).then(async (url) => {  
                             arr[i].insert.image = url!.signedUrl;
                         });
                     }

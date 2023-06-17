@@ -1,5 +1,5 @@
 'use client'
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 import { signIn, signOut, useSession } from 'next-auth/react'
 
@@ -15,6 +15,7 @@ import offingLogo from "@/app/assets/logos/offing text blue.svg";
 
 
 export default function LoginPage() {
+    const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = ("/login/verifying?callbackUrl=" + (searchParams.get('callbackUrl') ?? "/")) as string
 
@@ -25,7 +26,7 @@ export default function LoginPage() {
         <div className="flex flex-row sm:h-full h-[812px] font-sans">
             <div className="md:grow bg-login bg-no-repeat bg-cover"></div>
             <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
-                <Image className="w-[106px] h-[30px]" src={moopiLogo} alt=""/>
+                <Image className="w-[106px] h-[30px]" src={moopiLogo} alt="" onClick={() => router.push('/')}/>
                 <div className="sm:h-[95px] h-[40px]" />
                 <p className="font-semibold text-xl" onClick={() => signOut()}>moopi에 오신 것을 환영합니다</p>
                 <div className="sm:h-[60px] h-[80px]" />
