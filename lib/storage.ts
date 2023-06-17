@@ -1,12 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
-import { supabasePublic } from "./database";
+import { supabase } from "./database";
 import { decode } from "base64-arraybuffer";
 
 // Create file url
 export async function CreateModelUrl(userId: string, filename: any) {
   const filepath = `${userId}/${filename}`;
 
-  const { data, error } = await supabasePublic.storage
+  const { data, error } = await supabase.storage
     .from("model")
     .createSignedUrl(filepath, 60);
 
@@ -15,7 +15,7 @@ export async function CreateModelUrl(userId: string, filename: any) {
 
 // Create file url
 export async function CreateImageUrl(filepath: any) {
-  const { data, error } = await supabasePublic.storage
+  const { data, error } = await supabase.storage
     .from("image")
     .createSignedUrl(filepath, 60);
 
@@ -32,7 +32,7 @@ export async function UploadProfileImage(
 
   console.log(filepath);
 
-  const { data, error } = await supabasePublic.storage
+  const { data, error } = await supabase.storage
     .from("image")
     .upload(filepath, file, {
       cacheControl: "3600",
@@ -60,7 +60,7 @@ export async function UploadBase64Image(userId: any, filename: any, file: any) {
   // Create a Blob from the Uint8Array
   const blob = new Blob([uint8Array]);
 
-  const { data, error } = await supabasePublic.storage
+  const { data, error } = await supabase.storage
     .from("image")
     .upload(filepath, blob, {
       cacheControl: "3600",
@@ -72,7 +72,7 @@ export async function UploadBase64Image(userId: any, filename: any, file: any) {
 
 // Create file url
 export async function CreateImageUrl2(filepath: any) {
-  const { data, error } = await supabasePublic.storage
+  const { data, error } = await supabase.storage
     .from("image")
     .createSignedUrl(filepath, 60);
 

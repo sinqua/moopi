@@ -1,6 +1,3 @@
-"use client";
-import { useState, useLayoutEffect } from "react";
-
 import { CreateImageUrl2 } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
@@ -9,53 +6,25 @@ import parse from "html-react-parser";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import "react-quill/dist/quill.snow.css";
-import useDrag from "@/app/hooks/dragHook";
 import Avatar from "@/components/user/Avatar";
 import ProfileCard, { ProfileCardProps } from "@/components/user/ProfileCard";
+import TabBar from "@/components/user/TabBar";
 
-const getUserDetail = async () => {
-  await fetch("/api/user/detail", {
+const getUserDetail = async (id: string) => {
+  const res = await fetch("/api/user/detail", {
     method: "POST",
     body: JSON.stringify({
-      user_id: params.id,
+      user_id: id,
     }),
   })
-    .then((res) => res.json())
-    .then(async (data) => {
-      const wordCount = countOccurrences(
-        data.body.detail.description,
-        "image"
-      );
-      setDescriptionImgCount(wordCount);
+  return res.json();
+};
 
-      const descriptionObject = JSON.parse(data.body.detail.description);
+const countOccurrences = (str: any, word: any) => {
+  const regex = new RegExp(`\\"${word}\\"`, "gi");
+  const matches = str.match(regex);
 
-      const arr: any[] = [];
-      Object.keys(descriptionObject).forEach((key) =>
-        arr.push(descriptionObject[key])
-      );
-
-      for (let i = 0; i < arr.length; i++) {
-        if (Object.keys(arr[i].insert).includes("image")) {
-          await CreateImageUrl2(arr[i].insert.image).then(async (url) => {
-            arr[i].insert.image = url!.signedUrl;
-            arr[i].attributes = {
-              display: "inline-block",
-              onload: setLoadedCount((count) => count + 1),
-            };
-          });
-        }
-      }
-
-      var cfg = {};
-      var converter = new QuillDeltaToHtmlConverter(arr, cfg);
-      var html = converter.convert();
-
-      setDescription(html);
-    })
-    .catch((err) => {
-      console.log("user does not have description");
-    });
+  return matches ? matches.length : 0;
 };
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -70,6 +39,36 @@ export default async function Page({ params }: { params: { id: string } }) {
   });
   const detail = await getUserDetail(params.id);
 
+  const descriptionImgCount = countOccurrences(
+    detail.body.detail.description,
+    "image"
+  );
+
+  const descriptionObject = JSON.parse(detail.body.detail.description);
+
+  const arr: any[] = [];
+  Object.keys(descriptionObject).forEach((key) =>
+    arr.push(descriptionObject[key])
+  );
+
+  for (let i = 0; i < arr.length; i++) {
+    if (Object.keys(arr[i].insert).includes("image")) {
+      await CreateImageUrl2(arr[i].insert.image).then(async (url) => {
+        arr[i].insert.image = url!.signedUrl;
+        arr[i].attributes = {
+          display: "inline-block",
+        };
+      });
+    }
+  }
+
+  var cfg = {};
+  var converter = new QuillDeltaToHtmlConverter(arr, cfg);
+  var html = converter.convert();
+
+  const description = html;
+
+
   const property: ProfileCardProps = {
     profileImage : profileImage.body.auth.image,
     nickname : nickname.body.user.nickname,
@@ -79,34 +78,11 @@ export default async function Page({ params }: { params: { id: string } }) {
     id : params.id,
   };
 
-
-  const [page, setPage] = useState("설명");
-
-
-  const [description, setDescription] = useState<any>(null);
-
-
   // Prevent the default right-click behavior
   const handleContextMenu = (event: any) => {
     event.preventDefault();
   };
 
-  const [descriptionImgCount, setDescriptionImgCount] = useState(-1);
-  const [loadedCount, setLoadedCount] = useState(0);
-
-  // image 개수 찾기
-  const countOccurrences = (str: any, word: any) => {
-    const regex = new RegExp(`\\"${word}\\"`, "gi");
-    const matches = str.match(regex);
-
-    return matches ? matches.length : 0;
-  };
-
-
-
-  useLayoutEffect(() => {
-    getUserDetail();
-  }, []);
 
   return (
     <>
@@ -118,46 +94,12 @@ export default async function Page({ params }: { params: { id: string } }) {
           <Avatar IframeUrl={IframeUrl} />
           <ProfileCard {...property} />
         </div>
-
-        <div className="md:mt-0 mt-[40px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
-          <div className="w-full h-full flex justify-center border-solid border-[1px] border-[#E7E7E7]">
-            <div
-              className={page === "설명" ? selectedBtn : normalBtn}
-              onClick={() => setPage("설명")}
-            >
-              설명
-            </div>
-            <div
-              className={page === "포트폴리오" ? selectedBtn : normalBtn}
-              onClick={() => setPage("포트폴리오")}
-            >
-              포트폴리오
-            </div>
-            <div
-              className={page === "가격정보" ? selectedBtn : normalBtn}
-              onClick={() => setPage("가격정보")}
-            >
-              가격정보
-            </div>
-            <div
-              className={page === "리뷰" ? selectedBtn : normalBtn}
-              onClick={() => setPage("리뷰")}
-            >
-              리뷰
-            </div>
-          </div>
-        </div>
+        <TabBar />
+        
         <div className="ql-editor relative w-full md:w-[1312px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px] grow">
-          <div className={page !== "설명" ? "hidden" : ""}>
+          {/* <div className={page !== "설명" ? "hidden" : ""}>
             {description && parse(description)}
-            {descriptionImgCount !== -1 &&
-              descriptionImgCount !== loadedCount &&
-              descriptionImgCount !== 0 && (
-                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-white">
-                  <ClipLoader size={100} color="#2778C7" />
-                </div>
-              )}
-          </div>
+          </div> */}
           {/* {page === "설명" && (
             <div>
               {description && parse(description)}
@@ -179,10 +121,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`;
 
-const normalBtn =
-  "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
-const selectedBtn =
-  "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow text-white bg-[#333333] cursor-pointer";
 
 const getUserNickname = async (id: string) => {
   const res = await fetch("/api/user/nickname", {
