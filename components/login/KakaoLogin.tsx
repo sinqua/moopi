@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function KakaoLogin() {
   const searchParams = useSearchParams();
-  const callbackUrl = ("/login/verify?callbackUrl=" +
+  const callbackUrl = ("/verify?callbackUrl=" +
     (searchParams.get("callbackUrl") ?? "/")) as string;
 
   return (
