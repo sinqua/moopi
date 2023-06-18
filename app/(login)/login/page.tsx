@@ -7,15 +7,22 @@ import TwitterLogin from "@/components/login/TwitterLogin";
 import GoogleLogin from "@/components/login/GoogleLogin";
 import DiscordLogin from "@/components/login/DiscordLogin";
 import NaverLogin from "@/components/login/NaverLogin";
+import loginBg from "@/app/assets/images/loginBackground.png";
 
 export default function Page() {
-
   return (
     <div className="flex flex-row sm:h-full h-[812px] font-sans">
-      <div className="md:grow bg-login bg-no-repeat bg-cover"></div>
+      <div className="md:grow">
+        <Image className="hidden w-full h-full md:block" src={loginBg} alt="" loading="eager" />
+      </div>
       <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
         <a href="/" className="w-[106px] h-[30px]">
-          <Image className="w-[106px] h-[30px]" src={moopiLogo} alt="" loading="eager" />
+          <Image
+            className="w-[106px] h-[30px]"
+            src={moopiLogo}
+            alt=""
+            loading="eager"
+          />
         </a>
         <div className="sm:h-[95px] h-[40px]" />
         <p className="font-semibold text-xl">moopi에 오신 것을 환영합니다</p>
@@ -46,6 +53,7 @@ export default function Page() {
             className="w-[106px] h-[30px] m-[10px]"
             src={offingLogo}
             alt=""
+            loading="eager"
           />
         </div>
       </div>
