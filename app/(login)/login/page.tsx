@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import moopiLogo from "@/app/assets/logos/moopi.svg";
-import offingLogo from "@/app/assets/logos/offing text blue.svg";
+import offingLogo from "@/app/assets/logos/offing.svg";
 import KakaoLogin from "@/components/login/KakaoLogin";
 import TwitterLogin from "@/components/login/TwitterLogin";
 import GoogleLogin from "@/components/login/GoogleLogin";
