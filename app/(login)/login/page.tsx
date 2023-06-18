@@ -15,7 +15,7 @@ export default function Page() {
       <div className="md:grow bg-login bg-no-repeat bg-cover"></div>
       <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
         <a href="/" className="w-[106px] h-[30px]">
-          <Image className="w-[106px] h-[30px]" src={moopiLogo} alt="" />
+          <Image className="w-[106px] h-[30px]" src={moopiLogo} alt="" loading="eager" />
         </a>
         <div className="sm:h-[95px] h-[40px]" />
         <p className="font-semibold text-xl">moopi에 오신 것을 환영합니다</p>

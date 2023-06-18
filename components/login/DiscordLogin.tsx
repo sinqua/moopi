@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 export default function DiscordLogin() {
   const searchParams = useSearchParams();
-  const callbackUrl = ("/login/verifying?callbackUrl=" +
+  const callbackUrl = ("/login/verify?callbackUrl=" +
     (searchParams.get("callbackUrl") ?? "/")) as string;
 
   return (
