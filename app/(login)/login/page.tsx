@@ -8,7 +8,6 @@ import GoogleLogin from "@/components/login/GoogleLogin";
 import DiscordLogin from "@/components/login/DiscordLogin";
 import NaverLogin from "@/components/login/NaverLogin";
 import loginBg from "@/app/assets/images/loginBackground.png";
-import { Suspense } from "react";
 
 export default function Page() {
   return (
@@ -34,13 +33,13 @@ export default function Page() {
         <p className="font-semibold text-xl">moopi에 오신 것을 환영합니다</p>
         <div className="sm:h-[60px] h-[80px]" />
         <div className="space-y-[18px] text-sm text-white">
-          <Suspense fallback={<div>Loading...</div>}>
+          {/* <Suspense fallback={<div>Loading...</div>}> */}
             <KakaoLogin />
             <TwitterLogin />
             <GoogleLogin />
             <DiscordLogin />
             <NaverLogin />
-          </Suspense>
+          {/* </Suspense> */}
         </div>
         <div className="sm:h-[57px] h-[60px]" />
         <div className="w-[300px] text-sm text-center leading-[30px]">
