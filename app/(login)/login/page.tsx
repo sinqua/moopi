@@ -8,12 +8,18 @@ import GoogleLogin from "@/components/login/GoogleLogin";
 import DiscordLogin from "@/components/login/DiscordLogin";
 import NaverLogin from "@/components/login/NaverLogin";
 import loginBg from "@/app/assets/images/loginBackground.png";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
     <div className="flex flex-row sm:h-full h-[812px] font-sans">
       <div className="md:grow">
-        <Image className="hidden w-full h-full md:block" src={loginBg} alt="" loading="eager" />
+        <Image
+          className="hidden w-full h-full md:block"
+          src={loginBg}
+          alt=""
+          loading="eager"
+        />
       </div>
       <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
         <a href="/" className="w-[106px] h-[30px]">
@@ -28,11 +34,13 @@ export default function Page() {
         <p className="font-semibold text-xl">moopi에 오신 것을 환영합니다</p>
         <div className="sm:h-[60px] h-[80px]" />
         <div className="space-y-[18px] text-sm text-white">
-          <KakaoLogin />
-          <TwitterLogin />
-          <GoogleLogin />
-          <DiscordLogin />
-          <NaverLogin />
+          <Suspense fallback={<div>Loading...</div>}>
+            <KakaoLogin />
+            <TwitterLogin />
+            <GoogleLogin />
+            <DiscordLogin />
+            <NaverLogin />
+          </Suspense>
         </div>
         <div className="sm:h-[57px] h-[60px]" />
         <div className="w-[300px] text-sm text-center leading-[30px]">
