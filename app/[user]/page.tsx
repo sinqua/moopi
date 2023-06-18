@@ -6,11 +6,11 @@ import ProfileCard from "@/components/user/ProfileCard";
 import TabBar from "@/components/user/TabBar";
 import { supabase, supabaseAuth } from "@/lib/database";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const nickname = await getUserNickname(params.id);
-  const profileImage = await getUserProfileImage(params.id);
-  const profile = await getUserProfile(params.id);
-  const detail = await getUserDetail(params.id);
+export default async function Page({ params }: { params: { user: string } }) {
+  const nickname = await getUserNickname(params.user);
+  const profileImage = await getUserProfileImage(params.user);
+  const profile = await getUserProfile(params.user);
+  const detail = await getUserDetail(params.user);
 
   const tags = profile.tags.map((tag: any) => {
     return tag.tag;
@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           description={profile.description}
           tags={tags}
           profile={profile}
-          id={params.id}
+          id={params.user}
         />
       </div>
       <TabBar description={description} />
