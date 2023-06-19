@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 interface DescriptionProps {
 	session: any;
     profile: any;
+    inputDescriptionRef: any;
 }
 
 export const Description = (props: DescriptionProps) => {
-    const { session, profile } = props;
+    const { session, profile, inputDescriptionRef } = props;
 
-    const inputDescriptionRef = useRef<any>(null);
     const [textareaCount, setTextareaCount] = useState(0);
 
     useEffect(() => {

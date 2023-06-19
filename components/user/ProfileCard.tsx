@@ -97,7 +97,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           <div className="flex w-full h-[47px] space-x-[16px]">
             <div
               className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer"
-              onClick={() => router.push(`/${id}/edit`)}
+              onClick={() => router.push(`/${id}/edit/profile-card`)}
             >
               슬롯 설정
             </div>

@@ -6,10 +6,11 @@ interface ModalProps {
   // session: any;
   modal: any;
   setModal: any;
+  onSaveProfileCard: any;
 }
 
 export const Modal = (props: ModalProps) => {
-  const { modal, setModal } = props;
+  const { modal, setModal, onSaveProfileCard } = props;
 
   const savePofile = () => {
     // if (page === "프로필 카드") {
@@ -41,7 +42,7 @@ export const Modal = (props: ModalProps) => {
             </div>
             <div
               className="flex justify-center basis-1/2 py-[20px] text-[#2778C7] cursor-pointer"
-              onClick={savePofile}
+              onClick={onSaveProfileCard}
             >
               저장
             </div>
