@@ -1,13 +1,15 @@
+'use client'
 import useDrag from "@/app/hooks/dragHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-interface NavbarProps {
+export interface NavbarProps {
     page: any;
     setPage: any;
 }
 
-export const Navbar = (props: NavbarProps) => {
+export default function Navbar(props: NavbarProps) {
     const { page, setPage } = props;
+
     let { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
     useEffect(() => {

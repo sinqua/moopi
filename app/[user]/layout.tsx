@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center h-auto min-h-full">
+    <div className="relative flex flex-col items-center h-auto min-h-full">
       <Header />
       {children}
       <Footer />

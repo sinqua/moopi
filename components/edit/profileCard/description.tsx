@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import useInputDescription from "./useInputDescription";
 
 interface DescriptionProps {
 	session: any;
-    userInfo: any;
-    inputDescriptionRef: any;
+    profile: any;
 }
 
 export const Description = (props: DescriptionProps) => {
-    const { session, userInfo, inputDescriptionRef } = props;
-    const { textareaCount, setTextareaCount } = useInputDescription(props);
+    const { session, profile } = props;
+
+    const inputDescriptionRef = useRef<any>(null);
+    const [textareaCount, setTextareaCount] = useState(0);
+
+    useEffect(() => {
+        inputDescriptionRef.current.value = profile ? profile.description : "";
+        setTextareaCount(inputDescriptionRef.current.value.length);
+    }, [profile]);
 
     return (
         <div>

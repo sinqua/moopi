@@ -8,11 +8,11 @@ import useDrag from "@/app/hooks/dragHook";
 
 interface AvatarProps {
 	session: any;
-    userInfo: any;
+    profile: any;
 }
 
 export const Avatar = (props: AvatarProps) => {
-    const { session, userInfo } = props;
+    const { session, profile } = props;
     // const { textareaCount, setTextareaCount } = useInputDescription(props);
     const [avatarTags, setAvatarTags] = useState<any>(["VRC", "blender", "트위치 방송", "이세계아이돌"]);
 
@@ -29,7 +29,7 @@ export const Avatar = (props: AvatarProps) => {
             <div className="w-full p-[30px] flex flex-col rounded-[10px] shadow-[0px_3px_6px_rgba(0,0,0,0.16)]">
                 <div className="flex sm:flex-row flex-col sm:space-x-[30px] sm:space-y-0 space-y-[30px] sm:items-start items-center">
                     <Image className="w-[316px] h-[512px] rounded-[10px]" src={emptyImg} alt=""/>
-                    <div className="inline-flex flex-col grow w-full overflow-hidden">
+                    <div className="inline-flex flex-col grow w-full md:h-[512px] h-auto overflow-hidden">
                         <div className="w-full h-full md:space-y-[50px] space-y-[30px]">
                             <div className="flex flex-col space-y-[15px] mb-[50px]">
                                 <p className="text-[20px] font-semibold">Avatar Name</p>

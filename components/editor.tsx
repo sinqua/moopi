@@ -1,3 +1,4 @@
+'use client'
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 // import styled from 'styled-components';
 import axios from 'axios';
@@ -148,8 +149,3 @@ const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, i
 }
 
 export default Editor;
-
-// // style
-// const CustomReactQuill = styled(ReactQuill)`
-//     height: 300px;
-// `

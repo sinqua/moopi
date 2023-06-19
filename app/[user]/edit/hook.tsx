@@ -28,24 +28,24 @@ export default function useProfileHook() {
 
   const [htmlStr, setHtmlStr] = useState<any>(null);
 
-  const getUserProfile = async () => {
-    await fetch("/api/user/profile", {
-      method: "POST",
-      body: JSON.stringify({
-        user_id: session?.user.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUserInfo(data.body.user);
+  // const getUserProfile = async () => {
+  //   await fetch("/api/user/profile", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       user_id: session?.user.id,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setUserInfo(data.body.user);
 
-        setTags(
-          data.body.user.tags.map((tag: any) => {
-            return { value: tag.tag, label: tag.tag };
-          })
-        );
-      });
-  };
+  //       setTags(
+  //         data.body.user.tags.map((tag: any) => {
+  //           return { value: tag.tag, label: tag.tag };
+  //         })
+  //       );
+  //     });
+  // };
 
   const getUserDetail = async () => {
     await fetch("/api/user/detail", {
@@ -165,7 +165,7 @@ export default function useProfileHook() {
 
   useEffect(() => {
     if (session) {
-      getUserProfile();
+      // getUserProfile();
       getUserDetail();
     }
   }, [session]);

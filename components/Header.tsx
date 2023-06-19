@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 import Image from "next/image";
@@ -11,9 +11,12 @@ import alertImg from '@/app/assets/images/alert.svg'
 import profileImg from '@/app/assets/images/profile.svg'
 import { use, useEffect, useState } from "react";
 
+
 export default function Header() {
     const [callbackUrl, setCallbackUrl] = useState<string>();
     const router = useRouter();
+
+    const [modal, setModal] = useState(false);
 
     const {data: session, status} = useSession();
 
@@ -23,8 +26,8 @@ export default function Header() {
 
 
     return (
-        <div className='relative md:max-w-[1312px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm'>
-            <a href="/" title="Go to homepage">
+        <div className='relative md:max-w-[1312px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm text-[14px]'>
+            <a href="/" title="Go to homepage"> 
                 <Image src={moopiLogo} className="w-auto sm:h-[40px] h-[30px]" alt=""/>
             </a>
             <div className='h-[30px] flex flex-row items-center sm:space-x-[30px] space-x-[20px]'>
@@ -35,13 +38,21 @@ export default function Header() {
                     </div>
                 </div>
                 {status === "unauthenticated" ?
-                    <div className="flex justify-center items-center w-[82px] h-[40px] bg-white text-[14px] font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer" onClick={() => router.push(`/login?callbackUrl=${callbackUrl}`)}>
+                    <div className="flex justify-center items-center w-[82px] h-[40px] bg-white font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer" onClick={() => router.push(`/login?callbackUrl=${callbackUrl}`)}>
                         로그인
                     </div> :
                     <>
                         <Image src={messageImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" />
                         <Image src={alertImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" />
-                        <Image src={profileImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" onClick={()=>router.push('/profile')} />
+                        <Image src={profileImg} className='inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer' alt="" onClick={() => setModal(!modal)} />
+                        {
+                            modal &&
+                            <div className="absolute top-[60px] right-0 w-[144px] rounded-[10px] bg-white border-solid border-[1px] border-[#ECECEC] overflow-hidden z-10">
+                                <div className="flex items-center h-[43px] px-[15px] cursor-pointer" onClick={()=>router.push(`/${session!.user.id}/edit`)}>프로필 변경</div>
+                                <div className="w-full h-[1px] bg-[#ECECEC]"></div>
+                                <div className="flex items-center h-[43px] px-[15px] cursor-pointer" onClick={() => signOut()}>로그아웃</div>
+                            </div>
+                        }
                     </>
                 }
             </div>
