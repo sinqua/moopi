@@ -12,7 +12,7 @@ import { Nickname } from "./nickname";
 import { Description } from "./description";
 import { Tag } from "./tag";
 import { Avatar } from "./avatar";
-import { Modal } from "./modal";
+import { Modal } from "../modal";
 import { UploadProfileImage } from "@/lib/storage";
 import { v4 as uuidv4 } from "uuid";
 import { supabase, supabaseAuth } from "@/lib/database";
@@ -21,16 +21,14 @@ export interface ProfileCardProps {
   profileImage: string;
   profile: any;
   tags: any;
+  mostUsedTags: any;
 }
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
 
 export default function ProfileCard(props: ProfileCardProps) {
-  const { profileImage, profile, tags } = props;
-
-  const [hover, setHover] = useState(false);
-  const [like, setLike] = useState(false);
+  const { profileImage, profile, tags, mostUsedTags } = props;
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -118,6 +116,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           session={session}
           currentTags={currentTags}
           setCurrentTags={setCurrentTags}
+          mostUsedTags={mostUsedTags}
         />
         <Avatar session={session} profile={profile} />
         <div className="flex justify-center pt-[40px] space-x-[15px]">
@@ -132,7 +131,7 @@ export default function ProfileCard(props: ProfileCardProps) {
       <Modal
         modal={modal}
         setModal={setModal}
-        onSaveProfileCard={onSaveProfileCard}
+        onSaveData={onSaveProfileCard}
       />
     </>
   );

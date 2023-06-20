@@ -1,11 +1,10 @@
-// import Editor from "@/components/Editor";
 "use client";
 import { UploadBase64Image } from "@/lib/storage";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Modal } from "../profileCard/modal";
+import { Modal } from "../modal";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/database";
 
@@ -87,11 +86,7 @@ export default function Description(props: DescriptionProps) {
           저장하기
         </div>
       </div>
-      <Modal
-        modal={modal}
-        setModal={setModal}
-        onSaveProfileCard={onSaveDescription}
-      />
+      <Modal modal={modal} setModal={setModal} onSaveData={onSaveDescription} />
     </>
   );
 }

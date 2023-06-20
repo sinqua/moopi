@@ -15,13 +15,15 @@ export interface ProfileCardProps {
   tags: string[];
   profile: any;
   id: string;
+  modal: any;
+  setModal: any;
 }
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
 
 export default function ProfileCard(props: ProfileCardProps) {
-  const { profileImage, nickname, description, tags, profile, id } = props;
+  const { profileImage, nickname, description, tags, profile, id, modal, setModal } = props;
 
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
@@ -97,7 +99,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           <div className="flex w-full h-[47px] space-x-[16px]">
             <div
               className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer"
-              onClick={() => router.push(`/${id}/edit/profile-card`)}
+              onClick={() => setModal(!modal)}
             >
               슬롯 설정
             </div>

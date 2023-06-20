@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Modal } from "../profileCard/modal";
+import { Modal } from "../modal";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/database";
 
@@ -92,7 +92,7 @@ export default function PriceInfo(props: PriceInfoProps) {
       <Modal
         modal={modal}
         setModal={setModal}
-        onSaveProfileCard={onSavePriceInfo}
+        onSaveData={onSavePriceInfo}
       />
     </>
   );

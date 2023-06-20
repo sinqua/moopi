@@ -9,11 +9,18 @@ export default async function Page({ params }: { params: { user: string } }) {
   const profileImage = await getUserProfileImage(params.user);
   const profile = await getUserProfile(params.user);
   const tags = profile.tags.map((tag: any) => {
-    return { value: tag.tag, label: tag.tag};
+    return { value: tag.tag, label: tag.tag };
   });
 
+  const mostUsedTags = await getMostUsedTags();
+
   return (
-    <ProfileCard profileImage={profileImage.image} profile={profile} tags={tags}/>
+    <ProfileCard
+      profileImage={profileImage.image}
+      profile={profile}
+      tags={tags}
+      mostUsedTags={mostUsedTags}
+    />
   );
 }
 
@@ -42,4 +49,30 @@ const getUserProfileImage = async (id: string) => {
     return { image: url!.signedUrl };
   }
   return authData![0];
+};
+
+const getMostUsedTags = async () => {
+  const { data, error } = await supabase
+  .from("tags")
+  .select("*", { count: "exact" });
+
+  const countByGroupTag : any = {};
+  data!.forEach(row => {
+    const tag = row.tag;
+    if (countByGroupTag[tag]) {
+      countByGroupTag[tag]++;
+    } else {
+      countByGroupTag[tag] = 1;
+    }
+  });
+  const countArray = Object.entries(countByGroupTag);
+  countArray.sort((a: any, b: any) => b[1] - a[1]);
+
+  const slicedCountByGroupTag = Object.fromEntries(countArray.slice(0, 5));
+
+  const options = Object.keys(slicedCountByGroupTag).map((tag: any) => {
+    return { value: tag, label: tag };
+  })
+
+  return options;
 };

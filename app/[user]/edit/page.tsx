@@ -14,7 +14,7 @@ import { Avatar } from "@/components/edit/profileCard/avatar";
 import { supabase, supabaseAuth } from "@/lib/database";
 import { CreateImageUrl } from "@/lib/storage";
 import ProfileCard from "@/components/edit//profileCard/profileCard";
-import { Modal } from "@/components/edit/profileCard/modal";
+import { Modal } from "@/components/edit/modal";
 
 // const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 

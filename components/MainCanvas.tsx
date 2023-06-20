@@ -36,7 +36,7 @@ const MainCanvas = (props: MainCanvasProps) => {
 	const [modelInfo, setModelInfo] = useState<ModelProps>();
 	const [fullScreen, setFullScreen] = useState(false);
 	const [helpViewer, setHelpViewer] = useState(false);
-	const [thumbnailViewer, setThumbnailViewer] = useState(false);
+	const [thumbnailViewer, setThumbnailViewer] = useState(true);
     const [progress, setProgress] = useState(false);
 
 	const cameraControlsRef = useRef<CameraControls>(null);
@@ -85,7 +85,7 @@ const MainCanvas = (props: MainCanvasProps) => {
 		<>
 			{thumbnailViewer ? (
 				<div
-					className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[#dc444480] z-10"
+					className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover z-10 cursor-pointer"
 					onClick={() => setThumbnailViewer(false)}
 				/>
 			) : (
@@ -138,7 +138,7 @@ function MenuButton(
 	setThumbnailViewer: any
 ) {
 	return (
-		<div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] px-[30px] py-[20px]">
+		<div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] px-[35px] py-[20px]">
 			<div
 				className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
 				onClick={resetCamera}

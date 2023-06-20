@@ -6,18 +6,11 @@ interface TagProps {
   session: any;
   currentTags: any;
   setCurrentTags: any;
+  mostUsedTags: any;
 }
 
 export const Tag = (props: TagProps) => {
-  const { session, currentTags, setCurrentTags } = props;
-
-
-  const options = [
-    { value: "VRM", label: "VRM" },
-    { value: "이세계아이돌", label: "이세계아이돌" },
-    { value: "Blender", label: "Blender" },
-  ];
-
+  const { session, currentTags, setCurrentTags, mostUsedTags } = props;
 
   return (
     <div>
@@ -28,7 +21,7 @@ export const Tag = (props: TagProps) => {
       <div className="mb-[20px]">
         <CreatableSelect
           isMulti
-          options={options}
+          options={mostUsedTags}
           value={currentTags}
           instanceId={""}
           onChange={(e: any) => {

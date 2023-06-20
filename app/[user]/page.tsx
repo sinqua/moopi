@@ -1,16 +1,15 @@
 import { CreateImageUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
-import Avatar from "@/components/user/Avatar";
-import ProfileCard from "@/components/user/ProfileCard";
-import TabBar from "@/components/user/TabBar";
 import { supabase, supabaseAuth } from "@/lib/database";
+import User from "@/components/user/user";
 
 export default async function Page({ params }: { params: { user: string } }) {
   const nickname = await getUserNickname(params.user);
   const profileImage = await getUserProfileImage(params.user);
   const profile = await getUserProfile(params.user);
   const detail = await getUserDetail(params.user);
+  const slot = await getUserSlot(params.user);
 
   const tags = profile.tags.map((tag: any) => {
     return tag.tag;
@@ -18,21 +17,22 @@ export default async function Page({ params }: { params: { user: string } }) {
   const descriptionObject = JSON.parse(detail.description);
   const description = await CreateHtml(descriptionObject);
 
+  const priceInfoObject = JSON.parse(detail.price_info);
+  const priceInfo = await CreateHtml(priceInfoObject);
+
   return (
-    <div className="w-full flex flex-col items-center font-sans grow">
-      <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
-        <Avatar IframeUrl={IframeUrl} />
-        <ProfileCard
-          profileImage={profileImage.image}
-          nickname={nickname.nickname}
-          description={profile.description}
-          tags={tags}
-          profile={profile}
-          id={params.user}
-        />
-      </div>
-      <TabBar description={description} />
-    </div>
+    <User
+      IframeUrl={IframeUrl}
+      profileImage={profileImage.image}
+      nickname={nickname.nickname}
+      profileDescription={profile.description}
+      tags={tags}
+      profile={profile}
+      id={params.user}
+      description={description}
+      priceInfo={priceInfo}
+      slot={slot}
+    />
   );
 }
 
@@ -77,6 +77,15 @@ const getUserProfileImage = async (id: string) => {
 const getUserDetail = async (id: string) => {
   const { data, error } = await supabase
     .from("user_details")
+    .select()
+    .eq("user_id", id);
+
+  return data![0];
+};
+
+const getUserSlot = async (id: string) => {
+  const { data, error } = await supabase
+    .from("slots")
     .select()
     .eq("user_id", id);
 
