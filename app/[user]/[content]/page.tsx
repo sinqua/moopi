@@ -36,7 +36,6 @@ export default async function Page({
           id={params.user}
         />
       </div>
-
       <TabBar />
       {params.content === "description" && (
         <Description description={description} />
