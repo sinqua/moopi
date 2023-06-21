@@ -5,8 +5,13 @@ import Avatar from "@/components/user/Avatar";
 import ProfileCard from "@/components/user/ProfileCard";
 import TabBar from "@/components/user/TabBar";
 import { supabase, supabaseAuth } from "@/lib/database";
+import Description from "@/components/user/Description";
 
-export default async function Page({ params }: { params: { user: string } }) {
+export default async function Page({
+  params,
+}: {
+  params: { user: string; content: string };
+}) {
   const nickname = await getUserNickname(params.user);
   const profileImage = await getUserProfileImage(params.user);
   const profile = await getUserProfile(params.user);
@@ -31,6 +36,11 @@ export default async function Page({ params }: { params: { user: string } }) {
           id={params.user}
         />
       </div>
+
+      <TabBar />
+      {params.content === "description" && (
+        <Description description={description} />
+      )}
     </div>
   );
 }
