@@ -1,22 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 
 interface TagProps {
   session: any;
-  tags: any;
+  currentTags: any;
+  setCurrentTags: any;
+  mostUsedTags: any;
 }
 
 export const Tag = (props: TagProps) => {
-  const { session, tags } = props;
-
-  const [currentTags, setCurrentTags] = useState(tags);
-
-  const options = [
-    { value: "VRM", label: "VRM" },
-    { value: "이세계아이돌", label: "이세계아이돌" },
-    { value: "Blender", label: "Blender" },
-  ];
+  const { session, currentTags, setCurrentTags, mostUsedTags } = props;
 
   return (
     <div>
@@ -27,11 +21,12 @@ export const Tag = (props: TagProps) => {
       <div className="mb-[20px]">
         <CreatableSelect
           isMulti
-          options={options}
+          options={mostUsedTags}
           value={currentTags}
           instanceId={""}
           onChange={(e: any) => {
             setCurrentTags(e);
+            
           }}
           className="flex w-full items-center sm:w-[482px] h-[47px]"
           placeholder={"태그를 입력해주세요"}

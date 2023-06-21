@@ -1,30 +1,30 @@
 'use client'
 import useDrag from "@/app/hooks/dragHook";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-export interface NavbarProps {
-    page: any;
-    setPage: any;
-}
 
-export default function Navbar(props: NavbarProps) {
-    const { page, setPage } = props;
-
+export default function Navbar() {
     let { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
+
+    const {data: session, status} = useSession();
+    const pathname = usePathname();
 
     useEffect(() => {
         setMountedStatus(true);
     }, []);
 
     return (
-        <div className="w-full flex flex-col items-start sm:space-y-[30px] space-y-[20px]">
+        <div className="w-full max-w-[1312px] flex flex-col items-start sm:space-y-[30px] space-y-[20px]">
             <p className="sm:text-[30px] text-[20px] font-bold">프로필 수정</p>
             <div className="relative flex w-full h-[30px] sm:space-x-[70px] space-x-[20px] sm:text-[18px] text-[14px] whitespace-nowrap overflow-x-scroll scrollbar-hide"  {...dragEvents} ref={dragRef}>
-                <div className={page === "프로필 카드" ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} onClick={() => setPage("프로필 카드")}>프로필 카드</div>
-                <div className={page === "설명" ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} onClick={() => setPage("설명")}>설명</div>
-                <div className={page === "포트폴리오" ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} onClick={() => setPage("포트폴리오")}>포트폴리오</div>
-                <div className={page === "가격정보" ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} onClick={() => setPage("가격정보")}>가격정보</div>
-                <div className={page === "결제수단" ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} onClick={() => setPage("결제수단")}>결제수단</div>
+                <Link href={`${session?.user.id}/edit/profile-card`} className={pathname.includes("profile-card") ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} >프로필 카드</Link>
+                <Link href={`${session?.user.id}/edit/description`} className={pathname.includes("description") ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} >설명</Link>
+                <Link href={`${session?.user.id}/edit/portfolio`} className={pathname.includes("portfolio") ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"}>포트폴리오</Link>
+                <Link href={`${session?.user.id}/edit/price-info`} className={pathname.includes("price-info") ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} >가격정보</Link>
+                <Link href={`${session?.user.id}/edit/bill`} className={pathname.includes("bill") ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} >결제수단</Link>
             </div>
         </div>
     );

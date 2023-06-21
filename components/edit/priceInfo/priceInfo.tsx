@@ -1,3 +1,4 @@
+// import Editor from "@/components/Editor";
 "use client";
 import { UploadBase64Image } from "@/lib/storage";
 import { useSession } from "next-auth/react";
@@ -10,12 +11,12 @@ import { supabase } from "@/lib/database";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
-interface DescriptionProps {
+interface PriceInfoProps {
   profile: any;
   detail: any;
 }
 
-export default function Description(props: DescriptionProps) {
+export default function PriceInfo(props: PriceInfoProps) {
   const { profile, detail } = props;
   const router = useRouter();
 
@@ -28,7 +29,7 @@ export default function Description(props: DescriptionProps) {
 
   const [modal, setModal] = useState(false);
 
-  const onSaveDescription = async () => {
+  const onSavePriceInfo = async () => {
     for (let i = 0; i < htmlStr.ops.length; i++) {
       if (Object.keys(htmlStr.ops[i].insert).includes("image")) {
         if (htmlStr.ops[i].insert.image.includes("base64")) {
@@ -51,24 +52,26 @@ export default function Description(props: DescriptionProps) {
 
     const { data, error } = await supabase
       .from("user_details")
-      .update({ description: JSON.stringify({ ...htmlStr.ops }) })
+      .update({ price_info: JSON.stringify({ ...htmlStr.ops }) })
       .eq("user_id", session?.user.id)
       .select();
 
+      
+    console.log("success data", data);
     router.push(`/${session?.user.id}`);
   };
 
   return (
     <>
       <div>
-        <p className="mb-[15px] text-[20px] font-semibold">상품 설명</p>
+        <p className="mb-[15px] text-[20px] font-semibold">가격정보</p>
         <p className="mb-[30px] text-[#7B7B7B] leading-[25px]">
-          크리에이터님이 제공하는 서비스에 대해 자유롭게 설명해주세요
+          서비스에 대한 가격정보를 상세히 적어주세요.
         </p>
         <div className="h-[500px]">
           <Editor
             session={profile}
-            content={userDetail.description}
+            content={userDetail.price_info}
             htmlStr={htmlStr}
             setHtmlStr={setHtmlStr}
             imgFiles={imgFiles}
@@ -86,7 +89,11 @@ export default function Description(props: DescriptionProps) {
           저장하기
         </div>
       </div>
-      <Modal modal={modal} setModal={setModal} onSaveData={onSaveDescription} />
+      <Modal
+        modal={modal}
+        setModal={setModal}
+        onSaveData={onSavePriceInfo}
+      />
     </>
   );
 }

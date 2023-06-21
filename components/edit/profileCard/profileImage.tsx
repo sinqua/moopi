@@ -5,16 +5,16 @@ import emptyImg from "@/app/assets/images/empty.png";
 interface ProfileImageProps {
 	session: any;
     profileImage: any;
+    imgFile: any;
+    setImgFile: any;
 }
 
 export const ProfileImage = (props: ProfileImageProps) => {
-    const { session, profileImage } = props;
+    const { session, profileImage, imgFile, setImgFile } = props;
 
     const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
-    const [imgFile, setImgFile] = useState(null);
 
     const imgRef = useRef<any>();
-
 
     const loadImgFile = () => {
         const file = imgRef.current.files[0];

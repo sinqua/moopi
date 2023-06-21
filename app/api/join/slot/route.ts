@@ -4,11 +4,11 @@ import { supabaseAuth, supabase } from "@/lib/database";
 export async function POST(req: NextRequest, context: { params: any }) {
     const json = await req.json();
 
-    const { data, error } = await supabaseAuth
-                                .from('users')
-                                .update({'nickname': json.nickname})
-                                .eq('id', json.user_id );
-
+    const { data, error } = await supabase
+                                .from('slots')
+                                .insert([{user_id: json.user_id}])
+                                .select();
+    
     return NextResponse.json({
         status: 200,
         headers: {

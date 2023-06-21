@@ -65,10 +65,21 @@ export default function JoinPage() {
                                     })
                                 })
                                 .then((res) => res.json())
-                                .then((data) => {
+                                .then(async (data) => {
                                     if(data.status === 200) {
-                                        update();
-                                        router.push(callbackUrl);
+                                        await fetch('/api/join/slot', {
+                                            method: 'POST',
+                                            body: JSON.stringify({
+                                                "user_id": userId,
+                                            })
+                                        })
+                                        .then((res) => res.json())
+                                        .then((data) => {
+                                            if(data.status === 200) {
+                                                update();
+                                                router.push(callbackUrl);
+                                            }
+                                        });
                                     }
                                 });
                             }
