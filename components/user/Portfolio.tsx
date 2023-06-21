@@ -1,18 +1,20 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 
 interface PortfolioProps {
-  IframeUrl: string;
+  user: any;
+  portfolio: any;
 }
 
 export default function Portfolio(props: PortfolioProps) {
-  const { IframeUrl } = props;
-  const [portfolios, setPortfolios] = useState(["1", "2", "3", "4", "5"]);
+  const { user, portfolio } = props;
 
   return (
     <div className="ql-editor relative w-full md:w-[1312px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px] grow">
       <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[16px]">
-        {portfolios.map((portfolio: any, index: any) => {
+        {portfolio.map((work: any, index: any) => {
+          const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${user}/${work.id}`;
+
           return (
             <iframe
               src={IframeUrl}

@@ -30,6 +30,7 @@ export default async function Page({
   const priceInfo = await CreateHtml(priceInfoObject);
 
   const avatar = await getUserAvatar(params.user);
+  const portfolio = await getPortfoilo(params.user); 
 
   const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar.id}`;
 
@@ -52,13 +53,20 @@ export default async function Page({
       {params.content === "description" && (
         <Description description={description} />
       )}
-      {params.content === "portfolio" && <Portfolio IframeUrl={IframeUrl} />}
+      {params.content === "portfolio" && <Portfolio user={params.user} portfolio={portfolio} />}
       {params.content === "price" && <Price priceInfo={priceInfo} />}
     </>
   );
 }
 
+const getPortfoilo = async (id: string) => {
+  const { data, error } = await supabase
+    .from("avatars")
+    .select()
+    .eq("user_id", id);
 
+  return data;
+}
 
 const getUserAvatar = async (id: string) => {
   const { data, error } = await supabase
