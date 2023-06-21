@@ -2,7 +2,7 @@ import TabBar from "@/components/user/TabBar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="w-full">
       {children}
     </div>
   );

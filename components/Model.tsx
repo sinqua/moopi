@@ -6,7 +6,6 @@ import {
   VRM,
   VRMLoaderPlugin,
   VRMUtils,
-  VRMHumanoidHelper,
 } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
@@ -17,21 +16,17 @@ import { Color } from "three";
 
 export interface ModelProps {
   animationUrl?: string;
-  modelUrl: string;
+  modelUrl?: string;
   setProgress: (done: boolean) => void;
 }
 
 const Model: FC<ModelProps> = ({
-  animationUrl = "PutYourHandsUp.fbx",
-  modelUrl,
+  animationUrl = "/PutYourHandsUp.fbx",
+  modelUrl = "/s2xyoon.vrm",
   setProgress,
 }) => {
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
-  const helper = useHelper(vrmRef, THREE.SkeletonHelper);
-  useEffect(() => {
-    console.log("help", helper);
-  }, [helper]);
 
   const animationMixer = useMemo<THREE.AnimationMixer>(() => {
     if (!vrm) return null!;
@@ -58,8 +53,6 @@ const Model: FC<ModelProps> = ({
       (gltf) => {
         setProgress(true);
         const vrm: VRM = gltf.userData.vrm;
-        console.log("VRM", vrm);
-        console.log("Humanoid", vrm.humanoid);
 
         VRMUtils.deepDispose(vrm.scene);
         VRMUtils.removeUnnecessaryJoints(vrm.scene);
@@ -134,24 +127,3 @@ const gradientShader = {
           }
     `,
 };
-
-function traverseJson(jsonData: any, bonesArray: any[]): void {
-  if (typeof jsonData === 'object' && jsonData !== null) {
-    if (Array.isArray(jsonData)) {
-      for (const item of jsonData) {
-        traverseJson(item, bonesArray); // Recursively traverse each item in the array
-      }
-    } else {
-      for (const key in jsonData) {
-        if (key === 'name' && jsonData[key] === 'bone') {
-          bonesArray.push(jsonData); // Push the current node to the bones array
-        }
-        traverseJson(jsonData[key], bonesArray); // Recursively traverse the value
-      }
-    }
-  }
-}
-
-const bones: any[] = [];
-
-console.log(bones);

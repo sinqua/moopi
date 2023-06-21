@@ -29,8 +29,12 @@ export default async function Page({
   const priceInfoObject = JSON.parse(detail.price_info);
   const priceInfo = await CreateHtml(priceInfoObject);
 
+  const avatar = await getUserAvatar(params.user);
+
+  const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar.id}`;
+
   return (
-    <div>
+    <>
       <User
         IframeUrl={IframeUrl}
         profileImage={profileImage.image}
@@ -50,11 +54,21 @@ export default async function Page({
       )}
       {params.content === "portfolio" && <Portfolio IframeUrl={IframeUrl} />}
       {params.content === "price" && <Price priceInfo={priceInfo} />}
-    </div>
+    </>
   );
 }
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs`;
+
+
+const getUserAvatar = async (id: string) => {
+  const { data, error } = await supabase
+    .from("avatars")
+    .select()
+    .eq("user_id", id)
+    .eq("is_profile", true);
+
+  return data![0];
+}
 
 const getUserNickname = async (id: string) => {
   const { data, error } = await supabaseAuth
