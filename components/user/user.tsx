@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Avatar from "./Avatar";
 import ProfileCard from "./ProfileCard";
-import TabBar from "./TabBar";
 import { Modal } from "./modal";
 
 interface UserProps {
@@ -27,8 +26,6 @@ export default function User(props: UserProps) {
     tags,
     profile,
     id,
-    description,
-    priceInfo,
     slot,
   } = props;
 
@@ -50,7 +47,6 @@ export default function User(props: UserProps) {
             setModal={setModal}
           />
         </div>
-        <TabBar description={description} priceInfo={priceInfo} />
       </div>
       <Modal modal={modal} setModal={setModal} slot={slot} />
     </>

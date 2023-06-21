@@ -7,7 +7,6 @@ import { ProfileImage } from "@/components/edit/profileCard/profileImage";
 import { Nickname } from "@/components/edit/profileCard/nickname";
 import { Description } from "@/components/edit/profileCard/description";
 import { Tag } from "@/components/edit/profileCard/tag";
-import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 import { Avatar } from "@/components/edit/profileCard/avatar";
