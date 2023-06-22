@@ -20,7 +20,7 @@ export default function Portfolio(props: PortfolioProps) {
               src={IframeUrl}
               className="relative w-full h-[512px] top-0 left-0 md:rounded-[10px] rounded-none"
               allowFullScreen
-              key={portfolio}
+              key={index}
             />
           );
         })}

@@ -2,17 +2,14 @@
 
 import * as THREE from "three";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import {
-  VRM,
-  VRMLoaderPlugin,
-  VRMUtils,
-} from "@pixiv/three-vrm";
+import { VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Circle, useHelper } from "@react-three/drei";
 import { Color } from "three";
+import { WebGLProgram } from "three";
 
 export interface ModelProps {
   animationUrl?: string;
@@ -27,6 +24,7 @@ const Model: FC<ModelProps> = ({
 }) => {
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
+  const { gl } = useThree();
 
   const animationMixer = useMemo<THREE.AnimationMixer>(() => {
     if (!vrm) return null!;
@@ -54,18 +52,7 @@ const Model: FC<ModelProps> = ({
         setProgress(true);
         const vrm: VRM = gltf.userData.vrm;
 
-        VRMUtils.deepDispose(vrm.scene);
-        VRMUtils.removeUnnecessaryJoints(vrm.scene);
-        VRMUtils.removeUnnecessaryVertices(vrm.scene);
-
-        let bones: THREE.Bone[] = [];
-        vrm.scene.traverse((child: any) => {
-          if (child instanceof THREE.Bone) {
-            bones.push(child);
-          }
-        });
-
-        setVrm(vrm);
+        setVrm(OptimizeModel(vrm));
       },
       (progress) => {},
       (error) => console.log("Error loading model", error)
@@ -127,3 +114,15 @@ const gradientShader = {
           }
     `,
 };
+
+function OptimizeModel(vrm: VRM) {
+  VRMUtils.deepDispose(vrm.scene);
+  VRMUtils.removeUnnecessaryJoints(vrm.scene);
+  VRMUtils.removeUnnecessaryVertices(vrm.scene);
+
+  vrm.materials!.forEach((material) => {
+    if (material.transparent === true) material.transparent = false;
+  });
+
+  return vrm;
+}
