@@ -122,7 +122,10 @@ const gradientShader = {
     `,
 };
 
+
 function RemoveMorphs(gltf: GLTF) {
+  /* have to design algorithm to find face */
+
   const geomtery = gltf.userData.vrm.scene.children[1].children[0].geometry;
 
   gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.position.length = 0;
