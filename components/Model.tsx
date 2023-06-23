@@ -11,6 +11,7 @@ import { Circle } from "@react-three/drei";
 import { Color } from "three";
 import { GLTF } from "three-stdlib";
 
+
 export interface ModelProps {
   animationUrl?: string;
   modelUrl?: string;
@@ -22,7 +23,6 @@ const Model: FC<ModelProps> = ({
   modelUrl = "/Karin_spring.vrm",
   setProgress,
 }) => {
-  console.log(animationUrl);
   const [animation, setAnimation] = useState(animationUrl);
 
   const [vrm, setVrm] = useState<VRM>(null!);
