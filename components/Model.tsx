@@ -2,36 +2,29 @@
 
 import * as THREE from "three";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import {
-  VRM,
-  VRMLoaderPlugin,
-  VRMUtils,
-  VRMHumanoidHelper,
-} from "@pixiv/three-vrm";
+import { MToonMaterial, MToonMaterialLoaderPlugin, VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Circle, useHelper } from "@react-three/drei";
+import { Circle } from "@react-three/drei";
 import { Color } from "three";
+import { GLTF } from "three-stdlib";
 
 export interface ModelProps {
   animationUrl?: string;
-  modelUrl: string;
+  modelUrl?: string;
   setProgress: (done: boolean) => void;
 }
 
 const Model: FC<ModelProps> = ({
-  animationUrl = "PutYourHandsUp.fbx",
-  modelUrl,
+  animationUrl = "/PutYourHandsUp.fbx",
+  modelUrl = "/Karin_spring.vrm",
   setProgress,
 }) => {
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
-  const helper = useHelper(vrmRef, THREE.SkeletonHelper);
-  useEffect(() => {
-    console.log("help", helper);
-  }, [helper]);
+  const { gl } = useThree();
 
   const animationMixer = useMemo<THREE.AnimationMixer>(() => {
     if (!vrm) return null!;
@@ -53,26 +46,20 @@ const Model: FC<ModelProps> = ({
       return new VRMLoaderPlugin(parser);
     });
 
+    loader.register((parser) => {
+      return new MToonMaterialLoaderPlugin(parser);
+    });
+
     loader.load(
       modelUrl,
-      (gltf) => {
+      async (gltf) => {
         setProgress(true);
-        const vrm: VRM = gltf.userData.vrm;
-        console.log("VRM", vrm);
-        console.log("Humanoid", vrm.humanoid);
 
-        VRMUtils.deepDispose(vrm.scene);
-        VRMUtils.removeUnnecessaryJoints(vrm.scene);
-        VRMUtils.removeUnnecessaryVertices(vrm.scene);
+        const lessMorph = RemoveMorphs(gltf);
 
-        let bones: THREE.Bone[] = [];
-        vrm.scene.traverse((child: any) => {
-          if (child instanceof THREE.Bone) {
-            bones.push(child);
-          }
-        });
+        const vrm: VRM = lessMorph.userData.vrm;
 
-        setVrm(vrm);
+        setVrm(OptimizeModel(vrm));
       },
       (progress) => {},
       (error) => console.log("Error loading model", error)
@@ -135,23 +122,36 @@ const gradientShader = {
     `,
 };
 
-function traverseJson(jsonData: any, bonesArray: any[]): void {
-  if (typeof jsonData === 'object' && jsonData !== null) {
-    if (Array.isArray(jsonData)) {
-      for (const item of jsonData) {
-        traverseJson(item, bonesArray); // Recursively traverse each item in the array
-      }
-    } else {
-      for (const key in jsonData) {
-        if (key === 'name' && jsonData[key] === 'bone') {
-          bonesArray.push(jsonData); // Push the current node to the bones array
-        }
-        traverseJson(jsonData[key], bonesArray); // Recursively traverse the value
-      }
-    }
-  }
+
+function RemoveMorphs(gltf: GLTF) {
+  /* have to design algorithm to find face */
+
+  const geomtery = gltf.userData.vrm.scene.children[1].children[0].geometry;
+
+  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.position.length = 0;
+  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.normal.length = 0;
+  gltf.userData.vrm.scene.children[1].children[0].geometry.morphTargetsRelative = false;
+
+  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.position.length = 0;
+  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.normal.length = 0;
+  gltf.userData.vrm.scene.children[1].children[1].geometry.morphTargetsRelative = false;
+
+  gltf.userData.vrm.scene.children[1].children[0].updateMorphTargets();
+  gltf.userData.vrm.scene.children[1].children[1].updateMorphTargets();
+
+  return gltf;
 }
 
-const bones: any[] = [];
+function OptimizeModel(vrm: VRM) {
+  VRMUtils.deepDispose(vrm.scene);
+  VRMUtils.removeUnnecessaryJoints(vrm.scene);
+  VRMUtils.removeUnnecessaryVertices(vrm.scene);
 
-console.log(bones);
+  const materials : MToonMaterial[] = vrm.materials! as MToonMaterial[]; 
+
+  materials.forEach((material: MToonMaterial) => {
+    material.transparent = false;
+    material.toneMapped = false;
+  });
+  return vrm;
+}
