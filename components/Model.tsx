@@ -2,14 +2,14 @@
 
 import * as THREE from "three";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
+import { MToonMaterial, MToonMaterialLoaderPlugin, VRM, VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 import { LoadMixamoAnimation } from "../utils/LoadMixamoAnimation";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Circle, useHelper } from "@react-three/drei";
+import { Circle } from "@react-three/drei";
 import { Color } from "three";
-import { WebGLProgram } from "three";
+import { GLTF } from "three-stdlib";
 
 export interface ModelProps {
   animationUrl?: string;
@@ -19,7 +19,7 @@ export interface ModelProps {
 
 const Model: FC<ModelProps> = ({
   animationUrl = "/PutYourHandsUp.fbx",
-  modelUrl = "/s2xyoon.vrm",
+  modelUrl = "/Karin_spring.vrm",
   setProgress,
 }) => {
   const [vrm, setVrm] = useState<VRM>(null!);
@@ -46,11 +46,18 @@ const Model: FC<ModelProps> = ({
       return new VRMLoaderPlugin(parser);
     });
 
+    loader.register((parser) => {
+      return new MToonMaterialLoaderPlugin(parser);
+    });
+
     loader.load(
       modelUrl,
-      (gltf) => {
+      async (gltf) => {
         setProgress(true);
-        const vrm: VRM = gltf.userData.vrm;
+
+        const lessMorph = RemoveMorphs(gltf);
+
+        const vrm: VRM = lessMorph.userData.vrm;
 
         setVrm(OptimizeModel(vrm));
       },
@@ -115,14 +122,33 @@ const gradientShader = {
     `,
 };
 
+function RemoveMorphs(gltf: GLTF) {
+  const geomtery = gltf.userData.vrm.scene.children[1].children[0].geometry;
+
+  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.position.length = 0;
+  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.normal.length = 0;
+  gltf.userData.vrm.scene.children[1].children[0].geometry.morphTargetsRelative = false;
+
+  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.position.length = 0;
+  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.normal.length = 0;
+  gltf.userData.vrm.scene.children[1].children[1].geometry.morphTargetsRelative = false;
+
+  gltf.userData.vrm.scene.children[1].children[0].updateMorphTargets();
+  gltf.userData.vrm.scene.children[1].children[1].updateMorphTargets();
+
+  return gltf;
+}
+
 function OptimizeModel(vrm: VRM) {
   VRMUtils.deepDispose(vrm.scene);
   VRMUtils.removeUnnecessaryJoints(vrm.scene);
   VRMUtils.removeUnnecessaryVertices(vrm.scene);
 
-  vrm.materials!.forEach((material) => {
-    if (material.transparent === true) material.transparent = false;
-  });
+  const materials : MToonMaterial[] = vrm.materials! as MToonMaterial[]; 
 
+  materials.forEach((material: MToonMaterial) => {
+    material.transparent = false;
+    material.toneMapped = false;
+  });
   return vrm;
 }
