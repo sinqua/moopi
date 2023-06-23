@@ -48,7 +48,6 @@ const Editor: NextPage<IEditor> = ({ session, content, htmlStr, setHtmlStr, imgF
                 }
     
                 setHtmlStr({'ops': arr});
-
                 // var cfg = {};
      
                 // var converter = new QuillDeltaToHtmlConverter(arr, cfg);
