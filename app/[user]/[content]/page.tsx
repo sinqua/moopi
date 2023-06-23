@@ -32,6 +32,8 @@ export default async function Page({
   const avatar = await getUserAvatar(params.user);
   const portfolio = await getPortfoilo(params.user); 
 
+  console.log(description);
+
   const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar.id}`;
 
   return (
