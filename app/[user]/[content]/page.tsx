@@ -90,6 +90,8 @@ const getUserNickname = async (id: string) => {
     .select()
     .eq("id", id);
 
+    console.log("getUserNickname", data![0]);
+
   return data![0];
 };
 
