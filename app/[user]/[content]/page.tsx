@@ -32,7 +32,11 @@ export default async function Page({
   const avatar = await getUserAvatar(params.user);
   const portfolio = await getPortfoilo(params.user); 
 
-  console.log(description);
+  console.log("nickname", nickname);
+  console.log("tags", tags);
+  console.log("detail", detail);
+  console.log("descriptionObject", descriptionObject);
+  console.log("description", description);
 
   const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar.id}`;
 
