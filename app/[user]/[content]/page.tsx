@@ -10,7 +10,7 @@ import User from "@/components/user/user";
 import Portfolio from "@/components/user/Portfolio";
 import Price from "@/components/user/Price";
 
-export const revalidate = 0
+export const revalidate = 120;
 
 
 export default async function Page({
