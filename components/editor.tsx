@@ -57,7 +57,6 @@ const Editor: NextPage<IEditor> = ({ session, content, htmlStr, setHtmlStr, imgF
         }
 
         loadDescription();
-        
     }, [content])
 
 
