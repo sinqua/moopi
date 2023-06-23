@@ -18,21 +18,17 @@ export interface ModelProps {
 }
 
 const Model: FC<ModelProps> = ({
-  animationUrl = "/PutYourHandsUp.fbx",
+  animationUrl = "/Landing.fbx",
   modelUrl = "/Karin_spring.vrm",
   setProgress,
 }) => {
+  console.log(animationUrl);
   const [animation, setAnimation] = useState(animationUrl);
 
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
-  const { gl } = useThree();
-
-  const [activeAction, setActiveAction] = useState<any>(null);
   const [actions, setActions] = useState<any>({});
 
-  const [walkingAnimation, setWalkingAnimation] = useState<any>(null);
-  const [idleAnimation, setIdleAnimation] = useState<any>(null);
 
   const animationMixer = useMemo<THREE.AnimationMixer>(() => {
     if (!vrm) return null!;
@@ -44,7 +40,7 @@ const Model: FC<ModelProps> = ({
       setActions((prevActions: any) => ({...prevActions, "Landing": clip}));
     });
 
-    LoadMixamoAnimation("Idle.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/Idle.fbx", vrm).then((clip) => {
       clip.name = "Idle";
       setActions((prevActions: any) => ({...prevActions, "Idle": clip}));
     });
@@ -99,6 +95,13 @@ const Model: FC<ModelProps> = ({
         const lessMorph = RemoveMorphs(gltf);
 
         const vrm: VRM = lessMorph.userData.vrm;
+
+        vrm.scene.traverse((child: any) => {
+          if (child instanceof THREE.Mesh) {
+            child.material.transparent = true;
+            child.material.opacity = 0;
+          }
+        });
 
         setVrm(OptimizeModel(vrm));
       },
@@ -192,7 +195,6 @@ function OptimizeModel(vrm: VRM) {
   const materials : MToonMaterial[] = vrm.materials! as MToonMaterial[]; 
 
   materials.forEach((material: MToonMaterial) => {
-    material.transparent = false;
     material.toneMapped = false;
   });
   return vrm;
