@@ -26,24 +26,65 @@ const Model: FC<ModelProps> = ({
   modelUrl,
   setProgress,
 }) => {
+  const [animation, setAnimation] = useState(animationUrl);
+
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
   const helper = useHelper(vrmRef, THREE.SkeletonHelper);
-  useEffect(() => {
-    console.log("help", helper);
-  }, [helper]);
+  // useEffect(() => {
+  //   console.log("help", helper);
+  // }, [helper]);
+
+  const [activeAction, setActiveAction] = useState<any>(null);
+  const [actions, setActions] = useState<any>({});
+
+  const [walkingAnimation, setWalkingAnimation] = useState<any>(null);
+  const [idleAnimation, setIdleAnimation] = useState<any>(null);
 
   const animationMixer = useMemo<THREE.AnimationMixer>(() => {
     if (!vrm) return null!;
 
     const mixer = new THREE.AnimationMixer(vrm.scene);
 
-    LoadMixamoAnimation(animationUrl, vrm).then((clip) => {
-      mixer.clipAction(clip).play();
+    LoadMixamoAnimation(animation, vrm).then((clip) => {
+      clip.name = "Landing";
+      setActions((prevActions: any) => ({...prevActions, "Landing": clip}));
+    });
+
+    LoadMixamoAnimation("Idle.fbx", vrm).then((clip) => {
+      clip.name = "Idle";
+      setActions((prevActions: any) => ({...prevActions, "Idle": clip}));
     });
 
     return mixer;
-  }, [animationUrl, vrm]);
+  }, [animation, vrm]);
+
+  useEffect(() => {
+    if(actions['Landing'] && actions['Idle']) {
+      setTimeout(() => {
+        var landingAction = animationMixer.clipAction(actions['Landing']);
+        var idleAction = animationMixer.clipAction(actions['Idle']);
+
+        landingAction.loop = THREE.LoopOnce;
+        landingAction.clampWhenFinished = true;
+        landingAction.play();
+
+        vrmRef.current.parent.traverse((child: any) => {
+          if (child instanceof THREE.Mesh) {
+            child.material.transparent = true;
+            child.material.opacity = 1;
+          }
+        });
+
+        animationMixer.addEventListener('finished', (e) => {
+          if(e.action._clip.name === "Landing") {
+            idleAction.stop();
+            idleAction.crossFadeFrom( landingAction, 0.5, false).play();
+          }
+        });
+      }, 500);
+    }
+  }, [actions])
 
   useEffect(() => {
     const loader = new GLTFLoader();
@@ -58,8 +99,8 @@ const Model: FC<ModelProps> = ({
       (gltf) => {
         setProgress(true);
         const vrm: VRM = gltf.userData.vrm;
-        console.log("VRM", vrm);
-        console.log("Humanoid", vrm.humanoid);
+        // console.log("VRM", vrm);
+        // console.log("Humanoid", vrm.humanoid);
 
         VRMUtils.deepDispose(vrm.scene);
         VRMUtils.removeUnnecessaryJoints(vrm.scene);
@@ -70,8 +111,13 @@ const Model: FC<ModelProps> = ({
           if (child instanceof THREE.Bone) {
             bones.push(child);
           }
-        });
 
+          if (child instanceof THREE.Mesh) {
+            child.material.transparent = true;
+            child.material.opacity = 0;
+          }
+        });
+        
         setVrm(vrm);
       },
       (progress) => {},
@@ -92,6 +138,7 @@ const Model: FC<ModelProps> = ({
           object={vrm.scene}
           position={[0, -0.67, 0]}
           rotation={[0, 135, 0]}
+          // material={new THREE.MeshStandardMaterial({ color: new THREE.Color('white'), opacity: 1, transparent: true })}
           children-0-castShadow
         >
           <Circle
@@ -136,14 +183,14 @@ const gradientShader = {
 };
 
 function traverseJson(jsonData: any, bonesArray: any[]): void {
-  if (typeof jsonData === 'object' && jsonData !== null) {
+  if (typeof jsonData === "object" && jsonData !== null) {
     if (Array.isArray(jsonData)) {
       for (const item of jsonData) {
         traverseJson(item, bonesArray); // Recursively traverse each item in the array
       }
     } else {
       for (const key in jsonData) {
-        if (key === 'name' && jsonData[key] === 'bone') {
+        if (key === "name" && jsonData[key] === "bone") {
           bonesArray.push(jsonData); // Push the current node to the bones array
         }
         traverseJson(jsonData[key], bonesArray); // Recursively traverse the value

@@ -24,7 +24,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 const ModelComponent = lazy(() => import("./Model"));
 const defaultModel = {
 	modelUrl: "s2xyoon.vrm",
-	animationUrl: "HipHopDancing.fbx",
+	animationUrl: "Landing.fbx",
 }
 interface MainCanvasProps {
 	userId?: string;
