@@ -1,11 +1,14 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TabBar from "@/components/user/TabBar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout(props: any) {
   return (
     <div className="relative flex flex-col items-center h-auto min-h-full">
       <Header />
-      {children}
+      {props.profile}
+      <TabBar />
+      {props.children}
       <Footer />
     </div>
   );
