@@ -7,20 +7,20 @@ import TwitterLogin from "@/components/login/TwitterLogin";
 import GoogleLogin from "@/components/login/GoogleLogin";
 import DiscordLogin from "@/components/login/DiscordLogin";
 import NaverLogin from "@/components/login/NaverLogin";
-import loginBg from "@/app/assets/images/loginBackground.png";
+import loginBg from "@/app/assets/images/loginBackground2.png";
 
 export default function Page() {
   return (
     <div className="flex flex-row sm:h-full h-[812px] font-sans">
-      <div className="md:grow">
+      <div className="md:block hidden grow-0 w-[514px]">
         <Image
-          className="hidden w-full h-full md:block"
+          className="w-full h-full"
           src={loginBg}
           alt=""
           loading="eager"
         />
       </div>
-      <div className="md:grow-0 grow w-[470px] sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
+      <div className="grow sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
         <a href="/" className="w-[106px] h-[30px]">
           <Image
             className="w-[106px] h-[30px]"
