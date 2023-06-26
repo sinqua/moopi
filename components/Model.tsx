@@ -171,18 +171,18 @@ const gradientShader = {
 function RemoveMorphs(gltf: GLTF) {
   /* have to design algorithm to find face */
 
-  const geomtery = gltf.userData.vrm.scene.children[1].children[0].geometry;
+  const face = gltf.userData.vrm.scene.children[1].children[0];
+  const face2 = gltf.userData.vrm.scene.children[1].children[1];
 
-  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.position.length = 0;
-  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.normal.length = 0;
-  gltf.userData.vrm.scene.children[1].children[0].geometry.morphTargetsRelative = false;
+  face.geometry.morphAttributes.position.length = 0;
+  face.geometry.morphAttributes.normal.length = 0;
+  face.geometry.morphTargetsRelative = false;
+  face.updateMorphTargets();
 
-  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.position.length = 0;
-  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.normal.length = 0;
-  gltf.userData.vrm.scene.children[1].children[1].geometry.morphTargetsRelative = false;
-
-  gltf.userData.vrm.scene.children[1].children[0].updateMorphTargets();
-  gltf.userData.vrm.scene.children[1].children[1].updateMorphTargets();
+  face2.geometry.morphAttributes.position.length = 0;
+  face2.geometry.morphAttributes.normal.length = 0;
+  face2.geometry.morphTargetsRelative = false;
+  face2.updateMorphTargets();
 
   return gltf;
 }

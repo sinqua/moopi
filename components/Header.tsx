@@ -73,6 +73,7 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
+                    if(status === "loading") return;
                     router.push(`/${session!.user.id}`);
                     setModal(false);
                   }}
@@ -83,6 +84,7 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
+                    if(status === "loading") return;
                     router.push(`/${session!.user.id}/edit/profile-card`);
                     setModal(false);
                   }}
@@ -93,6 +95,7 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
+                    if(status === "loading") return;
                     signOut();
                     setModal(false);
                   }}

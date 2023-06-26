@@ -4,12 +4,10 @@ import TabBar from "@/components/user/TabBar";
 
 export default function Layout(props: any) {
   return (
-    <div className="relative flex flex-col items-center h-auto min-h-full">
-      <Header />
+    <>
       {props.profile}
       <TabBar />
       {props.children}
-      <Footer />
-    </div>
+    </>
   );
 }
