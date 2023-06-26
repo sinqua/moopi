@@ -1,5 +1,4 @@
 import { CreateImageUrl } from "@/lib/storage";
-import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import { supabase, supabaseAuth } from "@/lib/database";
 import User from "@/components/user/user";
 
@@ -13,15 +12,11 @@ export default async function Default(props: any) {
   const tags = profile.tags.map((tag: any) => {
     return tag.tag;
   });
-  const detail = await getUserDetail(params.user);
-  const descriptionObject = JSON.parse(detail.description);
-  const description = await CreateHtml(descriptionObject);
-  const priceInfoObject = JSON.parse(detail.price_info);
-  const priceInfo = await CreateHtml(priceInfoObject);
+
   const slot = await getUserSlot(params.user);
   const avatar = await getUserAvatar(params.user);
 
-  const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar.id}`;
+  const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar?.id}`;
 
   return (
       <User
@@ -32,21 +27,10 @@ export default async function Default(props: any) {
         tags={tags}
         profile={profile}
         id={params.user}
-        description={description}
-        priceInfo={priceInfo}
         slot={slot}
       />
   );
 }
-
-const getPortfoilo = async (id: string) => {
-  const { data, error } = await supabase
-    .from("avatars")
-    .select()
-    .eq("user_id", id);
-
-  return data;
-};
 
 const getUserAvatar = async (id: string) => {
   const { data, error } = await supabase
@@ -96,15 +80,6 @@ const getUserProfileImage = async (id: string) => {
   return authData![0];
 };
 
-const getUserDetail = async (id: string) => {
-  const { data, error } = await supabase
-    .from("user_details")
-    .select()
-    .eq("user_id", id);
-
-  return data![0];
-};
-
 const getUserSlot = async (id: string) => {
   const { data, error } = await supabase
     .from("slots")
@@ -112,29 +87,4 @@ const getUserSlot = async (id: string) => {
     .eq("user_id", id);
 
   return data![0];
-};
-
-const CreateHtml = async (descriptionObject: any) => {
-  if (!descriptionObject) return;
-
-  const arr: any[] = [];
-  Object.keys(descriptionObject).forEach((key) =>
-    arr.push(descriptionObject[key])
-  );
-
-  for (let i = 0; i < arr.length; i++) {
-    if (Object.keys(arr[i].insert).includes("image")) {
-      await CreateImageUrl(arr[i].insert.image).then(async (url) => {
-        arr[i].insert.image = url!.signedUrl;
-        arr[i].attributes = {
-          display: "inline-block",
-        };
-      });
-    }
-  }
-
-  var cfg = {};
-  var converter = new QuillDeltaToHtmlConverter(arr, cfg);
-  var html = converter.convert();
-  return html;
 };

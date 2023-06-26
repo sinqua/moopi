@@ -1,11 +1,19 @@
-import Link from "next/link";
+import Portfolio from "@/components/user/Portfolio";
+import { supabase } from "@/lib/database";
 
-export default function Page(props: any) {
-    console.log(props)
-  return (
-    <div>
-      portfolio
-      {props.params.user}
-    </div>
-  );
+export default async function Page(props: any) {
+  const { params } = props;
+
+  const portfolio = await getPortfoilo(params.user);
+
+  return <Portfolio user={params.user} portfolio={portfolio} />;
 }
+
+const getPortfoilo = async (id: string) => {
+  const { data, error } = await supabase
+    .from("avatars")
+    .select()
+    .eq("user_id", id);
+
+  return data;
+};
