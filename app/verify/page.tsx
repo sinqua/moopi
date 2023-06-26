@@ -21,10 +21,8 @@ export default function Page() {
   useEffect(() => {
     if (status !== "loading") {
       if (session?.user.nickname) {
-        console.log("있음");
         router.push(searchParams.get("callbackUrl") ?? "/");
       } else {
-        console.log("없음");
         router.push(callbackUrl);
       }
     }

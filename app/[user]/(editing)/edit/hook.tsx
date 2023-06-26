@@ -158,7 +158,6 @@ export default function useProfileHook() {
     })
       .then((res) => res.json())
       .then(async (data) => {
-        console.log("success data", data);
         router.push(`/user?id=${session?.user.id}`);
       });
   };
