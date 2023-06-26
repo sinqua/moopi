@@ -74,7 +74,7 @@ export default function Header() {
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
                     if(status === "loading") return;
-                    router.push(`/${session!.user.id}`);
+                    router.push(`/${session!.user.id}/description`);
                     setModal(false);
                   }}
                 >
