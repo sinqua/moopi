@@ -1,8 +1,6 @@
 import { CreateImageUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
-import Avatar from "@/components/user/Avatar";
-import ProfileCard from "@/components/user/ProfileCard";
 import TabBar from "@/components/user/TabBar";
 import { supabase, supabaseAuth } from "@/lib/database";
 import Description from "@/components/user/Description";
@@ -34,12 +32,6 @@ export default async function Page({
 
   const avatar = await getUserAvatar(params.user);
   const portfolio = await getPortfoilo(params.user); 
-
-  console.log("nickname", nickname);
-  console.log("tags", tags);
-  console.log("detail", detail);
-  console.log("descriptionObject", descriptionObject);
-  console.log("description", description);
 
   const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar.id}`;
 
