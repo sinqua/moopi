@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
@@ -15,13 +15,15 @@ export interface ProfileCardProps {
   tags: string[];
   profile: any;
   id: string;
+  modal: any;
+  setModal: any;
 }
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
 
 export default function ProfileCard(props: ProfileCardProps) {
-  const { profileImage, nickname, description, tags, profile, id } = props;
+  const { profileImage, nickname, description, tags, profile, id, modal, setModal } = props;
 
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
@@ -31,11 +33,15 @@ export default function ProfileCard(props: ProfileCardProps) {
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
+  useEffect(() => {
+    setMountedStatus(true);
+  }, []);
+
   return (
-    <div className="relative md:w-[482px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
+    <div className="relative md:w-[482px] md:h-[526px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         <Image
-          src={profileImage ? profileImage : defaultImage}
+          src={profileImage}
           width={100}
           height={100}
           className="h-[100px] w-[100px] rounded-full border-none"
@@ -59,7 +65,7 @@ export default function ProfileCard(props: ProfileCardProps) {
             </div>
           </div>
           <Image
-            className="sm:h-[30px] h-[24px] sm:w-[30px] w-[24px] absolute border-none top-0 right-0 cursor-pointer"
+            className="sm:h-[30px] h-[24px] sm:w-[30px] w-[24px] !m-0 absolute border-none top-0 right-0 cursor-pointer"
             width={24}
             src={like ? activeHeartImg : hover ? hoverHeartImg : heartImg}
             onMouseOver={() => setHover(true)}
@@ -69,7 +75,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           />
         </div>
       </div>
-      <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px]">
+      <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] overflow-hidden">
         {profile && description}
       </div>
       <div className="text-[14px] space-y-[20px]">
@@ -93,7 +99,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           <div className="flex w-full h-[47px] space-x-[16px]">
             <div
               className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] cursor-pointer"
-              onClick={() => router.push("/profile")}
+              onClick={() => setModal(!modal)}
             >
               슬롯 설정
             </div>

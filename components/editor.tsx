@@ -1,3 +1,4 @@
+'use client'
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 // import styled from 'styled-components';
 import axios from 'axios';
@@ -18,7 +19,7 @@ Quill.register(Image, true);
 
 interface IEditor {
     session: any;
-    userDetail: any;
+    content: any;
     htmlStr: any;
     setHtmlStr: any;
     imgFiles: any;
@@ -27,13 +28,13 @@ interface IEditor {
     setTempPaths: any;
 }
 
-const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, imgFiles, setImgFiles, tempPaths, setTempPaths }) => {
+const Editor: NextPage<IEditor> = ({ session, content, htmlStr, setHtmlStr, imgFiles, setImgFiles, tempPaths, setTempPaths }) => {
     const quillRef = useRef<ReactQuill>(null);
 
     useEffect(() => {
         async function loadDescription() {
-            if (userDetail.description) {
-                const descriptionObject = JSON.parse(userDetail.description);
+            if (content) {
+                const descriptionObject = JSON.parse(content);
     
                 const arr: any[] = [];
                 Object.keys(descriptionObject).forEach(key => arr.push(descriptionObject[key]))
@@ -47,7 +48,6 @@ const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, i
                 }
     
                 setHtmlStr({'ops': arr});
-
                 // var cfg = {};
      
                 // var converter = new QuillDeltaToHtmlConverter(arr, cfg);
@@ -56,8 +56,7 @@ const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, i
         }
 
         loadDescription();
-        
-    }, [userDetail])
+    }, [content])
 
 
     // 이미지 업로드 핸들러, modules 설정보다 위에 있어야 정상 적용
@@ -148,8 +147,3 @@ const Editor: NextPage<IEditor> = ({ session, userDetail, htmlStr, setHtmlStr, i
 }
 
 export default Editor;
-
-// // style
-// const CustomReactQuill = styled(ReactQuill)`
-//     height: 300px;
-// `

@@ -17,7 +17,7 @@ export async function CreateModelUrl(userId: string, filename: any) {
 export async function CreateImageUrl(filepath: any) {
   const { data, error } = await supabase.storage
     .from("image")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
