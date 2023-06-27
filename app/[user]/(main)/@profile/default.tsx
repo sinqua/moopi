@@ -2,7 +2,7 @@ import { CreateImageUrl } from "@/lib/storage";
 import { supabase, supabaseAuth } from "@/lib/database";
 import User from "@/components/user/user";
 
-export const revalidate = 120;
+export const revalidate = 0;
 
 export default async function Default(props: any) {
   const { params } = props;
