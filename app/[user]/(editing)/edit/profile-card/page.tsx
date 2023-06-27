@@ -1,11 +1,9 @@
-// "use client";
 import { supabase, supabaseAuth } from "@/lib/database";
 import { CreateImageUrl } from "@/lib/storage";
 import ProfileCard from "@/components/edit//profileCard/profileCard";
 
-// const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
-
 export default async function Page({ params }: { params: { user: string } }) {
+
   const profileImage = await getUserProfileImage(params.user);
   const profile = await getUserProfile(params.user);
   const tags = profile.tags.map((tag: any) => {

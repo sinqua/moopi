@@ -1,7 +1,6 @@
 import { supabase, supabaseAuth } from "@/lib/database";
 import Description from "@/components/edit/description/description";
 
-
 export default async function Page({ params }: { params: { user: string } }) {
   const profile = await getUserProfile(params.user);
   const detail = await getUserDetail(params.user);
