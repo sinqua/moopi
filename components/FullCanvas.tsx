@@ -4,9 +4,9 @@ import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, Ring, useGLTF } from "@react-three/drei";
+import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import moment from "moment";
-import { Select, TextInput, Textarea } from "flowbite-react";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
 import rotateImg from "@/app/assets/images/rotate.svg";
@@ -87,7 +87,16 @@ const FullCanvas = (props: FullCanvasProps) => {
     }
   };
 
-  const options = ["공개", "비공개"];
+  const options = [
+    {value: "공개", label: "공개"},
+    {value: "비공개", label: "비공개"},
+  ];
+
+  const [isClearable, setIsClearable] = useState(true);
+  const [isSearchable, setIsSearchable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRtl, setIsRtl] = useState(false);
 
   return (
     <>
@@ -134,36 +143,21 @@ const FullCanvas = (props: FullCanvasProps) => {
                   <div className="flex flex-col space-y-[30px] text-[14px]">
                     <div className="flex flex-col space-y-[20px]">
                       <p className="font-semibold">아바타 이름</p>
-                      <TextInput
-                        type="text"
-                        ref={avatarNameRef}
-                        color={"#2778C780"}
-                        theme={{
-                          field: {
-                            input: {
-                              base: "grow w-full h-[47px] !px-[20px] bg-[#FFFFFF80] border-[#CCCCCC80] !outline-none !focus:outline-none !shadow-none text-sm",
-                            },
-                          },
-                        }}
-                        className="grow h-full bg-transparent outline-none text-sm"
-                        placeholder="아바타 이름을 입력해주세요."
-                      />
+                      <div className="relative w-full h-[47px]">
+                        <input
+                          type="text"
+                          className="w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid border-[#CCCCCC80] px-[20px] py-[0.25rem] text-sm outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
+                          placeholder="아바타 이름을 입력해주세요."
+                        />
+                      </div>
                     </div>
                     <div className="flex flex-col space-y-[20px]">
                       <p className="font-semibold">아바타 파일</p>
-                      <div className="relative">
-                        <TextInput
+                      <div className="relative w-full h-[47px]">
+                        <input
                           type="text"
-                          color={"#2778C780"}
-                          theme={{
-                            field: {
-                              input: {
-                                base: "grow w-full h-[47px] !px-[20px] bg-[#FFFFFF80] border-[#CCCCCC80] outline-none text-sm",
-                              },
-                            },
-                          }}
-                          className="grow h-full bg-transparent outline-none text-sm"
-                          placeholder="아바타 파일을 입력해주세요."
+                          className="w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid border-[#CCCCCC80] px-[20px] py-[0.25rem] text-sm outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
+                          placeholder="아바타 파일을 등록해주세요."
                         />
                         <div className="absolute flex items-center h-full top-0 right-[20px]">
                           <Image
@@ -176,37 +170,10 @@ const FullCanvas = (props: FullCanvasProps) => {
                     </div>
                     <div className="flex flex-col space-y-[20px]">
                       <p className="font-semibold">썸네일</p>
-                      {/* <div className="flex items-center w-full h-[47px] px-[20px] mb-[6px] rounded-[10px] bg-[#FFFFFF80] border-solid border-[1px] border-[#CCCCCC80]">
+                      <div className="relative w-full h-[47px]">
                         <input
                           type="text"
-                          className="grow h-full bg-transparent outline-none text-sm"
-                          placeholder="썸네일을 등록해주세요."
-                        ></input>
-                        <div className="flex space-x-[20px]">
-                          <Image
-                            src={cameraImg}
-                            className="w-[18px] h-[18px] cursor-pointer"
-                            alt=""
-                          />
-                          <Image
-                            src={clipImg}
-                            className="w-[18px] h-[18px] cursor-pointer"
-                            alt=""
-                          />
-                        </div>
-                      </div> */}
-                      <div className="relative">
-                        <TextInput
-                          type="text"
-                          color={"#2778C780"}
-                          theme={{
-                            field: {
-                              input: {
-                                base: "grow w-full h-[47px] !px-[20px] bg-[#FFFFFF80] border-[#CCCCCC80] outline-none text-sm",
-                              },
-                            },
-                          }}
-                          className="grow h-full bg-transparent outline-none text-sm"
+                          className="w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid border-[#CCCCCC80] px-[20px] py-[0.25rem] text-sm outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
                           placeholder="썸네일을 등록해주세요."
                         />
                         <div className="absolute flex items-center h-full top-0 right-[20px] space-x-[20px]">
@@ -225,17 +192,17 @@ const FullCanvas = (props: FullCanvasProps) => {
                     </div>
                     <div className="flex flex-col space-y-[20px]">
                       <p className="font-semibold">아바타 설명</p>
-                      {/* <textarea
-                        className="w-full h-[180px] sm:p-[30px] p-[20px] rounded-[10px] resize-none bg-[#FFFFFF80] border-solid border-[1px] border-[#CCCCCC80] text-sm"
+                      <textarea
+                        className="w-full h-[180px] sm:p-[30px] p-[20px] rounded-[10px] resize-none bg-[#FFFFFF80] border-solid border-[1px] border-[#CCCCCC80] text-sm outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
                         placeholder="아바타 설명을 입력해주세요."
-                      /> */}
-                      <Textarea
+                      />
+                      {/* <Textarea
                         color={"#2778C780"}
                         theme={{
                           base: "w-full h-[180px] sm:p-[30px] p-[20px] rounded-[10px] resize-none bg-[#FFFFFF80] border-solid border-[1px] border-[#CCCCCC80] shadow-none text-sm ",
                         }}
                         placeholder="아바타 설명을 입력해주세요."
-                      />
+                      /> */}
                     </div>
                     <div className="flex flex-col space-y-[20px]">
                       <p className="font-semibold">태그</p>
@@ -248,6 +215,13 @@ const FullCanvas = (props: FullCanvasProps) => {
                         // }}
                         className="flex w-full items-center h-[47px] ring-0"
                         placeholder={"태그를 입력해주세요"}
+                        theme={(theme) => ({
+                          ...theme,
+                          colors: {
+                            ...theme.colors,
+                            primary: '#2778C7'
+                          }
+                        })}
                         styles={{
                           control: (baseStyles, state) => ({
                             ...baseStyles,
@@ -255,7 +229,7 @@ const FullCanvas = (props: FullCanvasProps) => {
                             width: "100%",
                             backgroundColor: "#FFFFFF80",
                             borderRadius: "10px",
-                            boxShadow: "1px",
+                            fontSize: "14px"
                           }),
                         }}
                       />
@@ -264,7 +238,7 @@ const FullCanvas = (props: FullCanvasProps) => {
                 )}
               </div>
             </div>
-            <div className="flex flex-col items-end w-[252px] h-full mt-[50px] space-y-[30px] pointer-events-auto">
+            <div className="flex flex-col items-end w-[242px] h-full mt-[50px] space-y-[30px] pointer-events-auto">
               {MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
               <div
                 className="flex justify-center items-center w-[40px] h-[40px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
@@ -272,7 +246,7 @@ const FullCanvas = (props: FullCanvasProps) => {
               >
                 <Image
                   src={rightTabActive ? upImg : downImg}
-                  className="w-[18px] h-[9px]"
+                  className="w-[20px] h-[10px]"
                   alt=""
                 />
               </div>
@@ -282,19 +256,65 @@ const FullCanvas = (props: FullCanvasProps) => {
                     <p className="font-semibold">업로드 날짜</p>
                     <p>{moment().format("YYYY.MM.DD")}</p>
                   </div>
-                  <div className="flex flex-col space-y-[20px]">
+                  <div className="flex flex-col w-[125px] space-y-[20px]">
                     <p className="font-semibold">상태 설정</p>
                     <Select
-                      id="countries"
-                      color={"#2778C780"}
-                      theme={{ field: { select: { base: "w-full h-[47px]" } } }}
-                      required
-                    >
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>France</option>
-                      <option>Germany</option>
-                    </Select>
+                      className="basic-single"
+                      classNamePrefix="select"
+                      defaultValue={options[0]}
+                      isSearchable={false}
+                      // name="color"
+                      options={options}
+                      theme={(theme) => ({
+                        ...theme,
+                        colors: {
+                          ...theme.colors,
+                          primary: '#2778C7'
+                        }
+                      })}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          height: "100%",
+                          width: "100%",
+                          backgroundColor: "#FFFFFF80",
+                          borderRadius: "10px",
+                          fontSize: "14px"
+                        }),
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col w-full space-y-[20px]">
+                    <p className="font-semibold">애니메이션</p>
+                    <Select
+                      className="basic-single"
+                      classNamePrefix="select"
+                      defaultValue={options[0]}
+                      isSearchable={false}
+                      // name="color"
+                      options={options}
+                      theme={(theme) => ({
+                        ...theme,
+                        colors: {
+                          ...theme.colors,
+                          primary: '#2778C7'
+                        }
+                      })}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          height: "100%",
+                          width: "100%",
+                          backgroundColor: "#FFFFFF80",
+                          borderRadius: "10px",
+                          fontSize: "14px"
+                        }),
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col !mt-[50px] space-y-[20px]">
+                    <div className="flex justify-center items-center w-full h-[47px] rounded-[10px] bg-[#333333] text-[#FFFFFF] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer">저장하기</div>
+                    <div className="flex justify-center items-center w-full h-[47px] rounded-[10px] bg-[#FFFFFF] text-[#333333] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer">취소</div>
                   </div>
                 </div>
               )}
