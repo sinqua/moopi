@@ -14,3 +14,7 @@ body {
 .ql-editor img {
   display: inline-block;
 }
+
+/* input {
+  --tw-ring-shadow: 0 0 #000 !important;
+} */
