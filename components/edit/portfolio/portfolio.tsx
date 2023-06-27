@@ -37,7 +37,7 @@ export default function Portfolio(props: PortfolioProps) {
       </div>
       <div className="sm:space-y-[80px] space-y-[60px] ">
         {currentPortfolios.map((portfolio: any, index: any) => {
-          return <Avatar portfolio={portfolio} key={portfolio} />;
+          return <Avatar portfolio={portfolio} key={index} />;
         })}
       </div>
       <div className="flex justify-center pt-[120px] space-x-[15px]">
