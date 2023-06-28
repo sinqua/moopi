@@ -21,17 +21,18 @@ import { ModelProps } from "./Model";
 import BounceLoader from "react-spinners/BounceLoader";
 
 const ModelComponent = lazy(() => import("./Model"));
-const defaultModel = {
-	modelUrl: "s2xyoon.vrm",
-	animationUrl: "Landing.fbx",
-}
+
 interface MainCanvasProps {
   modelUrl: string | undefined;
   animationUrl: string | undefined;
+  thumbnailUrl: string | undefined;
 }
 
-const MainCanvas = (props: MainCanvasProps) => {
-  const { modelUrl, animationUrl } = props;
+const MainCanvas = ({
+  modelUrl,
+  animationUrl,
+  thumbnailUrl = "/mainModel.png",
+}: MainCanvasProps) => {
   const [modelInfo, setModelInfo] = useState<ModelProps>();
   const [fullScreen, setFullScreen] = useState(false);
   const [helpViewer, setHelpViewer] = useState(false);
@@ -79,8 +80,12 @@ const MainCanvas = (props: MainCanvasProps) => {
   return (
     <>
       {thumbnailViewer ? (
-        <div
-          className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[url('./assets/images/mainModel.png')] bg-center bg-no-repeat bg-cover z-10 cursor-pointer"
+        <Image
+          src={thumbnailUrl}
+          priority={true}
+          alt=""
+          fill
+          style={{ objectFit: "contain" }}
           onClick={() => setThumbnailViewer(false)}
         />
       ) : (

@@ -1,9 +1,6 @@
-// "use client";
 import { supabase, supabaseAuth } from "@/lib/database";
 import { CreateImageUrl } from "@/lib/storage";
 import ProfileCard from "@/components/edit//profileCard/profileCard";
-
-// const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 export default async function Page({ params }: { params: { user: string } }) {
   const profileImage = await getUserProfileImage(params.user);
@@ -15,12 +12,14 @@ export default async function Page({ params }: { params: { user: string } }) {
   const mostUsedTags = await getMostUsedTags();
 
   return (
-    <ProfileCard
-      profileImage={profileImage.image}
-      profile={profile}
-      tags={tags}
-      mostUsedTags={mostUsedTags}
-    />
+    <div className="flex flex-col w-full max-w-[1312px] sm:p-[50px] p-0 rounded-[10px] sm:border-solid border-none border-[1px] border-[#CCCCCC]">
+      <ProfileCard
+        profileImage={profileImage.image}
+        profile={profile}
+        tags={tags}
+        mostUsedTags={mostUsedTags}
+      />
+    </div>
   );
 }
 
@@ -53,11 +52,11 @@ const getUserProfileImage = async (id: string) => {
 
 const getMostUsedTags = async () => {
   const { data, error } = await supabase
-  .from("tags")
-  .select("*", { count: "exact" });
+    .from("tags")
+    .select("*", { count: "exact" });
 
-  const countByGroupTag : any = {};
-  data!.forEach(row => {
+  const countByGroupTag: any = {};
+  data!.forEach((row) => {
     const tag = row.tag;
     if (countByGroupTag[tag]) {
       countByGroupTag[tag]++;
@@ -72,7 +71,7 @@ const getMostUsedTags = async () => {
 
   const options = Object.keys(slicedCountByGroupTag).map((tag: any) => {
     return { value: tag, label: tag };
-  })
+  });
 
   return options;
 };
