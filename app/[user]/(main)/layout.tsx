@@ -8,6 +8,7 @@ export default function Layout(props: any) {
       {props.profile}
       <TabBar />
       {props.children}
+      <Footer />
     </>
   );
 }

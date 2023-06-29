@@ -17,7 +17,7 @@ export default function Navbar() {
     }, []);
 
     return (
-        <div className="w-full max-w-[1312px] flex flex-col items-start sm:space-y-[30px] space-y-[20px]">
+        <div className="w-full max-w-[1372px] flex flex-col items-start sm:space-y-[30px] space-y-[20px]">
             <p className="sm:text-[30px] text-[20px] font-bold">프로필 수정</p>
             <div className="relative flex w-full h-[30px] sm:space-x-[70px] space-x-[20px] sm:text-[18px] text-[14px] whitespace-nowrap overflow-x-scroll scrollbar-hide"  {...dragEvents} ref={dragRef}>
                 <Link href={`${session?.user.id}/edit/profile-card`} className={pathname.includes("profile-card") ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer" : "cursor-pointer"} >프로필 카드</Link>
