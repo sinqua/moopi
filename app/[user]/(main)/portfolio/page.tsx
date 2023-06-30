@@ -19,5 +19,5 @@ const getPortfoilo = async (id: string) => {
 
     console.log("id", id, "data", data)
 
-  return data![0];
+  return data;
 };
