@@ -103,7 +103,7 @@ export default function ProfileCard(props: ProfileCardProps) {
             </div>
             <div
               className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer"
-              onClick={() => router.push("/upload")}
+              onClick={() => router.push(`/${session?.user.id}/upload`)}
             >
               게시하기
             </div>

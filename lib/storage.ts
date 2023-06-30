@@ -23,6 +23,26 @@ export async function CreateImageUrl(filepath: any) {
 }
 
 // Upload file using standard upload
+export async function UploadAvatar(
+  userId: any,
+  filename: any,
+  file: any
+) {
+  const filepath = `${userId}/${filename}`;
+
+  console.log(filepath);
+
+  const { data, error } = await supabase.storage
+    .from("model")
+    .upload(filepath, file, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+    
+  return data;
+}
+
+// Upload file using standard upload
 export async function UploadProfileImage(
   userId: any,
   filename: any,

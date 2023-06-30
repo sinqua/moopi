@@ -26,7 +26,6 @@ export const Tag = (props: TagProps) => {
           instanceId={""}
           onChange={(e: any) => {
             setCurrentTags(e);
-            
           }}
           className="flex w-full items-center sm:w-[482px] h-[47px]"
           placeholder={"태그를 입력해주세요"}
