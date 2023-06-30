@@ -1,6 +1,8 @@
 import Portfolio from "@/components/user/Portfolio";
 import { supabase } from "@/lib/database";
 
+export const revalidate = 0;
+
 export default async function Page(props: any) {
   const { params } = props;
 
@@ -14,6 +16,6 @@ const getPortfoilo = async (id: string) => {
     .from("avatars")
     .select()
     .eq("user_id", id);
-    
+
   return data![0];
 };

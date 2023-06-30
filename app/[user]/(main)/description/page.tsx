@@ -3,6 +3,7 @@ import { supabase } from "@/lib/database";
 import { CreateImageUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
+export const revalidate = 0;
 
 export default async function Page(props: any) {
 
