@@ -8,7 +8,7 @@ export async function CreateModelUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("model")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }

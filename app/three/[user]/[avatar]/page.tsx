@@ -31,7 +31,7 @@ async function CreateImageUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("image")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
@@ -44,7 +44,7 @@ async function CreateModelUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("model")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
@@ -63,7 +63,7 @@ async function CreateAnimationUrl(animationId: number) {
 
   const { data, error } = await supabase.storage
     .from("animation")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
