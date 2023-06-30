@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
@@ -17,6 +17,7 @@ import { placeholderCSS } from "react-select/dist/declarations/src/components/Pl
 
 interface InputProps {
   setModelUrl: any;
+  animationUrl: any;
   setAnimationUrl: any;
   mostUsedTags: any;
   cameraActive: any;
@@ -30,12 +31,14 @@ interface InputProps {
   setAvatarTags: any;
   avatarStatus: any;
   setAvatarStatus: any;
+  setAvatarAnimation: any;
   onSavePortfolio: any;
 }
 
 export default function Input(props: InputProps) {
   const {
     setModelUrl,
+    animationUrl,
     setAnimationUrl,
     mostUsedTags,
     cameraActive,
@@ -49,6 +52,7 @@ export default function Input(props: InputProps) {
     setAvatarTags,
     avatarStatus,
     setAvatarStatus,
+    setAvatarAnimation,
     onSavePortfolio,
   } = props;
 
@@ -60,7 +64,7 @@ export default function Input(props: InputProps) {
     { value: "비공개", label: "비공개" },
   ];
 
-  const [animationOptions, setAnimationOptions] = useState([
+  const [animationOptions, setAnimationOptions] = useState<any>([
     { value: "Idle", label: "Idle" },
     { value: "HipHopDancing", label: "HipHopDancing" },
     { value: "PutYourHandsUp", label: "PutYourHandsUp" },
@@ -70,12 +74,12 @@ export default function Input(props: InputProps) {
   const avatarFileRef = useRef<any>(null);
   const avatarFileNameRef = useRef<any>(null);
 
-  const animationRef = useRef<any>(null);
-
   const loadAvatarFile = (e: any) => {
     // setModelUrl(e.target.value);
-
     const file = avatarFileRef.current.files[0];
+
+    if (!file) return;
+
     setAvatarFile(avatarFileRef.current.files[0]);
 
     avatarFileNameRef.current.value = file.name;
@@ -88,8 +92,7 @@ export default function Input(props: InputProps) {
   };
 
   const loadAnimation = (e: any) => {
-    animationRef.current.state.selectValue = [{ value: "Idle", label: "Idle" }]
-    console.log(animationRef.current.state.selectValue);
+    setAvatarAnimation(e);
     setAnimationUrl(e.value);
   };
 
@@ -280,8 +283,9 @@ export default function Input(props: InputProps) {
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    ref={animationRef}
-                    defaultValue={animationOptions[0]}
+                    value={animationOptions.filter(function (option: any) {
+                      return option.value === animationUrl;
+                    })}
                     options={animationOptions}
                     onChange={(e: any) => loadAnimation(e)}
                     isSearchable={false}

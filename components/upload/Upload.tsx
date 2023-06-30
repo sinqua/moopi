@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { CameraControls } from "@react-three/drei";
+import { useSession } from "next-auth/react";
 
-import { ModelProps } from "../Model";
+import { CameraControls } from "@react-three/drei";
+import { supabase, supabaseAuth } from "@/lib/database";
+import { UploadAvatar } from "@/lib/storage";
 
 import Input from "@/components/upload/Input";
 import Camera from "@/components/upload/Camera";
 import FullCanvas from "@/components/FullCanvas";
+import { useRouter } from "next/navigation";
 
 const defaultModel = {
   modelUrl: "/s2xyoon.vrm",
@@ -20,6 +23,9 @@ interface UploadProps {
 
 export default function Upload(props: UploadProps) {
   const { IframeUrl, mostUsedTags } = props;
+  const router = useRouter();
+
+  const { data: session, status } = useSession();
 
   const [modelUrl, setModelUrl] = useState("/s2xyoon.vrm");
   const [animationUrl, setAnimationUrl] = useState("Idle");
@@ -41,11 +47,39 @@ export default function Upload(props: UploadProps) {
   const [avatarAnimation, setAvatarAnimation] = useState<any>(null);
 
   const onSavePortfolio = async () => {
-    console.log("아바타 이름", avatarNameRef.current.value);
-    console.log("아바타 파일", avatarFile);
-    console.log("아바타 설명", avatarDescriptionRef.current.value);
-    console.log("아바타 태그", avatarTags);
-    console.log("아바타 상태", avatarStatus);
+    if (avatarFile) {
+      UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
+        async (data) => {
+          const { data: avatarData, error: avatarError } = await supabase
+            .from("avatars")
+            .insert([
+              {
+                vrm: avatarFile.name,
+                user_id: session?.user.id,
+                is_profile: false,
+                name: avatarNameRef.current.value,
+                description: avatarDescriptionRef.current.value,
+                visible: true,
+              },
+            ])
+            .select();
+
+          const { data: tagsData, error: tagsError } = await supabase
+            .from("tags")
+            .insert(
+              avatarTags
+                .map((tag: any) => {
+                  return tag.value;
+                })
+                .map((tag: any) => {
+                  return { tag: tag, avatar_id: avatarData![0].id };
+                })
+            );
+
+          router.push(`/${session?.user.id}/description`);
+        }
+      );
+    }
   };
 
   const resetCamera = () => {
@@ -79,6 +113,7 @@ export default function Upload(props: UploadProps) {
       </div>
       <Input
         setModelUrl={setModelUrl}
+        animationUrl={animationUrl}
         setAnimationUrl={setAnimationUrl}
         mostUsedTags={mostUsedTags}
         cameraActive={cameraActive}
@@ -92,6 +127,7 @@ export default function Upload(props: UploadProps) {
         setAvatarTags={setAvatarTags}
         avatarStatus={avatarStatus}
         setAvatarStatus={setAvatarStatus}
+        setAvatarAnimation={setAvatarAnimation}
         onSavePortfolio={onSavePortfolio}
       />
       <Camera

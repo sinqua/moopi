@@ -90,7 +90,7 @@ const FullCanvas = (props: FullCanvasProps) => {
       }
     }
   };
-  
+
   return (
     <>
       <div
@@ -112,7 +112,7 @@ const FullCanvas = (props: FullCanvasProps) => {
           />
           <directionalLight position={[0, 1, 0]} castShadow />
           {/* {modelInfo && <ModelComponent {...modelInfo!} />} */}
-          {modelUrl && <ModelComponent animationUrl={animationUrl} modelUrl={modelUrl} setProgress={setProgress} />}
+          {modelUrl && <ModelComponent animationUrl={animationUrl} setAnimationUrl={setAnimationUrl} modelUrl={modelUrl} setProgress={setProgress} />}
         </Canvas>
         {!progress && (
           <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">

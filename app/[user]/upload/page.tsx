@@ -20,19 +20,18 @@ export default async function Page({ params }: { params: { user: string } }) {
 
   return (
     <>
-      <Upload IframeUrl={IframeUrl} mostUsedTags={mostUsedTags}/>
+      <Upload IframeUrl={IframeUrl} mostUsedTags={mostUsedTags} />
     </>
   );
 }
 
-
 const getMostUsedTags = async () => {
   const { data, error } = await supabase
-  .from("tags")
-  .select("*", { count: "exact" });
+    .from("tags")
+    .select("*", { count: "exact" });
 
-  const countByGroupTag : any = {};
-  data!.forEach(row => {
+  const countByGroupTag: any = {};
+  data!.forEach((row) => {
     const tag = row.tag;
     if (countByGroupTag[tag]) {
       countByGroupTag[tag]++;
@@ -47,7 +46,7 @@ const getMostUsedTags = async () => {
 
   const options = Object.keys(slicedCountByGroupTag).map((tag: any) => {
     return { value: tag, label: tag };
-  })
+  });
 
   return options;
 };

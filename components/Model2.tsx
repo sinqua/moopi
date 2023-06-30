@@ -1,5 +1,4 @@
 "use client";
-
 import * as THREE from "three";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -19,12 +18,13 @@ import { GLTF } from "three-stdlib";
 
 export interface ModelProps {
   animationUrl: any;
+  setAnimationUrl: any;
   modelUrl: any;
   setProgress: (done: boolean) => void;
 }
 
 const Model: FC<ModelProps> = (props: ModelProps) => {
-  const { animationUrl, modelUrl, setProgress } = props;
+  const { animationUrl, setAnimationUrl, modelUrl, setProgress } = props;
 
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
@@ -72,17 +72,20 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
   }, [vrm]);
 
   useEffect(() => {
-    if (Object.keys(actions).length === 5) {
+    if (Object.keys(actions).length === 5 && (currentAction !== animationUrl)) {
       var current = animationMixer.clipAction(actions[currentAction]);
       var next = animationMixer.clipAction(actions[animationUrl]);
 
-      next.stop();
-      next.crossFadeFrom(current, 0.5, false).play();
+      current.fadeOut(0.5);
+      next.reset().fadeIn(0.5).play();
+
       setCurrentAction(animationUrl);
     }
   }, [animationUrl]);
 
   useEffect(() => {
+    setActions({});
+    setAnimationUrl("Idle");
     setCurrentAction("Idle");
   }, [modelUrl]);
 
@@ -105,8 +108,9 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
 
         animationMixer.addEventListener("finished", (e) => {
           if (e.action._clip.name === "Landing") {
-            idleAction.stop();
-            idleAction.crossFadeFrom(landingAction, 0.5, false).play();
+            landingAction.fadeOut(0.5);
+            idleAction.reset().fadeIn(0.5).play();
+
             setCurrentAction("Idle");
           }
         });
@@ -115,6 +119,8 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
   }, [actions]);
 
   useEffect(() => {
+    setProgress(false);
+
     const loader = new GLTFLoader();
     loader.crossOrigin = "anonymous";
 
@@ -134,7 +140,6 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
         const lessMorph = RemoveTooMuchMorphs(gltf);
 
         const vrm: VRM = lessMorph.userData.vrm;
-
         vrm.scene.traverse((child: any) => {
           if (child instanceof THREE.Mesh) {
             child.material.transparent = true;
