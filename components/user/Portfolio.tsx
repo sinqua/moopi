@@ -1,6 +1,3 @@
-"use client";
-import React, { useState } from "react";
-
 interface PortfolioProps {
   user: any;
   portfolio: any;
