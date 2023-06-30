@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import Footer from "@/components/Footer";
 
 export default async function Layout(props: any) {
   const session = await getServerSession(authOptions);
