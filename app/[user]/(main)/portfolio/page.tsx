@@ -15,5 +15,7 @@ const getPortfoilo = async (id: string) => {
     .select()
     .eq("user_id", id);
 
+    console.log(data);
+
   return data;
 };
