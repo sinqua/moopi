@@ -14,9 +14,6 @@ const getPortfoilo = async (id: string) => {
     .from("avatars")
     .select()
     .eq("user_id", id);
-
-    console.log(id);
-    console.log(data);
-
-  return data;
+    
+  return data![0];
 };
