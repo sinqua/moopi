@@ -5,7 +5,11 @@ import { CreateImageUrl } from "@/lib/storage";
 export default async function Page({ params }: { params: { user: string } }) {
   const portfolios = await getUserPortfolios(params.user);
 
-  return <Portfolio portfolios={portfolios} />;
+  return (
+    <div className="flex flex-col w-full max-w-[1312px] sm:p-[50px] p-0 rounded-[10px] sm:border-solid border-none border-[1px] border-[#CCCCCC]">
+      <Portfolio portfolios={portfolios} />
+    </div>
+  );
 }
 
 const getUserPortfolios = async (id: string) => {

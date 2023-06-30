@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import offingLogo from '@/app/assets/logos/offing.svg'
 import moopiLogo from '@/app/assets/logos/moopi.svg'
+import logger from '@/lib/logger'
 
 export default function Home() {
+  logger.info("Hello, World!")
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">

@@ -1,7 +1,7 @@
 "use client";
-import "react-quill/dist/quill.snow.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const normalBtn =
   "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
@@ -10,6 +10,7 @@ const selectedBtn =
 
 export default function TabBar() {
   const pathname = usePathname();
+  const [selected, setSelected] = useState("description");
 
   return (
     <div className="md:mt-0 mt-[40px] flex justify-center w-full md:w-[1372px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
@@ -17,32 +18,36 @@ export default function TabBar() {
         <Link
           href={`${pathname.split("/")[1]}/description`}
           className={
-            pathname.split("/")[2] === "description" ? selectedBtn : normalBtn
+            selected === "description" ? selectedBtn : normalBtn
           }
+          onClick={() => setSelected("description")}
         >
           설명
         </Link>
         <Link
           href={`${pathname.split("/")[1]}/portfolio`}
           className={
-            pathname.split("/")[2] === "portfolio" ? selectedBtn : normalBtn
+            selected === "portfolio" ? selectedBtn : normalBtn
           }
+          onClick={() => setSelected("portfolio")}
         >
           포트폴리오
         </Link>
         <Link
           href={`${pathname.split("/")[1]}/price`}
           className={
-            pathname.split("/")[2] === "price" ? selectedBtn : normalBtn
+            selected === "price" ? selectedBtn : normalBtn
           }
+          onClick={() => setSelected("price")}
         >
           가격정보
         </Link>
         <Link
           href={`${pathname.split("/")[1]}/review`}
           className={
-            pathname.split("/")[2] === "review" ? selectedBtn : normalBtn
+            selected === "review" ? selectedBtn : normalBtn
           }
+          onClick={() => setSelected("review")}
         >
           리뷰
         </Link>
