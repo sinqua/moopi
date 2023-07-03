@@ -23,12 +23,16 @@ import BounceLoader from "react-spinners/BounceLoader";
 const ModelComponent = lazy(() => import("./Model"));
 
 interface MainCanvasProps {
+  userId: any;
+  avatarId: any;
   modelUrl: string | undefined;
   animationUrl: string | undefined;
   thumbnailUrl: string | undefined;
 }
 
 const MainCanvas = ({
+  userId,
+  avatarId,
   modelUrl,
   animationUrl,
   thumbnailUrl = "/mainModel.png",
@@ -63,6 +67,10 @@ const MainCanvas = ({
   const resetCamera = () => {
     cameraControlsRef.current?.reset(true);
     cameraControlsRef.current!.polarAngle = 1.35;
+  };
+
+  const handleTemp = () => {
+    window.parent.postMessage({ type: "MODAL", message: {userId: userId, avatarId: avatarId} }, "*");
   };
 
   const postMessage = () => {
@@ -114,6 +122,7 @@ const MainCanvas = ({
           )}
           {MenuButton(
             resetCamera,
+            handleTemp,
             setHelpViewer,
             postMessage,
             fullScreen,
@@ -129,6 +138,7 @@ export default MainCanvas;
 
 function MenuButton(
   resetCamera: () => void,
+  handleTemp: () => void,
   setHelpViewer: any,
   postMessage: () => void,
   fullScreen: boolean,
@@ -158,7 +168,7 @@ function MenuButton(
       </div>
       <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
-        onClick={resetCamera}
+        onClick={handleTemp}
       >
         <Image
           className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]"

@@ -1,27 +1,51 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import AvatarModal from "@/components/AvatarModal";
+import { useRouter } from "next/navigation";
+
 interface PortfolioProps {
   user: any;
-  portfolio: { [x: string]: any}[] | null;
+  portfolio: { [x: string]: any }[] | null;
 }
 
 export default function Portfolio(props: PortfolioProps) {
   const { user, portfolio } = props;
 
-  return (
-    <div className="ql-editor relative w-full md:w-[1372px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px] grow">
-      <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[16px]">
-        {portfolio!.map((work: any, index: any) => {
-          const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${user}/${work.id}`;
+  const router = useRouter();
 
-          return (
-            <iframe
-              src={IframeUrl}
-              className="relative w-full h-[512px] top-0 left-0 md:rounded-[10px] rounded-none"
-              allowFullScreen
-              key={index}
-            />
-          );
-        })}
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+
+      if (event.data.type === "MODAL") {
+        router.push(`/${event.data.message.userId}/avatar/${event.data.message.avatarId}`);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  return (
+    <>
+      <div className="ql-editor relative w-full md:w-[1372px] md:!px-[30px] sm:!px-[60px] !px-[30px] sm:!pt-[40px] !pt-[30px] sm:!pb-[80px] !pb-[50px] grow">
+        <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[16px]">
+          {portfolio!.map((work: any, index: any) => {
+            const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${user}/${work.id}`;
+
+            return (
+              <iframe
+                src={IframeUrl}
+                className="relative w-full h-[512px] top-0 left-0 md:rounded-[10px] rounded-none"
+                allowFullScreen
+                key={index}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
