@@ -75,7 +75,7 @@ export default function Input(props: InputProps) {
   const avatarFileNameRef = useRef<any>(null);
 
   const loadAvatarFile = (e: any) => {
-    // setModelUrl(e.target.value);
+    setModelUrl(null);
     const file = avatarFileRef.current.files[0];
 
     if (!file) return;
