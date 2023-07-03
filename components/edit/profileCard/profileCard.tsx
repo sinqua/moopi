@@ -128,11 +128,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           </div>
         </div>
       </div>
-      <Modal
-        modal={modal}
-        setModal={setModal}
-        onSaveData={onSaveProfileCard}
-      />
+      <Modal modal={modal} setModal={setModal} onSaveData={onSaveProfileCard} />
     </>
   );
 }

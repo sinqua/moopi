@@ -6,7 +6,8 @@ export default async function Page({
 }: {
   params: { user: string; avatar: number };
 }) {
-  const { vrm, animation } = await GetFileName(params.avatar);
+  const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
+  const thumbnaillUrl = await CreateImageUrl(params.user, thumbnail);
   const modelUrl = await CreateModelUrl(params.user, vrm);
   const animationUrl = await CreateAnimationUrl(animation);
 
@@ -15,9 +16,24 @@ export default async function Page({
       <MainCanvas
         modelUrl={modelUrl?.signedUrl}
         animationUrl={animationUrl?.signedUrl}
+        thumbnailUrl={thumbnaillUrl?.signedUrl}
       />
     </div>
   );
+}
+
+async function CreateImageUrl(userId: string, filename: any) {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { signedUrl: undefined };
+  }
+
+  const filepath = `${userId}/${filename}`;
+
+  const { data, error } = await supabase.storage
+    .from("image")
+    .createSignedUrl(filepath, 3600);
+
+  return data;
 }
 
 async function CreateModelUrl(userId: string, filename: any) {
@@ -28,7 +44,7 @@ async function CreateModelUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("model")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
@@ -47,21 +63,20 @@ async function CreateAnimationUrl(animationId: number) {
 
   const { data, error } = await supabase.storage
     .from("animation")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
 
 async function GetFileName(avatar: number) {
   if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { vrm: undefined, animation: undefined };
+    return { vrm: undefined, animation: undefined, thumbnail: undefined };
   }
   const { data, error } = await supabase
     .from("avatars")
-    .select("vrm, animation")
+    .select("vrm, animation, thumbnail")
     .eq("id", avatar);
 
-  console.log(data);
 
   return data![0];
 }

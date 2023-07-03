@@ -19,9 +19,6 @@ export interface ProfileCardProps {
   setModal: any;
 }
 
-const defaultImage =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
-
 export default function ProfileCard(props: ProfileCardProps) {
   const { profileImage, nickname, description, tags, profile, id, modal, setModal } = props;
 
@@ -47,6 +44,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           className="h-[100px] w-[100px] rounded-full border-none"
           alt=""
           loading="eager"
+          priority={true}
         />
         <div className="flex flex-col justify-center space-y-[25px] grow">
           <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
@@ -105,7 +103,7 @@ export default function ProfileCard(props: ProfileCardProps) {
             </div>
             <div
               className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer"
-              onClick={() => router.push("/upload")}
+              onClick={() => router.push(`/${session?.user.id}/upload`)}
             >
               게시하기
             </div>

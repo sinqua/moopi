@@ -12,8 +12,6 @@ interface UserProps {
   tags: any;
   profile: any;
   id: any;
-  description: any;
-  priceInfo: any;
   slot: any;
 }
 

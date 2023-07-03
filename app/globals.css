@@ -5,6 +5,8 @@
 
 html {
   height: 100%;
+
+  font-size: 14px;
 }
 
 body {
@@ -14,3 +16,7 @@ body {
 .ql-editor img {
   display: inline-block;
 }
+
+/* input {
+  --tw-ring-shadow: 0 0 #000 !important;
+} */

@@ -8,7 +8,7 @@ export async function CreateModelUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("model")
-    .createSignedUrl(filepath, 60);
+    .createSignedUrl(filepath, 3600);
 
   return data;
 }
@@ -19,6 +19,26 @@ export async function CreateImageUrl(filepath: any) {
     .from("image")
     .createSignedUrl(filepath, 3600);
 
+  return data;
+}
+
+// Upload file using standard upload
+export async function UploadAvatar(
+  userId: any,
+  filename: any,
+  file: any
+) {
+  const filepath = `${userId}/${filename}`;
+
+  console.log(filepath);
+
+  const { data, error } = await supabase.storage
+    .from("model")
+    .upload(filepath, file, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+    
   return data;
 }
 

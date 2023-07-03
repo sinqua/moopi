@@ -24,7 +24,7 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="relative md:max-w-[1312px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm text-[14px]">
+    <div className="relative md:max-w-[1372px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm text-[14px]">
       <a href="/" title="Go to homepage">
         <Image src={moopiLogo} className="w-auto sm:h-[40px] h-[30px]" alt="" />
       </a>
@@ -73,7 +73,8 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
-                    router.push(`/${session!.user.id}`);
+                    if(status === "loading") return;
+                    router.push(`/${session!.user.id}/description`);
                     setModal(false);
                   }}
                 >
@@ -83,6 +84,7 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
+                    if(status === "loading") return;
                     router.push(`/${session!.user.id}/edit/profile-card`);
                     setModal(false);
                   }}
@@ -93,6 +95,7 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
+                    if(status === "loading") return;
                     signOut();
                     setModal(false);
                   }}

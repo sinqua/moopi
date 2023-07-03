@@ -92,7 +92,7 @@ const Model: FC<ModelProps> = ({
       async (gltf) => {
         setProgress(true);
 
-        const lessMorph = RemoveMorphs(gltf);
+        const lessMorph = RemoveTooMuchMorphs(gltf);
 
         const vrm: VRM = lessMorph.userData.vrm;
 
@@ -123,7 +123,6 @@ const Model: FC<ModelProps> = ({
           object={vrm.scene}
           position={[0, -0.67, 0]}
           rotation={[0, 135, 0]}
-          // material={new THREE.MeshStandardMaterial({ color: new THREE.Color('white'), opacity: 1, transparent: true })}
           children-0-castShadow
         >
           <Circle
@@ -167,22 +166,28 @@ const gradientShader = {
     `,
 };
 
+function TraverseSkinnedMeshNodes(node: any) {
+  if (node.type === 'SkinnedMesh') {
+    /* Heuristic: face will be have more than 50 morphs */
+    if(node.geometry.morphAttributes.position?.length > 50) {
+      node.geometry.morphAttributes.position.length = 0;
+      node.geometry.morphAttributes.normal.length = 0;
+      node.geometry.morphTargetsRelative = false;
+      node.updateMorphTargets();
+    }
+  }
 
-function RemoveMorphs(gltf: GLTF) {
-  /* have to design algorithm to find face */
+  if (node.children) {
+    node.children.forEach((child: any) => {
+      TraverseSkinnedMeshNodes(child);
+    });
+  }
+}
 
-  const geomtery = gltf.userData.vrm.scene.children[1].children[0].geometry;
-
-  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.position.length = 0;
-  gltf.userData.vrm.scene.children[1].children[0].geometry.morphAttributes.normal.length = 0;
-  gltf.userData.vrm.scene.children[1].children[0].geometry.morphTargetsRelative = false;
-
-  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.position.length = 0;
-  gltf.userData.vrm.scene.children[1].children[1].geometry.morphAttributes.normal.length = 0;
-  gltf.userData.vrm.scene.children[1].children[1].geometry.morphTargetsRelative = false;
-
-  gltf.userData.vrm.scene.children[1].children[0].updateMorphTargets();
-  gltf.userData.vrm.scene.children[1].children[1].updateMorphTargets();
+function RemoveTooMuchMorphs(gltf: GLTF) {
+  gltf.scene.traverse((node) => {
+    TraverseSkinnedMeshNodes(node);
+  });
 
   return gltf;
 }
