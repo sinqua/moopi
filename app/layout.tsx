@@ -4,6 +4,8 @@ import Provider from "@/components/Provider";
 import Head from "next/head";
 import Script from "next/script";
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -13,7 +15,19 @@ export const metadata: Metadata = {
   },
   description: "무피는 3D 뷰어 기반의 크리에이터 포트폴리오 서비스입니다.",
   applicationName: "무피",
-  keywords: ["3D", "크리에이터", "포트폴리오", "무피", "메타버스", "Creator", "Portfolio", "Moopi", "VRChat", "VRM", "VRC"],
+  keywords: [
+    "3D",
+    "크리에이터",
+    "포트폴리오",
+    "무피",
+    "메타버스",
+    "Creator",
+    "Portfolio",
+    "Moopi",
+    "VRChat",
+    "VRM",
+    "VRC",
+  ],
   metadataBase: new URL("https://moopi.offing.me/"),
   openGraph: {
     type: "website",
@@ -38,9 +52,9 @@ export const metadata: Metadata = {
       index: true,
       follow: false,
       noimageindex: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 };
@@ -72,7 +86,10 @@ export default function RootLayout({
         src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
       />
       <Provider>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <Analytics />
+        </body>
       </Provider>
     </html>
   );
