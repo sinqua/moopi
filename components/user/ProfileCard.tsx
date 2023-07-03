@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -7,6 +7,12 @@ import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
 import activeHeartImg from "@/app/assets/images/activeheart.svg";
 import useDrag from "@/app/hooks/dragHook";
+import kakaoLogo from "@/app/assets/logos/kakao.svg";
+import discordLogo from "@/app/assets/logos/discord.svg";
+import Link from "next/link";
+
+const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`
+const discordUrl = `https://discord.gg/TqQK4UNNW`
 
 export interface ProfileCardProps {
   profileImage: string;
@@ -20,7 +26,16 @@ export interface ProfileCardProps {
 }
 
 export default function ProfileCard(props: ProfileCardProps) {
-  const { profileImage, nickname, description, tags, profile, id, modal, setModal } = props;
+  const {
+    profileImage,
+    nickname,
+    description,
+    tags,
+    profile,
+    id,
+    modal,
+    setModal,
+  } = props;
 
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
@@ -109,10 +124,33 @@ export default function ProfileCard(props: ProfileCardProps) {
             </div>
           </div>
         ) : (
-          <div className="relative h-[93px]">
-            <div className="flex justify-center items-center h-[47px] bg-[#333333] rounded-[10px] text-[14px] text-white cursor-pointer">
-              문의하기
-            </div>
+          <div className="flex relative h-[93px]">
+            <Link
+              href={discordUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+              className="flex justify-center items-center w-[50%] h-[47px] bg-[#5865F2] rounded-[10px] text-[14px] ml-1 mr-1 text-white cursor-pointer"
+            >
+              <Image
+                className="w-[22px] h-[22px] ml-[21px] absolute left-0"
+                src={discordLogo}
+                alt=""
+              />
+              디스코드
+            </Link>
+            <Link
+              href={kakaoUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+              className="flex relative justify-center items-center w-[50%] h-[47px] bg-[#FEE500] rounded-[10px] text-[14px] ml-1 mr-1 text-[#3C1E1E] cursor-pointer"
+            >
+              <Image
+                className="w-[22px] h-[22px] ml-[21px] absolute left-0"
+                src={kakaoLogo}
+                alt=""
+              />
+              오픈채팅
+            </Link>
             <div className="absolute flex justify-center w-full bottom-[-10px]">
               <div className="inline-flex justify-center items-end w-[330px] h-[71px] pb-[20px] bg-slot bg-no-repeat bg-cover text-[14px] text-center align-text-bottom">
                 <span>현재 2개의 슬롯이 남아있어요</span>
