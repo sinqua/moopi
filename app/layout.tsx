@@ -5,6 +5,7 @@ import Head from "next/head";
 import Script from "next/script";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import ProgressBar from "@/components/ProgressBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -87,6 +88,7 @@ export default function RootLayout({
       />
       <Provider>
         <body className={inter.className}>
+          <ProgressBar />
           {children}
           <Analytics />
         </body>
