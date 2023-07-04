@@ -8,7 +8,11 @@ export default async function Page(props: any) {
 
   const portfolio = await getPortfoilo(params.user);
 
-  return <Portfolio user={params.user} portfolio={portfolio} />;
+  return (
+    <>
+      <Portfolio user={params.user} portfolio={portfolio} />
+    </>
+  );
 }
 
 const getPortfoilo = async (id: string) => {
@@ -16,8 +20,6 @@ const getPortfoilo = async (id: string) => {
     .from("avatars")
     .select()
     .eq("user_id", id);
-
-    console.log("id", id, "data", data)
 
   return data;
 };

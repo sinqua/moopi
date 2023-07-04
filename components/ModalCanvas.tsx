@@ -2,24 +2,13 @@
 
 import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { CameraControls, Ring, useGLTF } from "@react-three/drei";
-import Select from "react-select";
-import CreatableSelect from "react-select/creatable";
-import moment from "moment";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { CameraControls, useGLTF } from "@react-three/drei";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
-import cancelBlackImg from "@/app/assets/images/cancel_black.svg";
-
 import rotateImg from "@/app/assets/images/rotate.svg";
 import zoomImg from "@/app/assets/images/zoom.svg";
 import moveImg from "@/app/assets/images/move.svg";
-import clipImg from "@/app/assets/images/clip.svg";
-import cameraImg from "@/app/assets/images/camera.svg";
-import cameraFillImg from "@/app/assets/images/camera_fill.svg";
-import upImg from "@/app/assets/images/up.svg";
-import downImg from "@/app/assets/images/down.svg";
-import playImg from "@/app/assets/images/play.svg";
 
 import refreshImg from "@/app/assets/images/refresh.svg";
 import helpImg from "@/app/assets/images/help.svg";
@@ -29,48 +18,37 @@ import originalscreenImg from "@/app/assets/images/originalscreen.svg";
 import powerImg from "@/app/assets/images/power.svg";
 
 import { ModelProps } from "./Model";
-import { CreateModelUrl } from "@/lib/storage";
 import BounceLoader from "react-spinners/BounceLoader";
-import { off } from "process";
 
-const ModelComponent = lazy(() => import("./Model2"));
+const ModelComponent = lazy(() => import("./Model"));
 
-// const defaultModel = {
-//   modelUrl: "/s2xyoon.vrm",
-//   animationUrl: "/HipHopDancing.fbx",
-// };
-interface FullCanvasProps {
-  userId?: string;
-  filename?: string;
-  modelUrl: any;
-  setModelUrl: any;
-  animationUrl: any;
-  setAnimationUrl: any;
-  progress: any;
-  setProgress: any;
-  cameraActive: any;
-  cameraControlsRef: any;
-  resetCamera: any;
-  canvasRef: any;
+interface ModalCanvasProps {
+  userId: any;
+  avatarId: any;
+  modelUrl: string | undefined;
+  animationUrl: string | undefined;
 }
 
-const FullCanvas = (props: FullCanvasProps) => {
-  const { userId, filename, modelUrl, setModelUrl, animationUrl, setAnimationUrl, progress, setProgress, cameraActive, cameraControlsRef, resetCamera, canvasRef } = props;
-
-  // const [modelInfo, setModelInfo] = useState<ModelProps>();
+const ModalCanvas = ({
+  userId,
+  avatarId,
+  modelUrl,
+  animationUrl,
+}: ModalCanvasProps) => {
+  const [modelInfo, setModelInfo] = useState<ModelProps>();
   const [fullScreen, setFullScreen] = useState(false);
   const [helpViewer, setHelpViewer] = useState(false);
-  // const [progress, setProgress] = useState(false);
+  const [progress, setProgress] = useState(false);
 
-  // useEffect(() => {
-  //   if (userId && filename) {
-  //     CreateModelUrl(userId, filename).then((url) => {
-  //       setModelInfo({ modelUrl: url!.signedUrl, setProgress });
-  //     });
-  //   }
+  const cameraControlsRef = useRef<CameraControls>(null);
 
-  //   setModelInfo({ ...defaultModel, setProgress });
-  // }, []);
+  useEffect(() => {
+    setModelInfo({
+      modelUrl: modelUrl,
+      animationUrl: animationUrl,
+      setProgress,
+    });
+  }, [modelUrl, animationUrl]);
 
   const isMobile = () => "ontouchstart" in document.documentElement;
 
@@ -78,6 +56,12 @@ const FullCanvas = (props: FullCanvasProps) => {
   const handleContextMenu = (event: any) => {
     event.preventDefault();
   };
+
+  const resetCamera = () => {
+    cameraControlsRef.current?.reset(true);
+    cameraControlsRef.current!.polarAngle = 1.35;
+  };
+
 
   const postMessage = () => {
     if (!document.fullscreenElement) {
@@ -92,53 +76,48 @@ const FullCanvas = (props: FullCanvasProps) => {
   };
 
   return (
-    <>
-      <div
-        className="relative w-full h-full overflow-hidden"
-        onContextMenu={handleContextMenu}
+    <div
+      className="absolute top-0 left-0 w-full h-full overflow-hidden"
+      onContextMenu={handleContextMenu}
+    >
+      {helpViewer && HelpViewer(setHelpViewer, isMobile)}
+      <Canvas
+        camera={{ position: [0, 0, 1.1] }}
+        style={{ backgroundColor: "#FAF9F6" }}
+        shadows
       >
-        {helpViewer && HelpViewer(setHelpViewer, isMobile)}
-        <Canvas
-          ref={canvasRef}
-          gl={{ preserveDrawingBuffer: true }}
-          camera={{ position: [0, 0, 1.1] }}
-          style={{ backgroundColor: "#FAF9F6" }}
-          shadows
-        >
-          <CameraControls
-            ref={cameraControlsRef}
-            maxDistance={5}
-            polarAngle={1.35}
-          />
-          <directionalLight position={[0, 1, 0]} castShadow />
-          {/* {modelInfo && <ModelComponent {...modelInfo!} />} */}
-          {modelUrl && <ModelComponent animationUrl={animationUrl} setAnimationUrl={setAnimationUrl} modelUrl={modelUrl} setProgress={setProgress} />}
-        </Canvas>
-        {!progress && (
-          <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
-            <BounceLoader color="#2778C7" />
-          </div>
-        )}
-        <div className="absolute flex justify-center top-0 w-full h-full pointer-events-none z-10">
-          <div className="absolute top-0 flex justify-end sm:items-start items-end max-w-[1372px] w-full h-full pt-[50px] pb-[20px] md:px-0 sm:px-[30px] px-[20px]">
-            {!cameraActive && MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
+        <CameraControls
+          ref={cameraControlsRef}
+          maxDistance={5}
+          polarAngle={1.35}
+        />
+        <directionalLight position={[0, 1, 0]} castShadow />
+        {modelInfo && <ModelComponent {...modelInfo!} />}
+      </Canvas>
+      {!progress && (
+        <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
+          <BounceLoader color="#2778C7" />
+        </div>
+      )}
+      <div className="absolute flex justify-center top-0 w-full h-full pointer-events-none z-10">
+          <div className="absolute top-0 flex justify-end sm:items-start items-end max-w-[1312px] w-full h-full md:px-0 sm:px-[30px] px-[20px]">
+            {MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
           </div>
         </div>
-      </div>
-    </>
+    </div>
   );
 };
 
-export default FullCanvas;
+export default ModalCanvas;
 
 function MenuButton(
   resetCamera: () => void,
   setHelpViewer: any,
   postMessage: () => void,
-  fullScreen: boolean
+  fullScreen: boolean,
 ) {
   return (
-    <div className="flex flex-row h-min space-x-[20px] pointer-events-auto">
+    <div className="absolute flex flex-row top-[50px] right-0 space-x-[20px] pointer-events-auto">
       <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={resetCamera}
@@ -159,7 +138,7 @@ function MenuButton(
           alt=""
         />
       </div>
-      {/* <div
+      <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={postMessage}
       >
@@ -168,7 +147,7 @@ function MenuButton(
           src={fullScreen ? originalscreenImg : fullscreenImg}
           alt=""
         />
-      </div> */}
+      </div>
     </div>
   );
 }

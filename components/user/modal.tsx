@@ -30,7 +30,7 @@ export const Modal = (props: ModalProps) => {
 
   return (
     modal && (
-      <div className="absolute w-full h-full bg-[#00000050] top-0 left-0 !m-0 z-0 text-[14px]">
+      <div className="absolute w-full h-full bg-[#00000050] top-0 left-0 !m-0 z-[999] text-[14px]">
         <div className="sticky top-0 w-full h-screen px-[50px] flex justify-center items-center">
           <div className="relative max-w-[360px] w-full flex flex-col box-border bg-white rounded-[10px] overflow-hidden">
             <div className="flex flex-col justify-center items-center grow space-y-[40px] box-border px-[40px] py-[30px]">

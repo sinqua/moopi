@@ -1,19 +1,17 @@
 import { supabase } from "@/lib/database";
 import MainCanvas from "../../../../components/MainCanvas";
 
-export default async function Page({
-  params,
-}: {
-  params: { user: string; avatar: number };
-}) {
-  const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
-  const thumbnaillUrl = await CreateImageUrl(params.user, thumbnail);
-  const modelUrl = await CreateModelUrl(params.user, vrm);
+export default async function Page(props: any) {
+  const { vrm, animation, thumbnail } = await GetFileName(props.params.avatar);
+  const thumbnaillUrl = await CreateImageUrl(props.params.user, thumbnail);
+  const modelUrl = await CreateModelUrl(props.params.user, vrm);
   const animationUrl = await CreateAnimationUrl(animation);
 
   return (
-    <div className="h-full">
+    <div className="relative h-full">
       <MainCanvas
+        userId={props.params.user}
+        avatarId={props.params.avatar}
         modelUrl={modelUrl?.signedUrl}
         animationUrl={animationUrl?.signedUrl}
         thumbnailUrl={thumbnaillUrl?.signedUrl}
@@ -76,7 +74,6 @@ async function GetFileName(avatar: number) {
     .from("avatars")
     .select("vrm, animation, thumbnail")
     .eq("id", avatar);
-
 
   return data![0];
 }

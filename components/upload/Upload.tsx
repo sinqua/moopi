@@ -100,7 +100,7 @@ export default function Upload(props: UploadProps) {
           userId={undefined}
           filename={undefined}
           modelUrl={modelUrl}
-          setMdoelUrl={setModelUrl}
+          setModelUrl={setModelUrl}
           animationUrl={animationUrl}
           setAnimationUrl={setAnimationUrl}
           progress={progress}

@@ -9,6 +9,7 @@ export default function Layout(props: any) {
       <TabBar />
       {props.children}
       <Footer />
+      {props.modal}
     </>
   );
 }
