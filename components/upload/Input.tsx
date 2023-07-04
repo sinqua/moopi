@@ -4,6 +4,7 @@ import Image from "next/image";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import moment from "moment";
+import { twMerge } from 'tailwind-merge'
 
 import clipImg from "@/app/assets/images/clip.svg";
 import cameraImg from "@/app/assets/images/camera.svg";
@@ -14,6 +15,7 @@ import playImg from "@/app/assets/images/play.svg";
 
 import cancelBlackImg from "@/app/assets/images/cancel_black.svg";
 import { placeholderCSS } from "react-select/dist/declarations/src/components/Placeholder";
+import { set } from "nprogress";
 
 interface InputProps {
   setModelUrl: any;
@@ -33,6 +35,8 @@ interface InputProps {
   setAvatarStatus: any;
   setAvatarAnimation: any;
   onSavePortfolio: any;
+  thumbnailImage: any;
+  setThumbnailImage: any;
 }
 
 export default function Input(props: InputProps) {
@@ -54,10 +58,15 @@ export default function Input(props: InputProps) {
     setAvatarStatus,
     setAvatarAnimation,
     onSavePortfolio,
+    thumbnailImage,
+    setThumbnailImage,
   } = props;
 
+  const [thumbTabActive, setThumbTabActive] = useState(false);
   const [leftTabActive, setLeftTabActive] = useState(true);
   const [rightTabActive, setRightTabActive] = useState(true);
+
+  const [display, setDisplay] = useState<string>('flex');
 
   const options = [
     { value: "공개", label: "공개" },
@@ -96,6 +105,25 @@ export default function Input(props: InputProps) {
     setAnimationUrl(e.value);
   };
 
+  const handleFileInputChange = (event: any) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setThumbnailImage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleButtonClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = handleFileInputChange;
+    input.click();
+  };
+
   return (
     <>
       <div
@@ -108,18 +136,64 @@ export default function Input(props: InputProps) {
             포트폴리오 업로드
           </p>
           <div className="flex flex-col sm:space-y-[30px] space-y-0">
-            <div
-              className="sm:flex hidden justify-center items-center w-[40px] h-[40px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
-              onClick={() => setLeftTabActive(!leftTabActive)}
-            >
-              <Image
-                src={leftTabActive ? upImg : downImg}
-                className="w-[18px] h-[9px]"
-                alt=""
-              />
+            <div className="flex flex-row space-x-[18px]">
+              <div
+                className="sm:flex hidden justify-center items-center w-[40px] h-[40px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
+                onClick={() => {
+                  if(display === "flex") setDisplay("hidden")
+                  else setDisplay("flex")
+                  setThumbTabActive(false);
+                }}
+              >
+                <Image
+                  src={leftTabActive ? upImg : downImg}
+                  className="w-[18px] h-[9px]"
+                  alt=""
+                />
+              </div>
+              <div
+                className="sm:flex hidden justify-center items-center w-[40px] h-[40px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
+                onClick={() => {
+                  if (display === "flex") setDisplay("hidden")
+                  setThumbTabActive(!thumbTabActive);
+                }}
+              >
+                <Image
+                  src={thumbTabActive ? upImg : downImg}
+                  className="w-[18px] h-[9px]"
+                  alt=""
+                />
+              </div>
             </div>
-            {leftTabActive && (
-              <div className="flex flex-col space-y-[30px] text-[14px]">
+
+            {thumbTabActive && (
+              <div className="flex flex-col space-y-[30px] text-[14px] w-[250px]">
+                <div className="flex flex-col space-y-[20px]">
+                  <p className="font-semibold">아바타 썸네일</p>
+                  <Image src={thumbnailImage} alt="" height={400} width={250} />
+                  <div className="flex sm:flex-col flex-row sm:space-x-0 space-x-[16px] sm:space-y-[20px] space-y-0">
+                    <div
+                      className="flex justify-center items-center w-full h-[47px] rounded-[10px] bg-[#333333] text-[#FFFFFF] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
+                      onClick={() => {
+                        resetCamera();
+                        setCameraActive(true);
+                      }}
+                    >
+                      촬영하기
+                    </div>
+                    <div
+                      className="flex justify-center items-center w-full h-[47px] rounded-[10px] bg-[#FFFFFF] text-[#333333] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
+                      onClick={handleButtonClick}
+                    >
+                      불러오기
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            
+              <div className={twMerge(display, "flex-col space-y-[30px] text-[14px]")}>
                 <div className="flex flex-col space-y-[20px]">
                   <p className="font-semibold">아바타 이름</p>
                   <div className="relative w-full h-[47px]">
@@ -162,32 +236,6 @@ export default function Input(props: InputProps) {
                   </div>
                 </div>
                 <div className="flex flex-col space-y-[20px]">
-                  <p className="font-semibold">썸네일</p>
-                  <div className="relative w-full h-[47px]">
-                    <input
-                      type="text"
-                      className="w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid border-[#CCCCCC80] px-[20px] py-[0.25rem] outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
-                      placeholder="썸네일을 등록해주세요."
-                    />
-                    <div className="absolute flex items-center h-full top-0 right-[20px] space-x-[20px]">
-                      <Image
-                        src={cameraImg}
-                        className="w-[18px] h-[18px] cursor-pointer"
-                        alt=""
-                        onClick={() => {
-                          setCameraActive(true);
-                          resetCamera();
-                        }}
-                      />
-                      <Image
-                        src={clipImg}
-                        className="w-[18px] h-[18px] cursor-pointer"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col space-y-[20px]">
                   <p className="font-semibold">아바타 설명</p>
                   <textarea
                     ref={avatarDescriptionRef}
@@ -227,7 +275,6 @@ export default function Input(props: InputProps) {
                   />
                 </div>
               </div>
-            )}
           </div>
         </div>
 

@@ -24,9 +24,6 @@ export interface ProfileCardProps {
   mostUsedTags: any;
 }
 
-const defaultImage =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAQAAAAnZu5uAAAAEUlEQVR42mP8/58BChhJYAIAOrAJ/K4Ry7oAAAAASUVORK5CYII=";
-
 export default function ProfileCard(props: ProfileCardProps) {
   const { profileImage, profile, tags, mostUsedTags } = props;
 

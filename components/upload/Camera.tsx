@@ -5,20 +5,24 @@ import Image from "next/image";
 import cancelBlackImg from "@/app/assets/images/cancel_black.svg";
 import cameraFillImg from "@/app/assets/images/camera_fill.svg";
 import playImg from "@/app/assets/images/play.svg";
+import { useSession } from "next-auth/react";
 
 interface CameraProps {
   cameraActive: any;
   setCameraActive: any;
   resetCamera: any;
   canvasRef: any;
+  setThumbnailImage: any;
 }
 
 export default function Camera(props: CameraProps) {
-  const { cameraActive, setCameraActive, resetCamera, canvasRef } = props;
+  const { cameraActive, setCameraActive, resetCamera, canvasRef, setThumbnailImage } = props;
   
   const [modalActive, setModalActive] = useState(false);
 
   const [thumbnailUrl, setThumbnailUrl] = useState<any>(null);
+
+  const { data: session, status, update } = useSession();
 
   function takeCaputre() {
     const canvas = canvasRef.current;
@@ -77,6 +81,12 @@ export default function Camera(props: CameraProps) {
     // const croppedImageURL = croppedCanvas.toDataURL();
 
     setThumbnailUrl(saveCanvas.toDataURL());
+  }
+
+  function saveImage() {
+    setThumbnailImage(thumbnailUrl)
+    setModalActive(false);
+    setCameraActive(false);
   }
 
   return (
@@ -158,7 +168,7 @@ export default function Camera(props: CameraProps) {
                     </div>
                   </div>
                   <div className="flex border-solid border-t-[1px] border-[#DFDFDF]">
-                    <div className="flex justify-center basis-1/2 py-[20px] text-[#2778C7] cursor-pointer">
+                    <div className="flex justify-center basis-1/2 py-[20px] text-[#2778C7] cursor-pointer" onClick={saveImage}>
                       저장
                     </div>
                     <div

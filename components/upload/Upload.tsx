@@ -10,11 +10,9 @@ import Input from "@/components/upload/Input";
 import Camera from "@/components/upload/Camera";
 import FullCanvas from "@/components/FullCanvas";
 import { useRouter } from "next/navigation";
-
-const defaultModel = {
-  modelUrl: "/s2xyoon.vrm",
-  animationUrl: "/HipHopDancing.fbx",
-};
+import tempImage from "@/app/assets/images/mainModel.png";
+import { decode } from "base64-arraybuffer";
+import { v4 as uuidv4 } from "uuid";
 
 interface UploadProps {
   IframeUrl: string;
@@ -45,6 +43,7 @@ export default function Upload(props: UploadProps) {
     label: "공개",
   });
   const [avatarAnimation, setAvatarAnimation] = useState<any>(null);
+  const [thumbnailImage, setThumbnailImage] = useState<any>(tempImage);
 
   const onSavePortfolio = async () => {
     if (avatarFile) {
@@ -75,6 +74,14 @@ export default function Upload(props: UploadProps) {
                   return { tag: tag, avatar_id: avatarData![0].id };
                 })
             );
+          UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
+            const { data, error } = await supabase
+              .from("avatars")
+              .update({
+                thumbnail: uuid,
+              })
+              .eq("user_id", session?.user.id);
+          });
 
           router.push(`/${session?.user.id}/description`);
         }
@@ -129,13 +136,30 @@ export default function Upload(props: UploadProps) {
         setAvatarStatus={setAvatarStatus}
         setAvatarAnimation={setAvatarAnimation}
         onSavePortfolio={onSavePortfolio}
+        thumbnailImage={thumbnailImage}
+        setThumbnailImage={setThumbnailImage}
       />
       <Camera
         cameraActive={cameraActive}
         setCameraActive={setCameraActive}
         resetCamera={resetCamera}
         canvasRef={canvasRef}
+        setThumbnailImage={setThumbnailImage}
       />
     </>
   );
 }
+
+const UploadBase64Image = async (session: any, url: string) => {
+  const base64Data = url.split(",")[1];
+
+  const uuid = uuidv4();
+
+  const { data, error } = await supabase.storage
+    .from("image")
+    .upload(`${session?.user.id}/${uuid}.png`, decode(base64Data), {
+      contentType: "image/png",
+    });
+
+  return uuid;
+};
