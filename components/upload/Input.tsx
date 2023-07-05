@@ -66,6 +66,9 @@ export default function Input(props: InputProps) {
   const router = useRouter();
 
   const [display, setDisplay] = useState<string>("flex");
+  const [borderColor, setBorderColor] = useState<string>(
+    "border-[#CCCCCC80] focus:border-[#2778C780] focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)]"
+  );
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const { data: session, status } = useSession();
@@ -126,14 +129,9 @@ export default function Input(props: InputProps) {
   };
 
   const onSavePortfolio = async () => {
-    if (!avatarNameRef.current.value) {
+    if (!avatarNameRef.current.value || !avatarFile) {
+      setBorderColor("border-red-500 shadow-[inset_0_0_0_1px_rgb(239,68,68)]");
       setIsEmpty(true);
-      console.log("no avatar name");
-      return;
-    }
-    if (!avatarFile) {
-      setIsEmpty(true);
-      console.log("no avatar file");
       return;
     }
 
@@ -260,9 +258,15 @@ export default function Input(props: InputProps) {
                   <input
                     type="text"
                     ref={avatarNameRef}
-                    className={twMerge("w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid border-[#CCCCCC80] px-[20px] py-[0.25rem] outline-none transition duration-200 ease-in-out focus:z-[3] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none", isEmpty ? "focus:border-red-500" : "focus:border-[#2778C780]")}
-                    placeholder="아바타 이름을 입력해주세요."
+                    className={twMerge(
+                      "w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid px-[20px] py-[0.25rem] outline-none transition duration-200 ease-in-out focus:z-[3] focus:text-neutral-700 focus:outline-none ",
+                      borderColor
+                    )}
+                    placeholder="아바타 이름을 입력해주세요"
                   />
+                  <div className="text-right h-full pt-1 pr-1 text-red-500">
+                    {isEmpty ? "아바타 이름이 필요합니다" : ""}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col space-y-[20px]">
@@ -272,8 +276,11 @@ export default function Input(props: InputProps) {
                     type="text"
                     ref={avatarFileNameRef}
                     disabled
-                    className="w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid border-[#CCCCCC80] px-[20px] py-[0.25rem] outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
-                    placeholder="아바타 파일을 등록해주세요."
+                    className={twMerge(
+                      "w-full h-full rounded-[10px] bg-[#FFFFFF80] border border-solid px-[20px] py-[0.25rem] outline-none transition duration-200 ease-in-out focus:z-[3]  focus:text-neutral-700 focus:outline-none",
+                      borderColor
+                    )}
+                    placeholder="아바타 파일을 등록해주세요"
                   />
                   <form>
                     <label htmlFor="avatarFile">
@@ -293,6 +300,9 @@ export default function Input(props: InputProps) {
                       ref={avatarFileRef}
                     />
                   </form>
+                  <div className="text-right h-full pt-1 pr-1 text-red-500">
+                    {isEmpty ? "아바타 파일이 필요합니다" : ""}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col space-y-[20px]">
@@ -300,7 +310,7 @@ export default function Input(props: InputProps) {
                 <textarea
                   ref={avatarDescriptionRef}
                   className="w-full h-[180px] sm:p-[30px] p-[20px] rounded-[10px] resize-none bg-[#FFFFFF80] border-solid border-[1px] border-[#CCCCCC80] outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-[#2778C780] focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
-                  placeholder="아바타 설명을 입력해주세요."
+                  placeholder="아바타 설명을 입력해주세요"
                 />
               </div>
               <div className="flex flex-col space-y-[20px]">
@@ -434,7 +444,6 @@ export default function Input(props: InputProps) {
     </>
   );
 }
-
 
 const UploadBase64Image = async (session: any, url: string) => {
   const base64Data = url.split(",")[1];
