@@ -12,7 +12,7 @@ export default async function Avatar(props: any) {
   const profileImage = await getUserProfileImage(params.user);
   const nickname = await getUserNickname(params.user);
 
-  const avatarInfo = await getAvatarInfo(params.avatar);
+  const avatarInfo = await getAvatarInfo(params.id);
   const tags = avatarInfo.tags.map((tag: any) => {
     return tag.tag;
   });
