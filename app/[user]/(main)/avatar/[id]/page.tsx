@@ -28,6 +28,7 @@ export default async function Avatar(props: any) {
       id={params.user}
       modelUrl={modelUrl?.signedUrl}
       animationUrl={animationUrl?.signedUrl}
+      portfolios={null}
     />
   );
 }
