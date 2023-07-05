@@ -19,7 +19,7 @@ export interface ModelProps {
 }
 
 const Model: FC<ModelProps> = ({
-  animationUrl = "/Landing.fbx",
+  animationUrl = "/animation/Landing.fbx",
   modelUrl = "/Karin_spring.vrm",
   setProgress,
 }) => {
@@ -40,7 +40,7 @@ const Model: FC<ModelProps> = ({
       setActions((prevActions: any) => ({...prevActions, "Landing": clip}));
     });
 
-    LoadMixamoAnimation("/Idle.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/Idle.fbx", vrm).then((clip) => {
       clip.name = "Idle";
       setActions((prevActions: any) => ({...prevActions, "Idle": clip}));
     });

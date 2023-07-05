@@ -66,15 +66,15 @@ export default function ProfileCard(props: ProfileCardProps) {
           <div className="flex flex-row text-[14px] flex-wrap md:justify-between md:space-x-0 sm:space-x-[50px] space-x-[30px]">
             <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
               <p>포트폴리오</p>
-              <p className="font-semibold">123</p>
+              <p className="font-semibold">3</p>
             </div>
             <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
               <p>커미션</p>
-              <p className="font-semibold">123</p>
+              <p className="font-semibold">1</p>
             </div>
             <div className="flex sm:flex-row flex-col items-center sm:space-x-[10px]">
               <p>팔로우</p>
-              <p className="font-semibold">123</p>
+              <p className="font-semibold">1</p>
             </div>
           </div>
           <Image
@@ -124,7 +124,7 @@ export default function ProfileCard(props: ProfileCardProps) {
             </div>
           </div>
         ) : (
-          <div className="flex relative h-[93px]">
+          <div className="flex relative h-[50px]">
             <Link
               href={discordUrl}
               rel="noopener noreferrer"
@@ -151,11 +151,11 @@ export default function ProfileCard(props: ProfileCardProps) {
               />
               오픈채팅
             </Link>
-            <div className="absolute flex justify-center w-full bottom-[-10px]">
+            {/* <div className="absolute flex justify-center w-full bottom-[-10px]">
               <div className="inline-flex justify-center items-end w-[330px] h-[71px] pb-[20px] bg-slot bg-no-repeat bg-cover text-[14px] text-center align-text-bottom">
                 <span>현재 2개의 슬롯이 남아있어요</span>
               </div>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

@@ -37,17 +37,17 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
 
     const mixer = new THREE.AnimationMixer(vrm.scene);
 
-    LoadMixamoAnimation("/Landing.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/Landing.fbx", vrm).then((clip) => {
       clip.name = "Landing";
       setActions((prevActions: any) => ({ ...prevActions, Landing: clip }));
     });
 
-    LoadMixamoAnimation("/Idle.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/Idle.fbx", vrm).then((clip) => {
       clip.name = "Idle";
       setActions((prevActions: any) => ({ ...prevActions, Idle: clip }));
     });
 
-    LoadMixamoAnimation("/HipHopDancing.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/HipHopDancing.fbx", vrm).then((clip) => {
       clip.name = "HipHopDancing";
       setActions((prevActions: any) => ({
         ...prevActions,
@@ -55,7 +55,7 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
       }));
     });
 
-    LoadMixamoAnimation("/PutYourHandsUp.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/PutYourHandsUp.fbx", vrm).then((clip) => {
       clip.name = "PutYourHandsUp";
       setActions((prevActions: any) => ({
         ...prevActions,
@@ -63,7 +63,7 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
       }));
     });
 
-    LoadMixamoAnimation("/Thankful.fbx", vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/Thankful.fbx", vrm).then((clip) => {
       clip.name = "Thankful";
       setActions((prevActions: any) => ({ ...prevActions, Thankful: clip }));
     });
