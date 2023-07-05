@@ -6,6 +6,8 @@ import Script from "next/script";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import ProgressBar from "@/components/ProgressBar";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,16 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
-      <Script id="google-analytics">
-        {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-        `}
-      </Script>
+      <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} />
       <Provider>
         <body className={inter.className}>
           <ProgressBar />

@@ -1,20 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
 
 import { CameraControls } from "@react-three/drei";
-import { supabase, supabaseAuth } from "@/lib/database";
-import { UploadAvatar } from "@/lib/storage";
+
 
 import Input from "@/components/upload/Input";
 import Camera from "@/components/upload/Camera";
 import FullCanvas from "@/components/FullCanvas";
-import { useRouter } from "next/navigation";
 
-const defaultModel = {
-  modelUrl: "/s2xyoon.vrm",
-  animationUrl: "/HipHopDancing.fbx",
-};
+
+import tempImage from "@/app/assets/images/mainModel.png";
+
 
 interface UploadProps {
   IframeUrl: string;
@@ -23,9 +19,7 @@ interface UploadProps {
 
 export default function Upload(props: UploadProps) {
   const { IframeUrl, mostUsedTags } = props;
-  const router = useRouter();
 
-  const { data: session, status } = useSession();
 
   const [modelUrl, setModelUrl] = useState("/s2xyoon.vrm");
   const [animationUrl, setAnimationUrl] = useState("Idle");
@@ -45,42 +39,7 @@ export default function Upload(props: UploadProps) {
     label: "공개",
   });
   const [avatarAnimation, setAvatarAnimation] = useState<any>(null);
-
-  const onSavePortfolio = async () => {
-    if (avatarFile) {
-      UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
-        async (data) => {
-          const { data: avatarData, error: avatarError } = await supabase
-            .from("avatars")
-            .insert([
-              {
-                vrm: avatarFile.name,
-                user_id: session?.user.id,
-                is_profile: false,
-                name: avatarNameRef.current.value,
-                description: avatarDescriptionRef.current.value,
-                visible: true,
-              },
-            ])
-            .select();
-
-          const { data: tagsData, error: tagsError } = await supabase
-            .from("tags")
-            .insert(
-              avatarTags
-                .map((tag: any) => {
-                  return tag.value;
-                })
-                .map((tag: any) => {
-                  return { tag: tag, avatar_id: avatarData![0].id };
-                })
-            );
-
-          router.push(`/${session?.user.id}/description`);
-        }
-      );
-    }
-  };
+  const [thumbnailImage, setThumbnailImage] = useState<any>(tempImage);
 
   const resetCamera = () => {
     cameraControlsRef.current?.reset(true);
@@ -128,14 +87,17 @@ export default function Upload(props: UploadProps) {
         avatarStatus={avatarStatus}
         setAvatarStatus={setAvatarStatus}
         setAvatarAnimation={setAvatarAnimation}
-        onSavePortfolio={onSavePortfolio}
+        thumbnailImage={thumbnailImage}
+        setThumbnailImage={setThumbnailImage}
       />
       <Camera
         cameraActive={cameraActive}
         setCameraActive={setCameraActive}
         resetCamera={resetCamera}
         canvasRef={canvasRef}
+        setThumbnailImage={setThumbnailImage}
       />
     </>
   );
 }
+
