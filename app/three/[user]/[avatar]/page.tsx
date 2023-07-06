@@ -1,8 +1,9 @@
 import { supabase } from "@/lib/database";
 import MainCanvas from "../../../../components/MainCanvas";
 
+export const revalidate = 0;
+
 export default async function Page(props: any) {
-  console.log(props.params.avatar)
   const { vrm, animation, thumbnail } = await GetFileName(props.params.avatar);
   const thumbnaillUrl = await CreateImageUrl(props.params.user, thumbnail);
   const modelUrl = await CreateModelUrl(props.params.user, vrm);
@@ -72,12 +73,10 @@ async function GetFileName(avatar: number) {
     return { vrm: undefined, animation: undefined, thumbnail: undefined };
   }
 
-  console.log(avatar)
   const { data, error } = await supabase
     .from("avatars")
     .select("vrm, animation, thumbnail")
     .eq("id", avatar);
-  console.log(data)
 
   return data![0];
 }
