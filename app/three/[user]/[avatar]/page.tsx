@@ -2,6 +2,7 @@ import { supabase } from "@/lib/database";
 import MainCanvas from "../../../../components/MainCanvas";
 
 export default async function Page(props: any) {
+  console.log(props.params.avatar)
   const { vrm, animation, thumbnail } = await GetFileName(props.params.avatar);
   const thumbnaillUrl = await CreateImageUrl(props.params.user, thumbnail);
   const modelUrl = await CreateModelUrl(props.params.user, vrm);
@@ -70,6 +71,8 @@ async function GetFileName(avatar: number) {
   if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
     return { vrm: undefined, animation: undefined, thumbnail: undefined };
   }
+
+  console.log(avatar)
   const { data, error } = await supabase
     .from("avatars")
     .select("vrm, animation, thumbnail")
