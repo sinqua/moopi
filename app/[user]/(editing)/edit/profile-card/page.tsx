@@ -5,6 +5,7 @@ import ProfileCard from "@/components/edit//profileCard/profileCard";
 export default async function Page({ params }: { params: { user: string } }) {
   const profileImage = await getUserProfileImage(params.user);
   const profile = await getUserProfile(params.user);
+  const avatar = await getMainAvatar(params.user);
   const tags = profile.tags.map((tag: any) => {
     return { value: tag.tag, label: tag.tag };
   });
@@ -14,6 +15,7 @@ export default async function Page({ params }: { params: { user: string } }) {
   return (
     <div className="flex flex-col w-full max-w-[1312px] sm:p-[50px] p-0 rounded-[10px] sm:border-solid border-none border-[1px] border-[#CCCCCC]">
       <ProfileCard
+        avatar={avatar}
         profileImage={profileImage.image}
         profile={profile}
         tags={tags}
@@ -21,6 +23,16 @@ export default async function Page({ params }: { params: { user: string } }) {
       />
     </div>
   );
+}
+
+const getMainAvatar = async (id: string) => {
+  const { data, error } = await supabase
+    .from("avatars")
+    .select()
+    .eq("user_id", id)
+    .eq("is_profile", true);
+
+  return data;
 }
 
 const getUserProfile = async (id: string) => {
