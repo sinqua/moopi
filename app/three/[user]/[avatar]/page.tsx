@@ -77,6 +77,7 @@ async function GetFileName(avatar: number) {
     .from("avatars")
     .select("vrm, animation, thumbnail")
     .eq("id", avatar);
+  console.log(data)
 
   return data![0];
 }
