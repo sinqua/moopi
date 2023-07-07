@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
 import activeHeartImg from "@/app/assets/images/activeheart.svg";
-import useDrag from "@/app/hooks/useDrag";
+import useDrag from "@/hooks/useDrag";
 import kakaoLogo from "@/app/assets/logos/kakao.svg";
 import discordLogo from "@/app/assets/logos/discord.svg";
 import Link from "next/link";

@@ -1,5 +1,5 @@
 "use client";
-import useDrag from "@/app/hooks/useDrag";
+import useDrag from "@/hooks/useDrag";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";

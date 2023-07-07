@@ -5,7 +5,7 @@ import cancelGrayImg from "@/app/assets/images/cancel_gray.svg";
 import infoIcon from "@/app/assets/images/info.svg";
 import listIcon from "@/app/assets/images/list.svg";
 import { useRouter } from "next/navigation";
-import useDrag from "@/app/hooks/useDrag";
+import useDrag from "@/hooks/useDrag";
 import { useEffect, useState } from "react";
 import ModalCanvas from "@/components/ModalCanvas";
 import PortfolioItem from "./PortfolioItem";

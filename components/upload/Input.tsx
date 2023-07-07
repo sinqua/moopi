@@ -36,7 +36,7 @@ interface InputProps {
   setAvatarAnimation: any;
   thumbnailImage: any;
   setThumbnailImage: any;
-  setProgress:any;
+  setProgress: any;
 }
 
 export default function Input(props: InputProps) {
@@ -82,11 +82,12 @@ export default function Input(props: InputProps) {
   ];
 
   const [animationOptions, setAnimationOptions] = useState<any>([
-    { value: "Idle", label: "Idle" },
-    { value: "HipHopDancing", label: "HipHopDancing" },
-    { value: "PutYourHandsUp", label: "PutYourHandsUp" },
-    { value: "Thankful", label: "Thankful" },
+    { value: 4, label: "Idle" },
+    { value: 1, label: "HipHopDancing" },
+    { value: 2, label: "PutYourHandsUp" },
+    { value: 3, label: "Thankful" },
   ]);
+  const [selectedAnime, setSelectedAnime] = useState<any>();
 
   const avatarFileRef = useRef<any>(null);
   const avatarFileNameRef = useRef<any>(null);
@@ -111,7 +112,8 @@ export default function Input(props: InputProps) {
 
   const loadAnimation = (e: any) => {
     setAvatarAnimation(e);
-    setAnimationUrl(e.value);
+    setAnimationUrl(e.label);
+    setSelectedAnime(e.value);
   };
 
   const handleFileInputChange = (event: any) => {
@@ -154,6 +156,7 @@ export default function Input(props: InputProps) {
                 name: avatarNameRef.current.value,
                 description: avatarDescriptionRef.current.value,
                 visible: true,
+                animation: selectedAnime,
               },
             ])
             .select();
@@ -410,8 +413,8 @@ export default function Input(props: InputProps) {
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    value={animationOptions.filter(function (option: any) {
-                      return option.value === animationUrl;
+                    value={animationOptions.filter((option: any) => {
+                      return option.label === animationUrl;
                     })}
                     options={animationOptions}
                     onChange={(e: any) => loadAnimation(e)}

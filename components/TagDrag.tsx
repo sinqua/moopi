@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import useDrag from "@/app/hooks/useDrag";
+import useDrag from "@/hooks/useDrag";
 
 interface TagDragProps {
   avatarTags: Array<{ value: string; label: string }>;

@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import useDrag from "@/app/hooks/useDrag";
+import useDrag from "@/hooks/useDrag";
 import { useEffect, useState } from "react";
 
 interface PortfolioItemProps {
