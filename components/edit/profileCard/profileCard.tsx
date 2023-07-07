@@ -6,12 +6,12 @@ import { useSession } from "next-auth/react";
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
 import activeHeartImg from "@/app/assets/images/activeheart.svg";
-import useDrag from "@/app/hooks/dragHook";
+import useDrag from "@/app/hooks/useDrag";
 import { ProfileImage } from "./profileImage";
 import { Nickname } from "./nickname";
 import { Description } from "./description";
 import { Tag } from "./tag";
-import { Avatar } from "./avatar";
+import Avatar from "./avatar";
 import { Modal } from "../modal";
 import { UploadProfileImage } from "@/lib/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -22,10 +22,11 @@ export interface ProfileCardProps {
   profile: any;
   tags: any;
   mostUsedTags: any;
+  avatar: any;
 }
 
 export default function ProfileCard(props: ProfileCardProps) {
-  const { profileImage, profile, tags, mostUsedTags } = props;
+  const { profileImage, profile, tags, mostUsedTags, avatar } = props;
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -115,7 +116,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           setCurrentTags={setCurrentTags}
           mostUsedTags={mostUsedTags}
         />
-        <Avatar session={session} profile={profile} />
+        <Avatar session={session} profile={profile} avatar={avatar[0]} tags={tags}/>
         <div className="flex justify-center pt-[40px] space-x-[15px]">
           <div
             className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"

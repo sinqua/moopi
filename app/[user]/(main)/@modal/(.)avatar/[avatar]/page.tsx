@@ -28,7 +28,6 @@ export default async function Avatar(props: any) {
       nickname={nickname.nickname}
       avatarInfo={avatarInfo}
       tags={tags}
-      id={params.user}
       portfolios={portfolios}
       modelUrl={modelUrl?.signedUrl}
       animationUrl={animationUrl?.signedUrl}

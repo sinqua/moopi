@@ -40,8 +40,6 @@ export const Nickname = (props: NicknameProps) => {
       <p className="mb-[30px] text-[#7B7B7B] leading-[25px]">
         타인에게 불쾌감을 주는 닉네임은 고객지원센터에서 임의로 변경할 수
         있습니다.
-        <br />
-        닉네임 변경은 2달에 1회 진행할 수 있습니다.
       </p>
       <div className="flex items-center sm:w-[482px] w-auto h-[47px] px-[20px] mb-[6px] rounded-[10px] bg-white border-solid border-[1px] border-[#CCCCCC]">
         <input

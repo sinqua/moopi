@@ -5,7 +5,6 @@ import ProfileCard from "./ProfileCard";
 import { Modal } from "./modal";
 
 interface UserProps {
-  IframeUrl: string;
   profileImage: any;
   nickname: any;
   profileDescription: any;
@@ -13,11 +12,14 @@ interface UserProps {
   profile: any;
   id: any;
   slot: any;
+  avatarID: any;
+  modelUrl: any;
+  animationUrl: any;
+  thumbnailUrl: any;
 }
 
 export default function User(props: UserProps) {
   const {
-    IframeUrl,
     profileImage,
     nickname,
     profileDescription,
@@ -25,15 +27,25 @@ export default function User(props: UserProps) {
     profile,
     id,
     slot,
+    avatarID,
+    modelUrl,
+    animationUrl,
+    thumbnailUrl,
   } = props;
-
+  
   const [modal, setModal] = useState(false);
 
   return (
     <>
       <div className="w-full flex flex-col items-center font-sans">
         <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
-          <Avatar IframeUrl={IframeUrl} />
+          <Avatar
+            userID={id}
+            avatarID={avatarID}
+            modelUrl={modelUrl}
+            animationUrl={animationUrl}
+            thumbnailUrl={thumbnailUrl}
+          />
           <ProfileCard
             profileImage={profileImage}
             nickname={nickname}
