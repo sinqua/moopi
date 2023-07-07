@@ -1,16 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-
-const normalBtn =
-  "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
-const selectedBtn =
-  "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow text-white bg-[#333333] cursor-pointer";
+import { useEffect, useState } from "react";
 
 export default function TabBar() {
   const pathname = usePathname();
   const [selected, setSelected] = useState("description");
+
+  useEffect(() => {
+    setSelected(pathname.split("/")[2]);
+  }, [pathname]);
 
   return (
     <div className="md:mt-0 mt-[40px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
@@ -55,3 +54,8 @@ export default function TabBar() {
     </div>
   );
 }
+
+const normalBtn =
+  "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow hover:bg-s2xyoon-gray cursor-pointer";
+const selectedBtn =
+  "flex justify-center items-center sm:basis-1/4 sm:h-[66px] h-[45px] grow text-white bg-[#333333] cursor-pointer";

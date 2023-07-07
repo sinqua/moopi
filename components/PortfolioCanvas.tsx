@@ -86,16 +86,15 @@ const PortfolioCanvas = ({
   };
 
   return (
-    <>
+    <div className="relative w-full h-[512px] top-0 left-0 md:rounded-[10px] rounded-none">
       {thumbnailViewer ? (
         <Image
           src={thumbnailUrl}
           priority={true}
-          alt=""
-          style={{ objectFit: "contain" }}
+          fill={true}
+          style={{ objectFit: "cover" }}
           onClick={() => setThumbnailViewer(false)}
-          width={814}
-          height={526}
+          alt=""
         />
       ) : (
         <div
@@ -131,7 +130,7 @@ const PortfolioCanvas = ({
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
