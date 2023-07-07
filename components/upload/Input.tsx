@@ -36,6 +36,7 @@ interface InputProps {
   setAvatarAnimation: any;
   thumbnailImage: any;
   setThumbnailImage: any;
+  setProgress:any;
 }
 
 export default function Input(props: InputProps) {
@@ -58,6 +59,7 @@ export default function Input(props: InputProps) {
     setAvatarAnimation,
     thumbnailImage,
     setThumbnailImage,
+    setProgress,
   } = props;
 
   const [done, setDone] = useState<boolean>(false);
@@ -91,6 +93,7 @@ export default function Input(props: InputProps) {
 
   const loadAvatarFile = (e: any) => {
     setModelUrl(null);
+    setProgress(false);
     const file = avatarFileRef.current.files[0];
 
     if (!file) return;

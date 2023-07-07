@@ -55,7 +55,20 @@ interface FullCanvasProps {
 }
 
 const FullCanvas = (props: FullCanvasProps) => {
-  const { userId, filename, modelUrl, setModelUrl, animationUrl, setAnimationUrl, progress, setProgress, cameraActive, cameraControlsRef, resetCamera, canvasRef } = props;
+  const {
+    userId,
+    filename,
+    modelUrl,
+    setModelUrl,
+    animationUrl,
+    setAnimationUrl,
+    progress,
+    setProgress,
+    cameraActive,
+    cameraControlsRef,
+    resetCamera,
+    canvasRef,
+  } = props;
 
   // const [modelInfo, setModelInfo] = useState<ModelProps>();
   const [fullScreen, setFullScreen] = useState(false);
@@ -112,7 +125,14 @@ const FullCanvas = (props: FullCanvasProps) => {
           />
           <directionalLight position={[0, 1, 0]} castShadow />
           {/* {modelInfo && <ModelComponent {...modelInfo!} />} */}
-          {modelUrl && <ModelComponent animationUrl={animationUrl} setAnimationUrl={setAnimationUrl} modelUrl={modelUrl} setProgress={setProgress} />}
+          {modelUrl && (
+            <ModelComponent
+              animationUrl={animationUrl}
+              setAnimationUrl={setAnimationUrl}
+              modelUrl={modelUrl}
+              setProgress={setProgress}
+            />
+          )}
         </Canvas>
         {!progress && (
           <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
@@ -121,7 +141,8 @@ const FullCanvas = (props: FullCanvasProps) => {
         )}
         <div className="absolute flex justify-center top-0 w-full h-full pointer-events-none z-10">
           <div className="absolute top-0 flex justify-end sm:items-start items-end max-w-[1372px] w-full h-full pt-[50px] pb-[20px] md:px-0 sm:px-[30px] px-[20px]">
-            {!cameraActive && MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
+            {!cameraActive &&
+              MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
           </div>
         </div>
       </div>

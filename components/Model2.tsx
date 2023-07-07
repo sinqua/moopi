@@ -120,8 +120,12 @@ const Model: FC<ModelProps> = (props: ModelProps) => {
   }, [actions]);
 
   useEffect(() => {
-    setProgress(false);
+    if (!modelUrl){
+      setProgress(true)
+      return;
+    }
 
+    setProgress(false);
     const loader = new GLTFLoader();
     loader.crossOrigin = "anonymous";
 

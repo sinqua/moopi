@@ -3,14 +3,11 @@ import { useEffect, useRef, useState } from "react";
 
 import { CameraControls } from "@react-three/drei";
 
-
 import Input from "@/components/upload/Input";
 import Camera from "@/components/upload/Camera";
 import FullCanvas from "@/components/FullCanvas";
 
-
 import tempImage from "@/app/assets/images/mainModel.png";
-
 
 interface UploadProps {
   IframeUrl: string;
@@ -20,10 +17,9 @@ interface UploadProps {
 export default function Upload(props: UploadProps) {
   const { IframeUrl, mostUsedTags } = props;
 
-
-  const [modelUrl, setModelUrl] = useState("/s2xyoon.vrm");
+  const [modelUrl, setModelUrl] = useState(undefined);
   const [animationUrl, setAnimationUrl] = useState("Idle");
-  const [progress, setProgress] = useState(false);
+  const [progress, setProgress] = useState(true);
 
   const cameraControlsRef = useRef<CameraControls>(null);
   const canvasRef = useRef<any>();
@@ -78,6 +74,7 @@ export default function Upload(props: UploadProps) {
         cameraActive={cameraActive}
         setCameraActive={setCameraActive}
         resetCamera={resetCamera}
+        setProgress={setProgress}
         avatarNameRef={avatarNameRef}
         avatarFile={avatarFile}
         setAvatarFile={setAvatarFile}
@@ -100,4 +97,3 @@ export default function Upload(props: UploadProps) {
     </>
   );
 }
-
