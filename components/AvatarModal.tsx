@@ -1,17 +1,13 @@
 "use client";
-
-import { useSession } from "next-auth/react";
-
 import Image from "next/image";
 import cancelImg from "@/app/assets/images/cancel.svg";
 import cancelGrayImg from "@/app/assets/images/cancel_gray.svg";
 import infoIcon from "@/app/assets/images/info.svg";
 import listIcon from "@/app/assets/images/list.svg";
 import { useRouter } from "next/navigation";
-import useDrag from "@/app/hooks/dragHook";
+import useDrag from "@/app/hooks/useDrag";
 import { useEffect, useState } from "react";
 import ModalCanvas from "@/components/ModalCanvas";
-import { CreateImageUrl } from "@/lib/storage";
 import PortfolioItem from "./PortfolioItem";
 
 interface AvatarModalProps {
@@ -21,7 +17,6 @@ interface AvatarModalProps {
   nickname: any;
   tags: any;
   avatarInfo: any;
-  id: any;
   portfolios: any;
   modelUrl: any;
   animationUrl: any;
@@ -35,12 +30,10 @@ export default function AvatarModal(props: AvatarModalProps) {
     nickname,
     tags,
     avatarInfo,
-    id,
     portfolios,
     modelUrl,
     animationUrl,
   } = props;
-  const { data: session, status } = useSession();
 
   const router = useRouter();
 
@@ -51,8 +44,12 @@ export default function AvatarModal(props: AvatarModalProps) {
 
   useEffect(() => {
     setMountedStatus(true);
+    document.body.style.overflow = "hidden";
 
-    console.log("portfolios", portfolios);
+    return () => {
+      setMountedStatus(false);
+      document.body.style.overflow = "unset";
+    }
   }, []);
 
   return (
@@ -75,7 +72,7 @@ export default function AvatarModal(props: AvatarModalProps) {
             />
 
             <div className="relative flex justify-between h-full pointer-events-none">
-              <div className="flex flex-col w-[348px] space-y-[30px]">
+              <div className="flex flex-col w-[348px] space-y-[30px] ">
                 <p className="font-semibold text-[30px]">{avatarInfo.name}</p>
                 <div className="flex space-x-[20px] pointer-events-auto">
                   <div

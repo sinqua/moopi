@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import emptyImg from "@/app/assets/images/empty.png";
-import useDrag from "@/app/hooks/dragHook";
+import useDrag from "@/app/hooks/useDrag";
 
 interface AvatarProps {
   portfolio: any;
