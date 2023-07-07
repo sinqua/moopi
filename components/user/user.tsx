@@ -32,9 +32,7 @@ export default function User(props: UserProps) {
     animationUrl,
     thumbnailUrl,
   } = props;
-
-  console.log(thumbnailUrl)
-
+  
   const [modal, setModal] = useState(false);
 
   return (
