@@ -30,8 +30,6 @@ export async function UploadAvatar(
 ) {
   const filepath = `${userId}/${filename}`;
 
-  console.log(filepath);
-
   const { data, error } = await supabase.storage
     .from("model")
     .upload(filepath, file, {

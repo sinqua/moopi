@@ -10,12 +10,12 @@ import clipImg from "@/app/assets/images/clip.svg";
 
 import upImg from "@/app/assets/images/up.svg";
 import downImg from "@/app/assets/images/down.svg";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { decode } from "base64-arraybuffer";
 import { v4 as uuidv4 } from "uuid";
 import { supabase, supabaseAuth } from "@/lib/database";
 import { UploadAvatar } from "@/lib/storage";
+import { Modal } from "./modal";
 
 interface InputProps {
   setModelUrl: any;
@@ -60,10 +60,12 @@ export default function Input(props: InputProps) {
     setThumbnailImage,
   } = props;
 
+  const [done, setDone] = useState<boolean>(false);
+  const [modal, setModal] = useState<boolean>(false);
+
   const [thumbTabActive, setThumbTabActive] = useState(false);
   const [leftTabActive, setLeftTabActive] = useState(true);
   const [rightTabActive, setRightTabActive] = useState(true);
-  const router = useRouter();
 
   const [display, setDisplay] = useState<string>("flex");
   const [borderColor, setBorderColor] = useState<string>(
@@ -136,6 +138,7 @@ export default function Input(props: InputProps) {
     }
 
     if (avatarFile) {
+      setModal(true);
       UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
         async (data) => {
           const { data: avatarData, error: avatarError } = await supabase
@@ -152,27 +155,31 @@ export default function Input(props: InputProps) {
             ])
             .select();
 
-          const { data: tagsData, error: tagsError } = await supabase
-            .from("tags")
-            .insert(
-              avatarTags
-                .map((tag: any) => {
-                  return tag.value;
+          if (avatarTags) {
+            const { data: tagsData, error: tagsError } = await supabase
+              .from("tags")
+              .insert(
+                avatarTags
+                  .map((tag: any) => {
+                    return tag.value;
+                  })
+                  .map((tag: any) => {
+                    return { tag: tag, avatar_id: avatarData![0].id };
+                  })
+              );
+          }
+          if (typeof thumbnailImage === "string") {
+            UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
+              const { data, error } = await supabase
+                .from("avatars")
+                .update({
+                  thumbnail: uuid,
                 })
-                .map((tag: any) => {
-                  return { tag: tag, avatar_id: avatarData![0].id };
-                })
-            );
-          UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
-            const { data, error } = await supabase
-              .from("avatars")
-              .update({
-                thumbnail: uuid,
-              })
-              .eq("user_id", session?.user.id);
-          });
+                .eq("user_id", session?.user.id);
+            });
+          }
 
-          router.push(`/${session?.user.id}/description`);
+          setDone(true);
         }
       );
     }
@@ -441,6 +448,7 @@ export default function Input(props: InputProps) {
           )}
         </div>
       </div>
+      <Modal modal={modal} done={done} />
     </>
   );
 }
