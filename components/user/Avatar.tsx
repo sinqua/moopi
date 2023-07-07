@@ -1,19 +1,26 @@
 "use client";
 import { useState } from "react";
+import AvatarCanvas from "../AvatarCanvas";
 
 interface AvatarProps {
-  IframeUrl: string;
+  userID: string;
+  avatarID: number;
+  modelUrl: string;
+  animationUrl: string;
+  thumbnailUrl: string;
 }
 
 export default function Avatar(props: AvatarProps) {
-  const { IframeUrl } = props;
+  const { userID, avatarID, modelUrl, animationUrl, thumbnailUrl } = props;
 
   return (
     <div className="md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
-      <iframe
-        src={IframeUrl}
-        className="relative w-full h-full top-0 left-0 md:rounded-[10px] rounded-none"
-        allowFullScreen
+      <AvatarCanvas
+        userId={userID}
+        avatarId={avatarID}
+        modelUrl={modelUrl}
+        animationUrl={animationUrl}
+        thumbnailUrl={thumbnailUrl}
       />
     </div>
   );

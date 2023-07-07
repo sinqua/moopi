@@ -16,19 +16,25 @@ export default async function Default(props: any) {
   const slot = await getUserSlot(params.user);
   const avatar = await getUserAvatar(params.user);
 
-  const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/three/${params.user}/${avatar?.id}`;
+  const { vrm, animation, thumbnail } = await GetFileName(avatar.id);
+  const thumbnaillUrl = await CreateThumbUrl(props.params.user, thumbnail);
+  const modelUrl = await CreateModelUrl(props.params.user, vrm);
+  const animationUrl = await CreateAnimationUrl(animation);
 
   return (
-      <User
-        IframeUrl={IframeUrl}
-        profileImage={profileImage.image}
-        nickname={nickname.nickname}
-        profileDescription={profile.description}
-        tags={tags}
-        profile={profile}
-        id={params.user}
-        slot={slot}
-      />
+    <User
+      profileImage={profileImage.image}
+      nickname={nickname.nickname}
+      profileDescription={profile.description}
+      tags={tags}
+      profile={profile}
+      id={params.user}
+      slot={slot}
+      avatarID={avatar.id}
+      modelUrl={modelUrl?.signedUrl}
+      animationUrl={animationUrl?.signedUrl}
+      thumbnailUrl={thumbnaillUrl?.signedUrl}
+    />
   );
 }
 
@@ -47,7 +53,6 @@ const getUserNickname = async (id: string) => {
     .from("users")
     .select()
     .eq("id", id);
-
 
   return data![0];
 };
@@ -87,3 +92,61 @@ const getUserSlot = async (id: string) => {
 
   return data![0];
 };
+
+async function CreateModelUrl(userId: string, filename: any) {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { signedUrl: undefined };
+  }
+  const filepath = `${userId}/${filename}`;
+
+  const { data, error } = await supabase.storage
+    .from("model")
+    .createSignedUrl(filepath, 3600);
+
+  return data;
+}
+
+async function CreateAnimationUrl(animationId: number) {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { signedUrl: undefined };
+  }
+
+  const { data: filename, error: error1 } = await supabase
+    .from("animations")
+    .select("file")
+    .eq("id", animationId);
+
+  const filepath = `${filename![0].file}`;
+
+  const { data, error } = await supabase.storage
+    .from("animation")
+    .createSignedUrl(filepath, 3600);
+
+  return data;
+}
+
+async function GetFileName(avatar: number) {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { vrm: undefined, animation: undefined, thumbnail: undefined };
+  }
+  const { data, error } = await supabase
+    .from("avatars")
+    .select("vrm, animation, thumbnail")
+    .eq("id", avatar);
+
+  return data![0];
+}
+
+async function CreateThumbUrl(userId: string, filename: any) {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { signedUrl: undefined };
+  }
+
+  const filepath = `${userId}/${filename}`;
+
+  const { data, error } = await supabase.storage
+    .from("image")
+    .createSignedUrl(filepath, 3600);
+
+  return data;
+}
