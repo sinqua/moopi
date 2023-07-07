@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { user: string } }) {
 const getMainAvatar = async (id: string) => {
   const { data, error } = await supabase
     .from("avatars")
-    .select()
+    .select(`*, animations(*)`)
     .eq("user_id", id)
     .eq("is_profile", true);
 

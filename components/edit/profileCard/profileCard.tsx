@@ -116,7 +116,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           setCurrentTags={setCurrentTags}
           mostUsedTags={mostUsedTags}
         />
-        <Avatar session={session} profile={profile} avatar={avatar} />
+        <Avatar session={session} profile={profile} avatar={avatar[0]} tags={tags}/>
         <div className="flex justify-center pt-[40px] space-x-[15px]">
           <div
             className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
