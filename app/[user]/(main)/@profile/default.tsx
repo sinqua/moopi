@@ -6,20 +6,26 @@ export const revalidate = 0;
 
 export default async function Default(props: any) {
   const { params } = props;
-  const profileImage = await getUserProfileImage(params.user);
-  const nickname = await getUserNickname(params.user);
-  const profile = await getUserProfile(params.user);
+  const profileImageData = getUserProfileImage(params.user);
+  const nicknameData =  getUserNickname(params.user);
+  const profileData =  getUserProfile(params.user);
+
+  const avatar = await getUserAvatar(params.user);
+  const { vrm, animation, thumbnail } = await GetFileName(avatar.id);
+
+  const slotData = getUserSlot(params.user);
+
+  const thumbnaillUrlData = CreateThumbUrl(props.params.user, thumbnail);
+  const modelUrlData = CreateModelUrl(props.params.user, vrm);
+  const animationUrlData = CreateAnimationUrl(animation);
+
+  const [profileImage, nickname, profile, slot, modelUrl, animationUrl, thumbnaillUrl] = await Promise.all([profileImageData, nicknameData, profileData, slotData, modelUrlData, animationUrlData, thumbnaillUrlData]);
+
+
   const tags = profile.tags.map((tag: any) => {
     return tag.tag;
   });
 
-  const slot = await getUserSlot(params.user);
-  const avatar = await getUserAvatar(params.user);
-
-  const { vrm, animation, thumbnail } = await GetFileName(avatar.id);
-  const thumbnaillUrl = await CreateThumbUrl(props.params.user, thumbnail);
-  const modelUrl = await CreateModelUrl(props.params.user, vrm);
-  const animationUrl = await CreateAnimationUrl(animation);
 
   return (
     <User
