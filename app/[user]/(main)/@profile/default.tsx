@@ -6,39 +6,38 @@ export const revalidate = 0;
 
 export default async function Default(props: any) {
   const { params } = props;
-  // const profileImageData = getUserProfileImage(params.user);
-  // const nicknameData =  getUserNickname(params.user);
-  // const profileData =  getUserProfile(params.user);
-  // const slotData = getUserSlot(params.user);
+  const profileImageData = getUserProfileImage(params.user);
+  const nicknameData =  getUserNickname(params.user);
+  const profileData =  getUserProfile(params.user);
+  const slotData = getUserSlot(params.user);
 
-  // const avatar = await getUserAvatar(params.user);
-  // const thumbnaillUrlData = CreateThumbUrl(props.params.user, avatar.thumbnail);
-  // const modelUrlData = CreateModelUrl(props.params.user, avatar.vrm);
-  // const animationUrlData = CreateAnimationUrl(avatar.animation);
+  const avatar = await getUserAvatar(params.user);
+  const thumbnaillUrlData = CreateThumbUrl(props.params.user, avatar.thumbnail);
+  const modelUrlData = CreateModelUrl(props.params.user, avatar.vrm);
+  const animationUrlData = CreateAnimationUrl(avatar.animation);
 
-  // const [profileImage, nickname, profile, slot, modelUrl, animationUrl, thumbnaillUrl] = await Promise.all([profileImageData, nicknameData, profileData, slotData, modelUrlData, animationUrlData, thumbnaillUrlData]);
+  const [profileImage, nickname, profile, slot, modelUrl, animationUrl, thumbnaillUrl] = await Promise.all([profileImageData, nicknameData, profileData, slotData, modelUrlData, animationUrlData, thumbnaillUrlData]);
 
-
-  // const tags = profile.tags.map((tag: any) => {
-  //   return tag.tag;
-  // });
+  const tags = profile.tags.map((tag: any) => {
+    return tag.tag;
+  });
 
 
   return (
-    // <User
-    //   profileImage={profileImage.image}
-    //   nickname={nickname.nickname}
-    //   profileDescription={profile.description}
-    //   tags={tags}
-    //   profile={profile}
-    //   id={params.user}
-    //   slot={slot}
-    //   avatarID={avatar.id}
-    //   modelUrl={modelUrl?.signedUrl}
-    //   animationUrl={animationUrl?.signedUrl}
-    //   thumbnailUrl={thumbnaillUrl?.signedUrl}
-    // />
-    <div>what if no profile?</div>
+    <User
+      profileImage={profileImage.image}
+      nickname={nickname.nickname}
+      profileDescription={profile.description}
+      tags={tags}
+      profile={profile}
+      id={params.user}
+      slot={slot}
+      avatarID={avatar.id}
+      modelUrl={modelUrl?.signedUrl}
+      animationUrl={animationUrl?.signedUrl}
+      thumbnailUrl={thumbnaillUrl?.signedUrl}
+    />
+    // <div>what if no profile?</div>
   );
 }
 
