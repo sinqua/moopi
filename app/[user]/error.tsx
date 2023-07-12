@@ -10,7 +10,13 @@ export default function Error({
   reset: () => void;
 }) {
 
+  console.log(error);
+
   return (
+    <div>
     <Image src={background} alt=""/>
+    ERROR!
+    </div>
+
   );
 }
