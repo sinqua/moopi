@@ -39,13 +39,13 @@ export default function User(props: UserProps) {
     <>
       <div className="w-full flex flex-col items-center font-sans">
         <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
-          <Avatar
+          {/* <Avatar
             userID={id}
             avatarID={avatarID}
             modelUrl={modelUrl}
             animationUrl={animationUrl}
             thumbnailUrl={thumbnailUrl}
-          />
+          /> */}
           <ProfileCard
             profileImage={profileImage}
             nickname={nickname}
