@@ -9,12 +9,13 @@ export default async function Page(props: any) {
 
   const { params } = props;
 
-  const detail = await getUserDetail(params.user);
-  const descriptionObject = JSON.parse(detail.description);
-  const description = await CreateHtml(descriptionObject);
+  // const detail = await getUserDetail(params.user);
+  // const descriptionObject = JSON.parse(detail.description);
+  // const description = await CreateHtml(descriptionObject);
   
   return (
-    <Description description={description} />
+    // <Description description={description} />
+    <div>what if no description</div>
   );
 }
 
