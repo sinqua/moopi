@@ -9,15 +9,12 @@ export default async function Default(props: any) {
   const profileImageData = getUserProfileImage(params.user);
   const nicknameData =  getUserNickname(params.user);
   const profileData =  getUserProfile(params.user);
-
-  const avatar = await getUserAvatar(params.user);
-  const { vrm, animation, thumbnail } = await GetFileName(avatar.id);
-
   const slotData = getUserSlot(params.user);
 
-  const thumbnaillUrlData = CreateThumbUrl(props.params.user, thumbnail);
-  const modelUrlData = CreateModelUrl(props.params.user, vrm);
-  const animationUrlData = CreateAnimationUrl(animation);
+  const avatar = await getUserAvatar(params.user);
+  const thumbnaillUrlData = CreateThumbUrl(props.params.user, avatar.thumbnail);
+  const modelUrlData = CreateModelUrl(props.params.user, avatar.vrm);
+  const animationUrlData = CreateAnimationUrl(avatar.animation);
 
   const [profileImage, nickname, profile, slot, modelUrl, animationUrl, thumbnaillUrl] = await Promise.all([profileImageData, nicknameData, profileData, slotData, modelUrlData, animationUrlData, thumbnaillUrlData]);
 
@@ -45,9 +42,13 @@ export default async function Default(props: any) {
 }
 
 const getUserAvatar = async (id: string) => {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
+  }
+
   const { data, error } = await supabase
     .from("avatars")
-    .select()
+    .select("id, vrm, animation, thumbnail")
     .eq("user_id", id)
     .eq("is_profile", true);
 
@@ -129,18 +130,6 @@ async function CreateAnimationUrl(animationId: number) {
     .createSignedUrl(filepath, 3600);
 
   return data;
-}
-
-async function GetFileName(avatar: number) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { vrm: undefined, animation: undefined, thumbnail: undefined };
-  }
-  const { data, error } = await supabase
-    .from("avatars")
-    .select("vrm, animation, thumbnail")
-    .eq("id", avatar);
-
-  return data![0];
 }
 
 async function CreateThumbUrl(userId: string, filename: any) {
