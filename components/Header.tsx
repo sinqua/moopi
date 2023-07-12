@@ -43,7 +43,7 @@ export default function Header() {
             />
           </div>
         </div>
-        {status === "unauthenticated" ? (
+        {status !== "authenticated" ? (
           <div
             className="flex justify-center items-center w-[82px] h-[40px] bg-white font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer"
             onClick={() => router.push(`/login?callbackUrl=${callbackUrl}`)}
@@ -73,7 +73,6 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
-                    if(status === "loading") return;
                     router.push(`/${session!.user.id}/description`);
                     setModal(false);
                   }}
@@ -84,7 +83,6 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
-                    if(status === "loading") return;
                     router.push(`/${session!.user.id}/edit/profile-card`);
                     setModal(false);
                   }}
@@ -95,7 +93,6 @@ export default function Header() {
                 <div
                   className="flex items-center h-[43px] px-[15px] cursor-pointer"
                   onClick={() => {
-                    if(status === "loading") return;
                     signOut();
                     setModal(false);
                   }}
