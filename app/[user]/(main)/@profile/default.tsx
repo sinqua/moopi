@@ -25,19 +25,20 @@ export default async function Default(props: any) {
 
 
   return (
-    <User
-      profileImage={profileImage.image}
-      nickname={nickname.nickname}
-      profileDescription={profile.description}
-      tags={tags}
-      profile={profile}
-      id={params.user}
-      slot={slot}
-      avatarID={avatar.id}
-      modelUrl={modelUrl?.signedUrl}
-      animationUrl={animationUrl?.signedUrl}
-      thumbnailUrl={thumbnaillUrl?.signedUrl}
-    />
+    // <User
+    //   profileImage={profileImage.image}
+    //   nickname={nickname.nickname}
+    //   profileDescription={profile.description}
+    //   tags={tags}
+    //   profile={profile}
+    //   id={params.user}
+    //   slot={slot}
+    //   avatarID={avatar.id}
+    //   modelUrl={modelUrl?.signedUrl}
+    //   animationUrl={animationUrl?.signedUrl}
+    //   thumbnailUrl={thumbnaillUrl?.signedUrl}
+    // />
+    <div>what if no profile?</div>
   );
 }
 
