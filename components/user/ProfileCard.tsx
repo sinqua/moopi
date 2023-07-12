@@ -58,8 +58,6 @@ export default function ProfileCard(props: ProfileCardProps) {
           height={100}
           className="h-[100px] w-[100px] rounded-full border-none"
           alt=""
-          loading="eager"
-          priority={true}
         />
         <div className="flex flex-col justify-center space-y-[25px] grow">
           <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
