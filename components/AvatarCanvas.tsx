@@ -96,7 +96,7 @@ const AvatarCanvas = ({
           src={`thumbnail/${thumbnailUrl}`}
           priority={true}
           alt=""
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: "contain", height: "100%" }}
           onClick={() => setThumbnailViewer(false)}
           width={814}
           height={526}
