@@ -11,8 +11,8 @@ import kakaoLogo from "@/app/assets/logos/kakao.svg";
 import discordLogo from "@/app/assets/logos/discord.svg";
 import Link from "next/link";
 
-const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`
-const discordUrl = `https://discord.gg/TqQK4UNNW`
+const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`;
+const discordUrl = `https://discord.gg/TqQK4UNNW`;
 
 export interface ProfileCardProps {
   profileImage: string;
@@ -24,6 +24,14 @@ export interface ProfileCardProps {
   modal: any;
   setModal: any;
 }
+
+const imageLoader = ({ src, width, quality }: any) => {
+  const projectId = "tpwylybqvkzcsrmbctnj"; // your supabase project id
+
+  return `https://${projectId}.supabase.co/storage/v1/render/image/public/${src}?width=${width}&quality=${
+    quality || 75
+  }`;
+};
 
 export default function ProfileCard(props: ProfileCardProps) {
   const {
@@ -53,7 +61,8 @@ export default function ProfileCard(props: ProfileCardProps) {
     <div className="relative md:w-[482px] md:h-[526px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         <Image
-          src={profileImage}
+          loader={imageLoader}
+          src={`image/${id}/2c5c1c60-06be-46a8-9d52-8facc912757e.png`}
           width={100}
           height={100}
           className="h-[100px] w-[100px] rounded-full border-none"
