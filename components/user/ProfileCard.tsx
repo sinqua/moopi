@@ -26,12 +26,9 @@ export interface ProfileCardProps {
 }
 
 const imageLoader = ({ src, width, quality }: any) => {
-  const projectId = "tpwylybqvkzcsrmbctnj"; // your supabase project id
+  const projectId = "tpwylybqvkzcsrmbctnj"; 
 
-  // You have to make a public bucket and use that name here
-  // so gotta have to make a bucket named "profileImage" in your supabase storage
-
-  return `https://${projectId}.supabase.co/storage/v1/render/image/public/${src}?width=${width}&quality=${
+  return `https://${projectId}.supabase.co/storage/v1/object/public/${src}?width=${width}&quality=${
     quality || 75
   }`;
 };
@@ -65,7 +62,7 @@ export default function ProfileCard(props: ProfileCardProps) {
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         <Image
           loader={imageLoader}
-          src={`image/${id}/2c5c1c60-06be-46a8-9d52-8facc912757e.png`}
+          src={`profile-image/${id}/2c5c1c60-06be-46a8-9d52-8facc912757e.png`}
           width={100}
           height={100}
           className="h-[100px] w-[100px] rounded-full border-none"
