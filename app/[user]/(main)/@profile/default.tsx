@@ -74,20 +74,20 @@ const getUserProfile = async (id: string) => {
 };
 
 const getUserProfileImage = async (id: string) => {
-  const { data: profileData, error: error1 } = await supabase
-    .from("profiles")
-    .select(`image`)
-    .eq("user_id", id);
+  // const { data: profileData, error: error1 } = await supabase
+  //   .from("profiles")
+  //   .select(`image`)
+  //   .eq("user_id", id);
 
   const { data: authData, error: error2 } = await supabaseAuth
     .from("users")
     .select(`image`)
     .eq("id", id);
 
-  if (profileData![0].image) {
-    const url = await CreateImageUrl(profileData![0].image);
-    return { image: url!.signedUrl };
-  }
+  // if (profileData![0].image) {
+  //   const url = await CreateImageUrl(profileData![0].image);
+  //   return { image: url!.signedUrl };
+  // }
   return authData![0];
 };
 

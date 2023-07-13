@@ -58,6 +58,7 @@ export default function ProfileCard(props: ProfileCardProps) {
     const regex = /(http:\/\/|https:\/\/)/;
     const result = regex.test(profileImage);
     setHasImage(result);
+    
   }, [profileImage]);
 
   return (
