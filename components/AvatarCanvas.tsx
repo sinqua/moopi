@@ -19,6 +19,7 @@ import powerImg from "@/app/assets/images/power.svg";
 
 import { ModelProps } from "./Model";
 import BounceLoader from "react-spinners/BounceLoader";
+import { supabasePublicImageLoader } from "@/lib/storage";
 
 const ModelComponent = lazy(() => import("./Model"));
 
@@ -46,6 +47,8 @@ const AvatarCanvas = ({
   const cameraControlsRef = useRef<CameraControls>(null);
 
   useEffect(() => {
+    console.log(thumbnailUrl);
+    console.log(modelUrl)
     setModelInfo({
       modelUrl: modelUrl,
       animationUrl: animationUrl,
@@ -89,7 +92,8 @@ const AvatarCanvas = ({
     <>
       {thumbnailViewer ? (
         <Image
-          src={thumbnailUrl}
+          loader={supabasePublicImageLoader}
+          src={`thumbnail/${thumbnailUrl}`}
           priority={true}
           alt=""
           style={{ objectFit: "contain" }}

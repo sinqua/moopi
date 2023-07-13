@@ -35,16 +35,15 @@ export default async function Default(props: any) {
       avatarID={avatar.id}
       modelUrl={modelUrl?.signedUrl}
       animationUrl={animationUrl?.signedUrl}
-      thumbnailUrl={thumbnaillUrl?.signedUrl}
+      thumbnailUrl={`${params.user}/${avatar.thumbnail}`}
     />
-    // <div>what if no profile?</div>
   );
 }
 
 const getUserAvatar = async (id: string) => {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
-  }
+  // if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+  //   return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
+  // }
 
   const { data, error } = await supabase
     .from("avatars")
