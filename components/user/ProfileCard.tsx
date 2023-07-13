@@ -28,6 +28,9 @@ export interface ProfileCardProps {
 const imageLoader = ({ src, width, quality }: any) => {
   const projectId = "tpwylybqvkzcsrmbctnj"; // your supabase project id
 
+  // You have to make a public bucket and use that name here
+  // so gotta have to make a bucket named "profileImage" in your supabase storage
+
   return `https://${projectId}.supabase.co/storage/v1/render/image/public/${src}?width=${width}&quality=${
     quality || 75
   }`;
