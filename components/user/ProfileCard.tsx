@@ -48,34 +48,26 @@ export default function ProfileCard(props: ProfileCardProps) {
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
-  const [hasImage, setHasImage] = useState(true);
-
   useEffect(() => {
     setMountedStatus(true);
   }, []);
 
-  useEffect(() => {
-    const regex = /(http:\/\/|https:\/\/)/;
-    const result = regex.test(profileImage);
-    setHasImage(result);
-    
-  }, [profileImage]);
 
   return (
     <div className="relative md:w-[482px] md:h-[526px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
-        {hasImage ? (
+        {profile.image ? (
           <Image
-            src={profileImage}
-            width={100}
-            height={100}
-            className="h-[100px] w-[100px] rounded-full border-none"
-            alt=""
-          />
+          loader={supabasePublicImageLoader}
+          src={`profile-image/${profile.image}`}
+          width={100}
+          height={100}
+          className="h-[100px] w-[100px] rounded-full border-none"
+          alt=""
+        />
         ) : (
           <Image
-            loader={supabasePublicImageLoader}
-            src={`profile-image/${profile.image}`}
+            src={profileImage}
             width={100}
             height={100}
             className="h-[100px] w-[100px] rounded-full border-none"
