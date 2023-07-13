@@ -24,6 +24,7 @@ export interface ProfileCardProps {
   id: string;
   modal: any;
   setModal: any;
+  session: any;
 }
 
 
@@ -38,12 +39,13 @@ export default function ProfileCard(props: ProfileCardProps) {
     id,
     modal,
     setModal,
+    session
   } = props;
 
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
 
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   const router = useRouter();
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();

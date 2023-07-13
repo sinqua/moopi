@@ -47,8 +47,6 @@ const AvatarCanvas = ({
   const cameraControlsRef = useRef<CameraControls>(null);
 
   useEffect(() => {
-    console.log(thumbnailUrl);
-    console.log(modelUrl)
     setModelInfo({
       modelUrl: modelUrl,
       animationUrl: animationUrl,

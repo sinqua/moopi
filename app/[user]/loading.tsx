@@ -12,7 +12,7 @@ export default function Loading() {
   useEffect(() => {
     console.log("session", session);
     console.log("status", status);
-  }, [session, status]);
+  }, []);
 
   return (
     <div className="flex h-screen items-center align-middle">

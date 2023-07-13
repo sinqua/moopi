@@ -1,14 +1,16 @@
 import { CreateImageUrl } from "@/lib/storage";
 import { supabase, supabaseAuth } from "@/lib/database";
 import User from "@/components/user/user";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 export const revalidate = 0;
 
 export default async function Default(props: any) {
   const { params } = props;
   const profileImageData = getUserProfileImage(params.user);
-  const nicknameData =  getUserNickname(params.user);
-  const profileData =  getUserProfile(params.user);
+  const nicknameData = getUserNickname(params.user);
+  const profileData = getUserProfile(params.user);
   const slotData = getUserSlot(params.user);
 
   const avatar = await getUserAvatar(params.user);
@@ -16,15 +18,33 @@ export default async function Default(props: any) {
   const modelUrlData = CreateModelUrl(props.params.user, avatar.vrm);
   const animationUrlData = CreateAnimationUrl(avatar.animation);
 
-  const [profileImage, nickname, profile, slot, modelUrl, animationUrl, thumbnaillUrl] = await Promise.all([profileImageData, nicknameData, profileData, slotData, modelUrlData, animationUrlData, thumbnaillUrlData]);
+  const [
+    profileImage,
+    nickname,
+    profile,
+    slot,
+    modelUrl,
+    animationUrl,
+    thumbnaillUrl,
+  ] = await Promise.all([
+    profileImageData,
+    nicknameData,
+    profileData,
+    slotData,
+    modelUrlData,
+    animationUrlData,
+    thumbnaillUrlData,
+  ]);
 
   const tags = profile.tags.map((tag: any) => {
     return tag.tag;
   });
 
+  const session = await getServerSession(authOptions);
 
   return (
     <User
+      session={session}
       profileImage={profileImage.image}
       nickname={nickname.nickname}
       profileDescription={profile.description}

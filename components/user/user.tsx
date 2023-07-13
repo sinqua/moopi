@@ -16,6 +16,7 @@ interface UserProps {
   modelUrl: any;
   animationUrl: any;
   thumbnailUrl: any;
+  session:any
 }
 
 export default function User(props: UserProps) {
@@ -31,6 +32,7 @@ export default function User(props: UserProps) {
     modelUrl,
     animationUrl,
     thumbnailUrl,
+    session
   } = props;
   
   const [modal, setModal] = useState(false);
@@ -47,6 +49,7 @@ export default function User(props: UserProps) {
             thumbnailUrl={thumbnailUrl}
           />
           <ProfileCard
+          session={session}
             profileImage={profileImage}
             nickname={nickname}
             description={profileDescription}
