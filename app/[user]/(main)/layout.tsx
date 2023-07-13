@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import HeaderYesSession from "@/components/HeaderYesSession";
 import Footer from "@/components/Footer";
 import TabBar from "@/components/user/TabBar";
 

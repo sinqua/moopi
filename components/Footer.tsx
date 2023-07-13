@@ -1,7 +1,3 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-
 import Image from "next/image";
 import moopiLogo from '../app/assets/logos/moopi.svg';
 

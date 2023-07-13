@@ -1,6 +1,6 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
@@ -9,9 +9,9 @@ import searchImg from "@/app/assets/images/search.svg";
 import messageImg from "@/app/assets/images/message.svg";
 import alertImg from "@/app/assets/images/alert.svg";
 import profileImg from "@/app/assets/images/profile.svg";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Header() {
+export default function HeaderYesSession() {
   const [callbackUrl, setCallbackUrl] = useState<string>();
   const router = useRouter();
 
@@ -43,15 +43,7 @@ export default function Header() {
             />
           </div>
         </div>
-        {status !== "authenticated" ? (
-          <div
-            className="flex justify-center items-center w-[82px] h-[40px] bg-white font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer"
-            onClick={() => router.push(`/login?callbackUrl=${callbackUrl}`)}
-          >
-            로그인
-          </div>
-        ) : (
-          <>
+        <>
             <Image
               src={messageImg}
               className="inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer"
@@ -102,7 +94,14 @@ export default function Header() {
               </div>
             )}
           </>
-        )}
+        {/* {status !== "authenticated" ? (
+          <div
+            className="flex justify-center items-center w-[82px] h-[40px] bg-white font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer"
+            onClick={() => router.push(`/login?callbackUrl=${callbackUrl}`)}
+          >
+            로그인
+          </div>
+        ) : (<div></div>)} */}
       </div>
     </div>
   );

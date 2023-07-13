@@ -1,15 +1,31 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Provider from "@/components/Provider";
-import Head from "next/head";
-import Script from "next/script";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import ProgressBar from "@/components/ProgressBar";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import { Suspense } from "react";
+import Provider from "@/components/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} />
+      <Provider>
+        <body className={inter.className}>
+          <ProgressBar />
+          {children}
+          <Analytics />
+        </body>
+      </Provider>
+    </html>
+  );
+}
 
 export const metadata: Metadata = {
   title: {
@@ -61,22 +77,3 @@ export const metadata: Metadata = {
     },
   },
 };
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} />
-      <Provider>
-        <body className={inter.className}>
-          <ProgressBar />
-          {children}
-          <Analytics />
-        </body>
-      </Provider>
-    </html>
-  );
-}
