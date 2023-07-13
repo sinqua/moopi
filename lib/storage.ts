@@ -2,6 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 import { supabase } from "./database";
 import { decode } from "base64-arraybuffer";
 
+export const supabasePublicImageLoader = ({ src, width, quality }: any) => {
+  const projectId = "tpwylybqvkzcsrmbctnj";
+
+  return `https://${projectId}.supabase.co/storage/v1/object/public/${src}?width=${width}&quality=${
+    quality || 75
+  }`;
+};
+
 // Create file url
 export async function CreateModelUrl(userId: string, filename: any) {
   const filepath = `${userId}/${filename}`;

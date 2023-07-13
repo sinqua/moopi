@@ -10,6 +10,7 @@ import useDrag from "@/hooks/useDrag";
 import kakaoLogo from "@/app/assets/logos/kakao.svg";
 import discordLogo from "@/app/assets/logos/discord.svg";
 import Link from "next/link";
+import { supabasePublicImageLoader } from "@/lib/storage";
 
 const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`;
 const discordUrl = `https://discord.gg/TqQK4UNNW`;
@@ -25,13 +26,7 @@ export interface ProfileCardProps {
   setModal: any;
 }
 
-const imageLoader = ({ src, width, quality }: any) => {
-  const projectId = "tpwylybqvkzcsrmbctnj"; 
 
-  return `https://${projectId}.supabase.co/storage/v1/object/public/${src}?width=${width}&quality=${
-    quality || 75
-  }`;
-};
 
 export default function ProfileCard(props: ProfileCardProps) {
   const {
@@ -53,21 +48,39 @@ export default function ProfileCard(props: ProfileCardProps) {
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
+  const [hasImage, setHasImage] = useState(true);
+
   useEffect(() => {
     setMountedStatus(true);
   }, []);
 
+  useEffect(() => {
+    const regex = /(http:\/\/|https:\/\/)/;
+    const result = regex.test(profileImage);
+    setHasImage(result);
+  }, [profileImage]);
+
   return (
     <div className="relative md:w-[482px] md:h-[526px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
-        <Image
-          loader={imageLoader}
-          src={`profile-image/${id}/2c5c1c60-06be-46a8-9d52-8facc912757e.png`}
-          width={100}
-          height={100}
-          className="h-[100px] w-[100px] rounded-full border-none"
-          alt=""
-        />
+        {hasImage ? (
+          <Image
+            src={profileImage}
+            width={100}
+            height={100}
+            className="h-[100px] w-[100px] rounded-full border-none"
+            alt=""
+          />
+        ) : (
+          <Image
+            loader={supabasePublicImageLoader}
+            src={`profile-image/${profileImage}`}
+            width={100}
+            height={100}
+            className="h-[100px] w-[100px] rounded-full border-none"
+            alt=""
+          />
+        )}
         <div className="flex flex-col justify-center space-y-[25px] grow">
           <p className="font-semibold text-[18px]">{nickname ?? ""}</p>
           <div className="flex flex-row text-[14px] flex-wrap md:justify-between md:space-x-0 sm:space-x-[50px] space-x-[30px]">
