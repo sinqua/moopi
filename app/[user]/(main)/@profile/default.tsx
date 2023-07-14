@@ -4,8 +4,6 @@ import User from "@/components/user/user";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
-export const revalidate = 0;
-
 export default async function Default(props: any) {
   const { params } = props;
   const profileImageData = getUserProfileImage(params.user);
@@ -14,8 +12,7 @@ export default async function Default(props: any) {
   const slotData = getUserSlot(params.user);
 
   const avatar = await getUserAvatar(params.user);
-  const thumbnaillUrlData = CreateThumbUrl(props.params.user, avatar.thumbnail);
-  const modelUrlData = CreateModelUrl(props.params.user, avatar.vrm);
+  const modelUrlData = CreateModelUrl(params.user, avatar.vrm);
   const animationUrlData = CreateAnimationUrl(avatar.animation);
 
   const [
@@ -25,7 +22,6 @@ export default async function Default(props: any) {
     slot,
     modelUrl,
     animationUrl,
-    thumbnaillUrl,
   ] = await Promise.all([
     profileImageData,
     nicknameData,
@@ -33,7 +29,6 @@ export default async function Default(props: any) {
     slotData,
     modelUrlData,
     animationUrlData,
-    thumbnaillUrlData,
   ]);
 
   const tags = profile.tags.map((tag: any) => {
@@ -61,9 +56,9 @@ export default async function Default(props: any) {
 }
 
 const getUserAvatar = async (id: string) => {
-  // if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-  //   return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
-  // }
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
+  }
 
   const { data, error } = await supabase
     .from("avatars")
@@ -93,20 +88,11 @@ const getUserProfile = async (id: string) => {
 };
 
 const getUserProfileImage = async (id: string) => {
-  // const { data: profileData, error: error1 } = await supabase
-  //   .from("profiles")
-  //   .select(`image`)
-  //   .eq("user_id", id);
-
   const { data: authData, error: error2 } = await supabaseAuth
     .from("users")
     .select(`image`)
     .eq("id", id);
 
-  // if (profileData![0].image) {
-  //   const url = await CreateImageUrl(profileData![0].image);
-  //   return { image: url!.signedUrl };
-  // }
   return authData![0];
 };
 
