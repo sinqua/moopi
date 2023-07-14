@@ -1,6 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
 import { supabase } from "./database";
-import { decode } from "base64-arraybuffer";
+
+export const CreateQuillUrl = async (filename: any) => {
+  const { data } = await supabase.storage
+    .from("quill")
+    .getPublicUrl(filename);
+
+  return data;
+};
 
 export const supabasePublicImageLoader = ({ src, width, quality }: any) => {
   const projectId = "tpwylybqvkzcsrmbctnj";
@@ -87,7 +93,7 @@ export async function UploadBase64Image(userId: any, filename: any, file: any) {
   const blob = new Blob([uint8Array]);
 
   const { data, error } = await supabase.storage
-    .from("image")
+    .from("quill")
     .upload(filepath, blob, {
       cacheControl: "3600",
       upsert: true,

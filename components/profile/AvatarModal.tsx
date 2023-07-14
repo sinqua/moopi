@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import useDrag from "@/hooks/useDrag";
 import { useEffect, useState } from "react";
 import ModalCanvas from "@/components/ModalCanvas";
-import PortfolioItem from "./PortfolioItem";
+import PortfolioItem from "../portfolio/PortfolioItem";
 
 interface AvatarModalProps {
   userId: any;

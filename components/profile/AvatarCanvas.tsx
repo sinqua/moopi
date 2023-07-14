@@ -17,12 +17,13 @@ import fullscreenImg from "@/app/assets/images/fullscreen.svg";
 import originalscreenImg from "@/app/assets/images/originalscreen.svg";
 import powerImg from "@/app/assets/images/power.svg";
 
-import { ModelProps } from "./Model";
+import { ModelProps } from "../Model";
 import BounceLoader from "react-spinners/BounceLoader";
+import { supabasePublicImageLoader } from "@/lib/storage";
 
-const ModelComponent = lazy(() => import("./Model"));
+const ModelComponent = lazy(() => import("../Model"));
 
-interface PortfolioCanvasProps {
+interface AvatarCanvasProps {
   userId: any;
   avatarId: any;
   modelUrl: string | undefined;
@@ -30,13 +31,13 @@ interface PortfolioCanvasProps {
   thumbnailUrl: string | undefined;
 }
 
-const PortfolioCanvas = ({
+const AvatarCanvas = ({
   userId,
   avatarId,
   modelUrl,
   animationUrl,
   thumbnailUrl = "/mainModel.png",
-}: PortfolioCanvasProps) => {
+}: AvatarCanvasProps) => {
   const [modelInfo, setModelInfo] = useState<ModelProps>();
   const [fullScreen, setFullScreen] = useState(false);
   const [helpViewer, setHelpViewer] = useState(false);
@@ -86,15 +87,17 @@ const PortfolioCanvas = ({
   };
 
   return (
-    <div className="relative w-full h-[512px] top-0 left-0 md:rounded-[10px] rounded-none">
+    <>
       {thumbnailViewer ? (
         <Image
-          src={thumbnailUrl}
+          loader={supabasePublicImageLoader}
+          src={`thumbnail/${thumbnailUrl}`}
           priority={true}
-          fill={true}
-          style={{ objectFit: "cover" }}
-          onClick={() => setThumbnailViewer(false)}
           alt=""
+          style={{ objectFit: "contain", height: "100%" }}
+          onClick={() => setThumbnailViewer(false)}
+          width={814}
+          height={526}
         />
       ) : (
         <div
@@ -130,11 +133,11 @@ const PortfolioCanvas = ({
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };
 
-export default PortfolioCanvas;
+export default AvatarCanvas;
 
 function MenuButton(
   resetCamera: () => void,

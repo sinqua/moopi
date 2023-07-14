@@ -2,13 +2,24 @@
 
 import Image from "next/image";
 import { lazy, useEffect, useRef, useState, FC } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { CameraControls, useGLTF } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { CameraControls, Ring, useGLTF } from "@react-three/drei";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+import moment from "moment";
 
 import cancelImg from "@/app/assets/images/cancel.svg";
+import cancelBlackImg from "@/app/assets/images/cancel_black.svg";
+
 import rotateImg from "@/app/assets/images/rotate.svg";
 import zoomImg from "@/app/assets/images/zoom.svg";
 import moveImg from "@/app/assets/images/move.svg";
+import clipImg from "@/app/assets/images/clip.svg";
+import cameraImg from "@/app/assets/images/camera.svg";
+import cameraFillImg from "@/app/assets/images/camera_fill.svg";
+import upImg from "@/app/assets/images/up.svg";
+import downImg from "@/app/assets/images/down.svg";
+import playImg from "@/app/assets/images/play.svg";
 
 import refreshImg from "@/app/assets/images/refresh.svg";
 import helpImg from "@/app/assets/images/help.svg";
@@ -17,61 +28,68 @@ import fullscreenImg from "@/app/assets/images/fullscreen.svg";
 import originalscreenImg from "@/app/assets/images/originalscreen.svg";
 import powerImg from "@/app/assets/images/power.svg";
 
-import { ModelProps } from "./Model";
+import { ModelProps } from "../Model";
+import { CreateModelUrl } from "@/lib/storage";
 import BounceLoader from "react-spinners/BounceLoader";
-import { supabasePublicImageLoader } from "@/lib/storage";
+import { off } from "process";
 
-const ModelComponent = lazy(() => import("./Model"));
+const ModelComponent = lazy(() => import("../Model2"));
 
-interface AvatarCanvasProps {
-  userId: any;
-  avatarId: any;
-  modelUrl: string | undefined;
-  animationUrl: string | undefined;
-  thumbnailUrl: string | undefined;
+// const defaultModel = {
+//   modelUrl: "/s2xyoon.vrm",
+//   animationUrl: "/HipHopDancing.fbx",
+// };
+interface FullCanvasProps {
+  userId?: string;
+  filename?: string;
+  modelUrl: any;
+  setModelUrl: any;
+  animationUrl: any;
+  setAnimationUrl: any;
+  progress: any;
+  setProgress: any;
+  cameraActive: any;
+  cameraControlsRef: any;
+  resetCamera: any;
+  canvasRef: any;
 }
 
-const AvatarCanvas = ({
-  userId,
-  avatarId,
-  modelUrl,
-  animationUrl,
-  thumbnailUrl = "/mainModel.png",
-}: AvatarCanvasProps) => {
-  const [modelInfo, setModelInfo] = useState<ModelProps>();
+const FullCanvas = (props: FullCanvasProps) => {
+  const {
+    userId,
+    filename,
+    modelUrl,
+    setModelUrl,
+    animationUrl,
+    setAnimationUrl,
+    progress,
+    setProgress,
+    cameraActive,
+    cameraControlsRef,
+    resetCamera,
+    canvasRef,
+  } = props;
+
+  // const [modelInfo, setModelInfo] = useState<ModelProps>();
   const [fullScreen, setFullScreen] = useState(false);
   const [helpViewer, setHelpViewer] = useState(false);
-  const [thumbnailViewer, setThumbnailViewer] = useState(true);
-  const [progress, setProgress] = useState(false);
+  // const [progress, setProgress] = useState(false);
 
-  const cameraControlsRef = useRef<CameraControls>(null);
+  // useEffect(() => {
+  //   if (userId && filename) {
+  //     CreateModelUrl(userId, filename).then((url) => {
+  //       setModelInfo({ modelUrl: url!.signedUrl, setProgress });
+  //     });
+  //   }
 
-  useEffect(() => {
-    setModelInfo({
-      modelUrl: modelUrl,
-      animationUrl: animationUrl,
-      setProgress,
-    });
-  }, [modelUrl, animationUrl]);
-
-  useEffect(() => {
-    if (thumbnailViewer) setProgress(false);
-  }, [thumbnailViewer]);
+  //   setModelInfo({ ...defaultModel, setProgress });
+  // }, []);
 
   const isMobile = () => "ontouchstart" in document.documentElement;
 
   // Prevent the default right-click behavior
   const handleContextMenu = (event: any) => {
     event.preventDefault();
-  };
-
-  const resetCamera = () => {
-    cameraControlsRef.current?.reset(true);
-    cameraControlsRef.current!.polarAngle = 1.35;
-  };
-
-  const handleTemp = () => {
-    window.parent.postMessage({ type: "MODAL", message: {userId: userId, avatarId: avatarId} }, "*");
   };
 
   const postMessage = () => {
@@ -88,67 +106,60 @@ const AvatarCanvas = ({
 
   return (
     <>
-      {thumbnailViewer ? (
-        <Image
-          loader={supabasePublicImageLoader}
-          src={`thumbnail/${thumbnailUrl}`}
-          priority={true}
-          alt=""
-          style={{ objectFit: "contain", height: "100%" }}
-          onClick={() => setThumbnailViewer(false)}
-          width={814}
-          height={526}
-        />
-      ) : (
-        <div
-          className="relative w-full h-full overflow-hidden"
-          onContextMenu={handleContextMenu}
+      <div
+        className="relative w-full h-full overflow-hidden"
+        onContextMenu={handleContextMenu}
+      >
+        {helpViewer && HelpViewer(setHelpViewer, isMobile)}
+        <Canvas
+          ref={canvasRef}
+          gl={{ preserveDrawingBuffer: true }}
+          camera={{ position: [0, 0, 1.1] }}
+          style={{ backgroundColor: "#FAF9F6" }}
+          shadows
         >
-          {helpViewer && HelpViewer(setHelpViewer, isMobile)}
-          <Canvas
-            camera={{ position: [0, 0, 1.1] }}
-            style={{ backgroundColor: "#FAF9F6" }}
-            shadows
-          >
-            <CameraControls
-              ref={cameraControlsRef}
-              maxDistance={5}
-              polarAngle={1.35}
+          <CameraControls
+            ref={cameraControlsRef}
+            maxDistance={5}
+            polarAngle={1.35}
+          />
+          <directionalLight position={[0, 1, 0]} castShadow />
+          {/* {modelInfo && <ModelComponent {...modelInfo!} />} */}
+          {modelUrl && (
+            <ModelComponent
+              animationUrl={animationUrl}
+              setAnimationUrl={setAnimationUrl}
+              modelUrl={modelUrl}
+              setProgress={setProgress}
             />
-            <directionalLight position={[0, 1, 0]} castShadow />
-            {modelInfo && <ModelComponent {...modelInfo!} />}
-          </Canvas>
-          {!progress && (
-            <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
-              <BounceLoader color="#2778C7" />
-            </div>
           )}
-          {MenuButton(
-            resetCamera,
-            handleTemp,
-            setHelpViewer,
-            postMessage,
-            fullScreen,
-            setThumbnailViewer
-          )}
+        </Canvas>
+        {!progress && (
+          <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
+            <BounceLoader color="#2778C7" />
+          </div>
+        )}
+        <div className="absolute flex justify-center top-0 w-full h-full pointer-events-none z-10">
+          <div className="absolute top-0 flex justify-end sm:items-start items-end max-w-[1372px] w-full h-full pt-[50px] pb-[20px] md:px-0 sm:px-[30px] px-[20px]">
+            {!cameraActive &&
+              MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
+          </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
 
-export default AvatarCanvas;
+export default FullCanvas;
 
 function MenuButton(
   resetCamera: () => void,
-  handleTemp: () => void,
   setHelpViewer: any,
   postMessage: () => void,
-  fullScreen: boolean,
-  setThumbnailViewer: any
+  fullScreen: boolean
 ) {
   return (
-    <div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] px-[35px] py-[20px]">
+    <div className="flex flex-row h-min space-x-[20px] pointer-events-auto">
       <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={resetCamera}
@@ -169,17 +180,7 @@ function MenuButton(
           alt=""
         />
       </div>
-      <div
-        className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
-        onClick={handleTemp}
-      >
-        <Image
-          className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]"
-          src={descriptionImg}
-          alt=""
-        />
-      </div>
-      <div
+      {/* <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={postMessage}
       >
@@ -188,24 +189,14 @@ function MenuButton(
           src={fullScreen ? originalscreenImg : fullscreenImg}
           alt=""
         />
-      </div>
-      <div
-        className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
-        onClick={() => setThumbnailViewer(true)}
-      >
-        <Image
-          className="sm:w-[20px] sm:h-[20px] w-[16px] h-[16px]"
-          src={powerImg}
-          alt=""
-        />
-      </div>
+      </div> */}
     </div>
   );
 }
 
 function HelpViewer(setHelpViewer: any, isMobile: () => boolean) {
   return (
-    <div className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[#00000080] z-10">
+    <div className="absolute flex justify-center items-center w-full h-full top-0 left-0 select-none bg-[#00000080] z-[999]">
       <Image
         className="absolute top-[20px] right-[20px] w-[28px] h-[28px] cursor-pointer"
         src={cancelImg}

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import AvatarCanvas from "../AvatarCanvas";
+import AvatarCanvas from "../profile/AvatarCanvas";
 
 interface AvatarProps {
   userID: string;

@@ -1,22 +1,18 @@
 import Description from "@/components/user/Description";
 import { supabase } from "@/lib/database";
-import { CreateImageUrl } from "@/lib/storage";
+import { CreateImageUrl, CreateQuillUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 export const revalidate = 0;
 
 export default async function Page(props: any) {
-
   const { params } = props;
 
-  // const detail = await getUserDetail(params.user);
-  // const descriptionObject = JSON.parse(detail.description);
-  // const description = await CreateHtml(descriptionObject);
-  
-  return (
-    // <Description description={description} />
-    <div>what if no description</div>
-  );
+  const detail = await getUserDetail(params.user);
+  const descriptionObject = JSON.parse(detail.description);
+  const description = await CreateHtml(descriptionObject);
+
+  return <Description description={description} />;
 }
 
 const getUserDetail = async (id: string) => {
@@ -38,8 +34,8 @@ const CreateHtml = async (descriptionObject: any) => {
 
   for (let i = 0; i < arr.length; i++) {
     if (Object.keys(arr[i].insert).includes("image")) {
-      await CreateImageUrl(arr[i].insert.image).then(async (url) => {
-        arr[i].insert.image = url!.signedUrl;
+      await CreateQuillUrl(arr[i].insert.image).then(async (url) => {
+        arr[i].insert.image = url!.publicUrl;
         arr[i].attributes = {
           display: "inline-block",
         };
@@ -50,5 +46,6 @@ const CreateHtml = async (descriptionObject: any) => {
   var cfg = {};
   var converter = new QuillDeltaToHtmlConverter(arr, cfg);
   var html = converter.convert();
+
   return html;
 };

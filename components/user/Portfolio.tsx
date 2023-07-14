@@ -1,4 +1,4 @@
-import PortfolioCanvas from "../PortfolioCanvas";
+import PortfolioCanvas from "../portfolio/PortfolioCanvas";
 import { supabase } from "@/lib/database";
 
 export const revalidate = 0;

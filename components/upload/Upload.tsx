@@ -5,7 +5,7 @@ import { CameraControls } from "@react-three/drei";
 
 import Input from "@/components/upload/Input";
 import Camera from "@/components/upload/Camera";
-import FullCanvas from "@/components/FullCanvas";
+import FullCanvas from "@/components/upload/FullCanvas";
 
 import tempImage from "@/app/assets/images/mainModel.png";
 

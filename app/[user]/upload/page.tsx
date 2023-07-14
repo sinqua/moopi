@@ -1,16 +1,4 @@
-// "use client";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-
-import { ProfileImage } from "@/components/edit/profileCard/profileImage";
-import { Nickname } from "@/components/edit/profileCard/nickname";
-import { Description } from "@/components/edit/profileCard/description";
-import { Tag } from "@/components/edit/profileCard/tag";
-import dynamic from "next/dynamic";
-
 import { supabase, supabaseAuth } from "@/lib/database";
-import { CreateImageUrl } from "@/lib/storage";
-
 import Upload from "@/components/upload/Upload";
 
 const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs-full`;
@@ -18,11 +6,7 @@ const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs-full`;
 export default async function Page({ params }: { params: { user: string } }) {
   const mostUsedTags = await getMostUsedTags();
 
-  return (
-    <>
-      <Upload IframeUrl={IframeUrl} mostUsedTags={mostUsedTags} />
-    </>
-  );
+  return <Upload IframeUrl={IframeUrl} mostUsedTags={mostUsedTags} />;
 }
 
 const getMostUsedTags = async () => {

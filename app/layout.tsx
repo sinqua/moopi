@@ -2,9 +2,9 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
-import ProgressBar from "@/components/ProgressBar";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
-import Provider from "@/components/Provider";
+import ProgressBar from "@/components/basic-layout/ProgressBar";
+import GoogleAnalytics from "@/components/etc/GoogleAnalytics";
+import Provider from "@/components/etc/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
