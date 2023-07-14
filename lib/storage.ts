@@ -1,17 +1,18 @@
 import { supabase } from "./database";
 
 export const CreateQuillUrl = async (filename: any) => {
+  const options = {
+    transform: {
+      quality: 75,
+      width: 800,
+      resize: 'contain'
+    }
+  }
+
   const { data } = await supabase.storage
     .from("quill")
-    .getPublicUrl(filename, {
-      transform: {
-        quality: 75,
-        width: 800,
-        resize: 'contain'
-      }
-    }
-    );
-
+    .getPublicUrl(filename)
+    
   return data;
 };
 
