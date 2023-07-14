@@ -1,4 +1,3 @@
-// import Editor from "@/components/Editor";
 "use client";
 import { UploadBase64Image } from "@/lib/storage";
 import { useSession } from "next-auth/react";
@@ -9,7 +8,7 @@ import { Modal } from "../modal";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/database";
 
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+const Editor = dynamic(() => import("../../Editor"), { ssr: false });
 
 interface PriceInfoProps {
   profile: any;
