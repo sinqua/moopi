@@ -1,7 +1,5 @@
 'use client'
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
-// import styled from 'styled-components';
-import axios from 'axios';
 import { NextPage } from 'next';
 
 import ReactQuill, { Quill } from 'react-quill';

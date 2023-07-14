@@ -38,6 +38,7 @@ const CreateHtml = async (descriptionObject: any) => {
         arr[i].insert.image = url!.publicUrl;
         arr[i].attributes = {
           display: "inline-block",
+          renderAsBlock: true,
         };
       });
     }
@@ -45,7 +46,12 @@ const CreateHtml = async (descriptionObject: any) => {
 
   var cfg = {};
   var converter = new QuillDeltaToHtmlConverter(arr, cfg);
-  var html = converter.convert();
 
+  converter.afterRender((groupType: any, htmlString: string) =>{
+    htmlString = htmlString.replace(/<img/g, '<img loading="lazy"');
+    return htmlString;
+});
+
+  var html = converter.convert();
   return html;
 };
