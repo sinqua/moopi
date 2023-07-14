@@ -7,18 +7,32 @@ export default async function Avatar(props: any) {
   const { params } = props;
 
   const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
-  const modelUrl = await CreateModelUrl(params.user, vrm);
-  const animationUrl = await CreateAnimationUrl(animation);
-  const profileImage = await getUserProfileImage(params.user);
-  const nickname = await getUserNickname(params.user);
+  const modelUrlData = CreateModelUrl(params.user, vrm);
+  const animationUrlData = CreateAnimationUrl(animation);
+  const profileImageData = getUserProfileImage(params.user);
+  const nicknameData = getUserNickname(params.user);
+  const avatarInfoData = getAvatarInfo(params.avatar);
+  const portfoliosData = getUserPortfolios(params.user);
 
-  const avatarInfo = await getAvatarInfo(params.avatar);
+  const [
+    modelUrl,
+    animationUrl,
+    profileImage,
+    nickname,
+    avatarInfo,
+    portfolios,
+  ] = await Promise.all([
+    modelUrlData,
+    animationUrlData,
+    profileImageData,
+    nicknameData,
+    avatarInfoData,
+    portfoliosData,
+  ]);
+
   const tags = avatarInfo.tags.map((tag: any) => {
     return tag.tag;
   });
-
-  const portfolios = await getUserPortfolios(params.user);
-
 
   return (
     <AvatarModal

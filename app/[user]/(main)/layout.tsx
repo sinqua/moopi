@@ -1,4 +1,3 @@
-import HeaderAfterLogin from "@/components/basic-layout/HeaderAfterLogin";
 import Footer from "@/components/basic-layout/Footer";
 import TabBar from "@/components/user/TabBar";
 
