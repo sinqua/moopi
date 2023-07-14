@@ -6,6 +6,8 @@ export const CreateQuillUrl = async (filename: any) => {
     .getPublicUrl(filename, {
       transform: {
         quality: 75,
+        width: 800,
+        resize: 'contain'
       }
     }
     );
