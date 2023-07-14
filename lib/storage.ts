@@ -3,7 +3,12 @@ import { supabase } from "./database";
 export const CreateQuillUrl = async (filename: any) => {
   const { data } = await supabase.storage
     .from("quill")
-    .getPublicUrl(filename);
+    .getPublicUrl(filename, {
+      transform: {
+        quality: 75,
+      }
+    }
+    );
 
   return data;
 };
@@ -11,9 +16,8 @@ export const CreateQuillUrl = async (filename: any) => {
 export const supabasePublicImageLoader = ({ src, width, quality }: any) => {
   const projectId = "tpwylybqvkzcsrmbctnj";
 
-  return `https://${projectId}.supabase.co/storage/v1/object/public/${src}?width=${width}&quality=${
-    quality || 75
-  }`;
+  return `https://${projectId}.supabase.co/storage/v1/object/public/${src}?width=${width}&quality=${quality || 75
+    }`;
 };
 
 // Create file url
@@ -50,7 +54,7 @@ export async function UploadAvatar(
       cacheControl: "3600",
       upsert: true,
     });
-    
+
   return data;
 }
 
