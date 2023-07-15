@@ -1,6 +1,5 @@
-import { CreateImageUrl } from "@/lib/storage";
 import { supabase, supabaseAuth } from "@/lib/database";
-import User from "@/components/user/user";
+import User from "@/components/user/User";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
@@ -13,7 +12,6 @@ export default async function Default(props: any) {
 
   const avatar = await getUserAvatar(params.user);
   const modelUrlData = CreateModelUrl(params.user, avatar.vrm);
-  const animationUrlData = CreateAnimationUrl(avatar.animation);
 
   const [
     profileImage,
@@ -21,14 +19,12 @@ export default async function Default(props: any) {
     profile,
     slot,
     modelUrl,
-    animationUrl,
   ] = await Promise.all([
     profileImageData,
     nicknameData,
     profileData,
     slotData,
     modelUrlData,
-    animationUrlData,
   ]);
 
   const tags = profile.tags.map((tag: any) => {
@@ -36,6 +32,9 @@ export default async function Default(props: any) {
   });
 
   const session = await getServerSession(authOptions);
+
+  const { data } = await supabase.from("profiles").select()
+
 
   return (
     <User
@@ -113,39 +112,6 @@ async function CreateModelUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("model")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
-}
-
-async function CreateAnimationUrl(animationId: number) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { signedUrl: undefined };
-  }
-
-  const { data: filename, error: error1 } = await supabase
-    .from("animations")
-    .select("file")
-    .eq("id", animationId);
-
-  const filepath = `${filename![0].file}`;
-
-  const { data, error } = await supabase.storage
-    .from("animation")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
-}
-
-async function CreateThumbUrl(userId: string, filename: any) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { signedUrl: undefined };
-  }
-
-  const filepath = `${userId}/${filename}`;
-
-  const { data, error } = await supabase.storage
-    .from("image")
     .createSignedUrl(filepath, 3600);
 
   return data;

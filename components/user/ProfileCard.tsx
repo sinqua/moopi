@@ -45,7 +45,6 @@ export default function ProfileCard(props: ProfileCardProps) {
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
 
-  // const { data: session, status } = useSession();
   const router = useRouter();
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();

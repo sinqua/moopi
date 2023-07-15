@@ -1,5 +1,4 @@
-import { SupabaseClientOptions, createClient } from "@supabase/supabase-js";
-import { Database } from "./database.types";
+import { createClient } from "@supabase/supabase-js";
 
 
 export const supabaseAuth = createClient(
