@@ -6,15 +6,15 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "tpwylybqvkzcsrmbctnj.supabase.co",
-        port: '',
-        pathname: '/storage/v1/object/public/**'
-      }
+        port: "",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
     domains: [
       "k.kakaocdn.net",
       "cdn.discordapp.com",
       "ssl.pstatic.net",
-      "lh3.googleusercontent.com"
+      "lh3.googleusercontent.com",
     ],
   },
 };
