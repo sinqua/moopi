@@ -17,10 +17,10 @@ const getMostUsedTags = async () => {
   const countByGroupTag: any = {};
   data!.forEach((row) => {
     const tag = row.tag;
-    if (countByGroupTag[tag]) {
-      countByGroupTag[tag]++;
+    if (countByGroupTag[tag!]) {
+      countByGroupTag[tag!]++;
     } else {
-      countByGroupTag[tag] = 1;
+      countByGroupTag[tag!] = 1;
     }
   });
   const countArray = Object.entries(countByGroupTag);

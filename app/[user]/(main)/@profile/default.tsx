@@ -8,7 +8,7 @@ export default async function Default(props: any) {
   const profileImageData = getUserProfileImage(params.user);
   const nicknameData = getUserNickname(params.user);
   const profileData = getUserProfile(params.user);
-  const slotData = getUserSlot(params.user);
+  const slotData = getSlot(params.user);
 
   const avatar = await getUserAvatar(params.user);
   const modelUrlData = CreateModelUrl(params.user, avatar.vrm);
@@ -33,9 +33,6 @@ export default async function Default(props: any) {
 
   const session = await getServerSession(authOptions);
 
-  const { data } = await supabase.from("profiles").select()
-
-
   return (
     <User
       session={session}
@@ -48,7 +45,7 @@ export default async function Default(props: any) {
       slot={slot}
       avatarID={avatar.id}
       modelUrl={modelUrl?.signedUrl}
-      animation={avatar.animation}
+      animation={avatar.animation!}
       thumbnailUrl={`${params.user}/${avatar.thumbnail}`}
     />
   );
@@ -95,13 +92,15 @@ const getUserProfileImage = async (id: string) => {
   return authData![0];
 };
 
-const getUserSlot = async (id: string) => {
+const getSlot = async (id: string) => {
   const { data, error } = await supabase
     .from("slots")
     .select()
-    .eq("user_id", id);
+    .eq("user_id", id)
+    .limit(1)
+    .single();
 
-  return data![0];
+  return data;
 };
 
 async function CreateModelUrl(userId: string, filename: any) {
