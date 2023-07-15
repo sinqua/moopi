@@ -49,16 +49,16 @@ export default async function Default(props: any) {
       slot={slot}
       avatarID={avatar.id}
       modelUrl={modelUrl?.signedUrl}
-      animationUrl={animationUrl?.signedUrl}
+      animation={avatar.animation}
       thumbnailUrl={`${params.user}/${avatar.thumbnail}`}
     />
   );
 }
 
 const getUserAvatar = async (id: string) => {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
-  }
+  // if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+  //   return { id: undefined, vrm: undefined, animation: undefined, thumbnail: undefined };
+  // }
 
   const { data, error } = await supabase
     .from("avatars")

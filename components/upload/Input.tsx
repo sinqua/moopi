@@ -311,6 +311,7 @@ export default function Input(props: InputProps) {
                       id="avatarFile"
                       onChange={(e: any) => loadAvatarFile(e)}
                       ref={avatarFileRef}
+                      placeholder="아바타 파일을 등록해주세요"
                     />
                   </form>
                   <div className="text-right h-full pt-1 pr-1 text-red-500">
