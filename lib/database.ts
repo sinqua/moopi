@@ -7,6 +7,8 @@ export const supabaseAuth = createClient(
   {
     auth: {
       persistSession: false,
+      detectSessionInUrl: false,
+      autoRefreshToken: false,
     },
     db: {
       schema: "next_auth",
@@ -20,6 +22,8 @@ export const supabase = createClient<Database>(
   {
     auth: {
       persistSession: false,
+      detectSessionInUrl: false,
+      autoRefreshToken: false,
     },
     db: {
       schema: "public",
