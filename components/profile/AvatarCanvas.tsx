@@ -19,15 +19,14 @@ import powerImg from "@/app/assets/images/power.svg";
 
 import { ModelProps } from "../Model";
 import BounceLoader from "react-spinners/BounceLoader";
-import { supabasePublicImageLoader } from "@/lib/storage";
-
 const ModelComponent = lazy(() => import("../Model"));
 
+const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
 interface AvatarCanvasProps {
   userId: any;
   avatarId: any;
   modelUrl: string | undefined;
-  animationUrl: string | undefined;
+  animation: number | undefined;
   thumbnailUrl: string | undefined;
 }
 
@@ -35,7 +34,7 @@ const AvatarCanvas = ({
   userId,
   avatarId,
   modelUrl,
-  animationUrl,
+  animation,
   thumbnailUrl = "/mainModel.png",
 }: AvatarCanvasProps) => {
   const [modelInfo, setModelInfo] = useState<ModelProps>();
@@ -47,12 +46,13 @@ const AvatarCanvas = ({
   const cameraControlsRef = useRef<CameraControls>(null);
 
   useEffect(() => {
+
     setModelInfo({
       modelUrl: modelUrl,
-      animationUrl: animationUrl,
+      animation: animation!,
       setProgress,
     });
-  }, [modelUrl, animationUrl]);
+  }, [modelUrl, animation]);
 
   useEffect(() => {
     if (thumbnailViewer) setProgress(false);
@@ -90,8 +90,7 @@ const AvatarCanvas = ({
     <>
       {thumbnailViewer ? (
         <Image
-          loader={supabasePublicImageLoader}
-          src={`thumbnail/${thumbnailUrl}`}
+          src={`${SupabasePublicURL}/thumbnail/${thumbnailUrl}`}
           priority={true}
           alt=""
           style={{ objectFit: "contain", height: "100%" }}

@@ -8,7 +8,7 @@ export default async function Avatar(props: any) {
 
   const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
   const modelUrlData = CreateModelUrl(params.user, vrm);
-  const animationUrlData = CreateAnimationUrl(animation);
+  const animationUrlData = CreateAnimationUrl(animation!);
   const profileImageData = getUserProfileImage(params.user);
   const nicknameData = getUserNickname(params.user);
   const avatarInfoData = getAvatarInfo(params.avatar);
@@ -71,7 +71,7 @@ const getUserNickname = async (id: string) => {
   const { data, error } = await supabaseAuth
     .from("users")
     .select()
-    .eq("id", id);
+    .eq("id", id)
 
   return data![0];
 };
@@ -130,34 +130,34 @@ async function GetFileName(avatar: number) {
 }
 
 const getUserPortfolios = async (id: string) => {
-  const { data: portfoiloData, error: portfolioError } = await supabase
-    .from("avatars")
-    .select()
-    .eq("user_id", id);
+  // const { data: portfoiloData, error: portfolioError } = await supabase
+  //   .from("avatars")
+  //   .select()
+  //   .eq("user_id", id);
 
-  const portfolios = [];
-  for (const portfolio of portfoiloData!) {
-    const { data: tagData, error: tagError } = await supabase
-      .from("tags")
-      .select("tag")
-      .eq("avatar_id", portfolio.id);
+  // const portfolios = [];
+  // for (const portfolio of portfoiloData!) {
+  //   const { data: tagData, error: tagError } = await supabase
+  //     .from("tags")
+  //     .select("tag")
+  //     .eq("avatar_id", portfolio.id);
 
-    const tags = tagData?.map((tag: any) => Object.values(tag)[0]) || [];
-    portfolio.tags = tags;
+  //   const tags = tagData?.map((tag: any) => Object.values(tag)[0]) || [];
+  //   portfolio.tags! = tags;
 
-    const { data: anmiationData, error: animationError } = await supabase
-      .from("animations")
-      .select()
-      .eq("id", portfolio.animation);
-    portfolio.animation = anmiationData![0];
+  //   const { data: anmiationData, error: animationError } = await supabase
+  //     .from("animations")
+  //     .select()
+  //     .eq("id", portfolio.animation);
+  //   portfolio.animation = anmiationData![0];
 
-    const url = await CreateImageUrl(
-      portfolio.user_id + "/" + portfolio.thumbnail
-    );
-    portfolio.thumbnailUrl = url ? url!.signedUrl : "";
+  //   const url = await CreateImageUrl(
+  //     portfolio.user_id + "/" + portfolio.thumbnail
+  //   );
+  //   portfolio.thumbnailUrl = url ? url!.signedUrl : "";
 
-    portfolios.push(portfolio);
-  }
+  //   portfolios.push(portfolio);
+  // }
 
-  return portfolios;
+  // return portfolios;
 };

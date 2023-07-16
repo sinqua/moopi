@@ -11,48 +11,60 @@ import { Circle } from "@react-three/drei";
 import { Color } from "three";
 import { GLTF } from "three-stdlib";
 
+const numberToUrl = (num: number) => {
+  switch (num) {
+    case 1:
+      return "/animation/HipHopDancing.fbx";
+    case 2:
+      return "/animation/PutYourHandsUp.fbx";
+    case 3:
+      return "/animation/Thankful.fbx";
+    case 4:
+      return "/animation/Idle.fbx";
+    default:
+      return "/animation/Idle.fbx";
+  }
+};
 
 export interface ModelProps {
-  animationUrl?: string;
+  animation: number;
   modelUrl?: string;
   setProgress: (done: boolean) => void;
 }
 
 const Model: FC<ModelProps> = ({
-  animationUrl = "/animation/Landing.fbx",
+  animation = 1,
   modelUrl = "/Karin_spring.vrm",
   setProgress,
 }) => {
-  const [animation, setAnimation] = useState(animationUrl);
-
   const [vrm, setVrm] = useState<VRM>(null!);
   const vrmRef = useRef<any>();
   const [actions, setActions] = useState<any>({});
-
 
   const animationMixer = useMemo<THREE.AnimationMixer>(() => {
     if (!vrm) return null!;
 
     const mixer = new THREE.AnimationMixer(vrm.scene);
+    const animationUrl = numberToUrl(animation);
 
-    LoadMixamoAnimation(animation, vrm).then((clip) => {
+    LoadMixamoAnimation("/animation/Landing.fbx", vrm).then((clip) => {
       clip.name = "Landing";
       setActions((prevActions: any) => ({...prevActions, "Landing": clip}));
     });
 
-    LoadMixamoAnimation("/animation/Idle.fbx", vrm).then((clip) => {
-      clip.name = "Idle";
-      setActions((prevActions: any) => ({...prevActions, "Idle": clip}));
+    LoadMixamoAnimation(animationUrl, vrm).then((clip) => {
+      clip.name = "Selected";
+      setActions((prevActions: any) => ({...prevActions, "Selected": clip}));
     });
 
     return mixer;
   }, [animation, vrm]);
 
   useEffect(() => {
-    if(actions['Landing'] && actions['Idle']) {
+    if(actions['Landing'] && actions['Selected']) {
       setTimeout(() => {
         var landingAction = animationMixer.clipAction(actions['Landing']);
-        var idleAction = animationMixer.clipAction(actions['Idle']);
+        var idleAction = animationMixer.clipAction(actions['Selected']);
 
         landingAction.loop = THREE.LoopOnce;
         landingAction.clampWhenFinished = true;

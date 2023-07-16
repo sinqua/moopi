@@ -2,8 +2,7 @@ import PortfolioCanvas from "../portfolio/PortfolioCanvas";
 import { supabase } from "@/lib/database";
 
 export const revalidate = 0;
-interface PortfolioProps
- {
+interface PortfolioProps {
   user: any;
   portfolio: { [x: string]: any }[] | null;
 }
@@ -17,7 +16,10 @@ export default function Portfolio(props: PortfolioProps) {
         {portfolio!.map(async (work: any, index: any) => {
           const modelUrl = await CreateModelUrl(work.user_id, work.vrm);
           const animationUrl = await CreateAnimationUrl(work.animation);
-          const thumbnailUrl = await CreateImageUrl(work.user_id, work.thumbnail);
+          const thumbnailUrl = await CreateImageUrl(
+            work.user_id,
+            work.thumbnail
+          );
 
           return (
             <PortfolioCanvas

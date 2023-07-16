@@ -10,10 +10,10 @@ import useDrag from "@/hooks/useDrag";
 import kakaoLogo from "@/app/assets/logos/kakao.svg";
 import discordLogo from "@/app/assets/logos/discord.svg";
 import Link from "next/link";
-import { supabasePublicImageLoader } from "@/lib/storage";
 
 const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`;
 const discordUrl = `https://discord.gg/TqQK4UNNW`;
+const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
 
 export interface ProfileCardProps {
   profileImage: string;
@@ -45,7 +45,6 @@ export default function ProfileCard(props: ProfileCardProps) {
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
 
-  // const { data: session, status } = useSession();
   const router = useRouter();
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
@@ -60,8 +59,7 @@ export default function ProfileCard(props: ProfileCardProps) {
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         {profile.image ? (
           <Image
-          loader={supabasePublicImageLoader}
-          src={`profile-image/${profile.image}`}
+          src={`${SupabasePublicURL}/profile-image/${profile.image}`}
           width={100}
           height={100}
           className="h-[100px] w-[100px] rounded-full border-none"
