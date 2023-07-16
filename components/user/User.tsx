@@ -19,7 +19,8 @@ interface UserProps {
   session: any;
 }
 
-export default function User(props: UserProps) {
+export default function User(
+  props: UserProps ) {
   const {
     profileImage,
     nickname,

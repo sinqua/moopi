@@ -15,6 +15,7 @@ export default function Error({
       <Image src={background} alt="" />
       ERROR!
       {error.message}
+      {error.stack}
     </div>
   );
 }

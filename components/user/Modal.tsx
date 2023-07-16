@@ -1,8 +1,7 @@
 "use client";
 import { supabase } from "@/lib/database";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import CreatableSelect from "react-select/creatable";
+import { useState } from "react";
 
 interface ModalProps {
   modal: any;
