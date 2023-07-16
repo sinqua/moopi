@@ -8,7 +8,7 @@ export default async function Avatar(props: any) {
 
   const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
   const modelUrlData = CreateModelUrl(params.user, vrm);
-  const animationUrlData = CreateAnimationUrl(animation);
+  const animationUrlData = CreateAnimationUrl(animation!);
   const profileImageData = getUserProfileImage(params.user);
   const nicknameData = getUserNickname(params.user);
   const avatarInfoData = getAvatarInfo(params.id);
