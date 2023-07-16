@@ -14,7 +14,7 @@ interface UserProps {
   slot: any;
   avatarID: any;
   modelUrl: any;
-  animation: number;
+  animation: any;
   thumbnailUrl: any;
   session: any;
 }

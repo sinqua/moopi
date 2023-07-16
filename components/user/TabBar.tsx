@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function TabBar() {
   const pathname = usePathname();
-  const [selected, setSelected] = useState("description");
+  const [selected, setSelected] = useState("home");
 
   useEffect(() => {
     setSelected(pathname.split("/")[2]);
@@ -15,11 +15,11 @@ export default function TabBar() {
     <div className="md:mt-0 mt-[40px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
       <div className="w-full h-full flex justify-center border-solid border-[1px] border-[#E7E7E7]">
         <Link
-          href={`${pathname.split("/")[1]}/description`}
+          href={`${pathname.split("/")[1]}`}
           className={
-            selected === "description" ? selectedBtn : normalBtn
+            selected === undefined ? selectedBtn : normalBtn
           }
-          onClick={() => setSelected("description")}
+          onClick={() => setSelected("home")}
         >
           설명
         </Link>

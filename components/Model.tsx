@@ -11,21 +11,6 @@ import { Circle } from "@react-three/drei";
 import { Color } from "three";
 import { GLTF } from "three-stdlib";
 
-const numberToUrl = (num: number) => {
-  switch (num) {
-    case 1:
-      return "/animation/HipHopDancing.fbx";
-    case 2:
-      return "/animation/PutYourHandsUp.fbx";
-    case 3:
-      return "/animation/Thankful.fbx";
-    case 4:
-      return "/animation/Idle.fbx";
-    default:
-      return "/animation/Idle.fbx";
-  }
-};
-
 export interface ModelProps {
   animation: number | null;
   modelUrl: string | undefined;
@@ -216,3 +201,19 @@ function OptimizeModel(vrm: VRM) {
   });
   return vrm;
 }
+
+
+const numberToUrl = (num: number) => {
+  switch (num) {
+    case 1:
+      return "/animation/HipHopDancing.fbx";
+    case 2:
+      return "/animation/PutYourHandsUp.fbx";
+    case 3:
+      return "/animation/Thankful.fbx";
+    case 4:
+      return "/animation/Idle.fbx";
+    default:
+      return "/animation/Idle.fbx";
+  }
+};
