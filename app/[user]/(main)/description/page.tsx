@@ -5,7 +5,7 @@ export default async function Page(props: any) {
   const { params } = props;
 
   const detail = await getUserDetail(params.user);
-  const descriptionObject = JSON.parse(detail.description);
+  const descriptionObject = JSON.parse(detail.description!);
 
   return <Description descriptionObject={descriptionObject} />;
 }
