@@ -3,17 +3,17 @@ import User from "@/components/user/User";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
-export async function generateStaticParams() {
-  const { data, error } = await supabase.from("profiles").select();
+// export async function generateStaticParams() {
+//   const { data, error } = await supabase.from("profiles").select();
 
-  if (data)
-    return data.map((profile: any) => ({
-      user: profile.user_id,
-    }));
-  else {
-    throw new Error("User not found");
-  }
-}
+//   if (data)
+//     return data.map((profile: any) => ({
+//       user: profile.user_id,
+//     }));
+//   else {
+//     throw new Error("User not found");
+//   }
+// }
 
 export default async function Page({ params } : { params: { user: string }}) {
   const slotData = getSlot(params.user);

@@ -33,7 +33,7 @@
     "html-react-parser": "^4.0.0",
     "moment": "^2.29.4",
     "mysql2": "^3.3.3",
-    "next": "13.4.4",
+    "next": "^13.4.10",
     "next-auth": "^4.22.1",
     "nprogress": "^0.2.0",
     "pino": "^8.14.1",

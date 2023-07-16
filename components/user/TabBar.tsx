@@ -15,7 +15,7 @@ export default function TabBar() {
     <div className="md:mt-0 mt-[40px] flex justify-center w-full md:w-[1312px] md:px-0 sm:px-[30px] px-[20px] font-semibold sm:text-[20px] text-[14px]">
       <div className="w-full h-full flex justify-center border-solid border-[1px] border-[#E7E7E7]">
         <Link
-          href={`${pathname.split("/")[1]}`}
+          href={`/${pathname.split("/")[1]}`}
           className={
             selected === undefined ? selectedBtn : normalBtn
           }
@@ -24,7 +24,7 @@ export default function TabBar() {
           설명
         </Link>
         <Link
-          href={`${pathname.split("/")[1]}/portfolio`}
+          href={`/${pathname.split('/')[1]}/portfolio`}
           className={
             selected === "portfolio" ? selectedBtn : normalBtn
           }
@@ -33,7 +33,7 @@ export default function TabBar() {
           포트폴리오
         </Link>
         <Link
-          href={`${pathname.split("/")[1]}/price`}
+          href={`/${pathname.split("/")[1]}/price`}
           className={
             selected === "price" ? selectedBtn : normalBtn
           }
@@ -42,7 +42,7 @@ export default function TabBar() {
           가격정보
         </Link>
         <Link
-          href={`${pathname.split("/")[1]}/review`}
+          href={`/${pathname.split("/")[1]}/review`}
           className={
             selected === "review" ? selectedBtn : normalBtn
           }

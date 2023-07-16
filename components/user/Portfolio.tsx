@@ -15,7 +15,6 @@ export default function Portfolio(props: PortfolioProps) {
       <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[16px]">
         {portfolio!.map(async (work: any, index: any) => {
           const modelUrl = await CreateModelUrl(work.user_id, work.vrm);
-          const animationUrl = await CreateAnimationUrl(work.animation);
           const thumbnailUrl = await CreateImageUrl(
             work.user_id,
             work.thumbnail
@@ -74,25 +73,6 @@ async function CreateModelUrl(userId: string, filename: any) {
 
   const { data, error } = await supabase.storage
     .from("model")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
-}
-
-async function CreateAnimationUrl(animationId: number) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
-    return { signedUrl: undefined };
-  }
-
-  const { data: filename, error: error1 } = await supabase
-    .from("animations")
-    .select("file")
-    .eq("id", animationId);
-
-  const filepath = `${filename![0].file}`;
-
-  const { data, error } = await supabase.storage
-    .from("animation")
     .createSignedUrl(filepath, 3600);
 
   return data;

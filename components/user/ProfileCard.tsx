@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
 import activeHeartImg from "@/app/assets/images/activeheart.svg";
