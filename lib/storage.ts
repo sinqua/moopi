@@ -1,7 +1,6 @@
 import { supabase } from "./database";
 
 export const CreateQuillUrl = async (filename: any) => {
-
   const { data } = await supabase.storage
     .from("quill")
     .getPublicUrl(filename)
