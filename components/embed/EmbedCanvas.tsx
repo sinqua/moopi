@@ -14,10 +14,10 @@ const SupabasePublicURL =
   "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 
 interface EmbedCanvasProps {
-  userID: string | undefined;
-  modelUrl: string | undefined;
-  animation: number;
-  thumbnail: string | undefined;
+  userID: string | null;
+  modelUrl: string | null;
+  animation: number| null;
+  thumbnail: string | null;
 }
 
 const EmbedCanvas = ({

@@ -27,14 +27,14 @@ const numberToUrl = (num: number) => {
 };
 
 export interface ModelProps {
-  animation: number;
-  modelUrl?: string;
+  animation: number | null;
+  modelUrl: string | null;
   setProgress: (done: boolean) => void;
 }
 
 const Model: FC<ModelProps> = ({
-  animation = 1,
-  modelUrl = "/Karin_spring.vrm",
+  animation,
+  modelUrl,
   setProgress,
 }) => {
   const [vrm, setVrm] = useState<VRM>(null!);
@@ -45,7 +45,7 @@ const Model: FC<ModelProps> = ({
     if (!vrm) return null!;
 
     const mixer = new THREE.AnimationMixer(vrm.scene);
-    const animationUrl = numberToUrl(animation);
+    const animationUrl = numberToUrl(animation? animation : 1);
 
     LoadMixamoAnimation("/animation/Landing.fbx", vrm).then((clip) => {
       clip.name = "Landing";
@@ -100,7 +100,7 @@ const Model: FC<ModelProps> = ({
     });
 
     loader.load(
-      modelUrl,
+      modelUrl? modelUrl : "/Karin_spring.vrm",
       async (gltf) => {
         setProgress(true);
 
