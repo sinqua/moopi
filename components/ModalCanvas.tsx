@@ -25,15 +25,15 @@ const ModelComponent = lazy(() => import("./Model"));
 interface ModalCanvasProps {
   userId: any;
   avatarId: any;
-  modelUrl: string | undefined;
-  animationUrl: string | undefined;
+  modelUrl: string | null;
+  animation: number | null;
 }
 
 const ModalCanvas = ({
   userId,
   avatarId,
   modelUrl,
-  animationUrl,
+  animation,
 }: ModalCanvasProps) => {
   const [modelInfo, setModelInfo] = useState<ModelProps>();
   const [fullScreen, setFullScreen] = useState(false);
@@ -45,10 +45,10 @@ const ModalCanvas = ({
   useEffect(() => {
     setModelInfo({
       modelUrl: modelUrl,
-      animationUrl: animationUrl,
+      animation: animation,
       setProgress,
     });
-  }, [modelUrl, animationUrl]);
+  }, [modelUrl, animation]);
 
   const isMobile = () => "ontouchstart" in document.documentElement;
 
