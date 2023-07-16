@@ -5,12 +5,12 @@ export const revalidate = 0;
 
 export default async function Page({ params }: { params: { avatar: string } }) {
   const avatar = await getAvatarInfo(params.avatar);
-  const modelUrlData = avatar.user_id && await CreateModelUrl(avatar.user_id, avatar.vrm);
+  const modelUrlData = await CreateModelUrl(avatar.user_id!, avatar.vrm);
 
   return (
     <div className="relative h-full">
       <EmbedCanvas
-        modelUrl={modelUrlData && modelUrlData?.signedUrl}
+        modelUrl={modelUrlData?.signedUrl}
         animation={avatar?.animation}
         thumbnail={avatar?.thumbnail}
         userID={avatar?.user_id}
@@ -35,6 +35,10 @@ async function getAvatarInfo(id: string) {
 
 
 async function CreateModelUrl(userId: string, filename: any) {
+  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+    return { signedUrl: undefined };
+  }
+
   const filepath = `${userId}/${filename}`;
 
   const { data, error } = await supabase.storage

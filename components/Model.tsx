@@ -28,7 +28,7 @@ const numberToUrl = (num: number) => {
 
 export interface ModelProps {
   animation: number | null;
-  modelUrl: string | null;
+  modelUrl: string | undefined;
   setProgress: (done: boolean) => void;
 }
 

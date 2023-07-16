@@ -68,7 +68,7 @@ export default function AvatarModal(props: AvatarModalProps) {
               userId={userId}
               avatarId={avatarId}
               modelUrl={modelUrl}
-              animationUrl={animationUrl}
+              animation={animationUrl}
             />
 
             <div className="relative flex justify-between h-full pointer-events-none">

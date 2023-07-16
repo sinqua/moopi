@@ -15,7 +15,7 @@ const SupabasePublicURL =
 
 interface EmbedCanvasProps {
   userID: string | null;
-  modelUrl: string | null;
+  modelUrl: string | undefined;
   animation: number| null;
   thumbnail: string | null;
 }

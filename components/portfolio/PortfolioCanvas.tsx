@@ -26,7 +26,7 @@ interface PortfolioCanvasProps {
   userId: any;
   avatarId: any;
   modelUrl: string | undefined;
-  animationUrl: string | undefined;
+  animation: number | null;
   thumbnailUrl: string | undefined;
 }
 
@@ -34,7 +34,7 @@ const PortfolioCanvas = ({
   userId,
   avatarId,
   modelUrl,
-  animationUrl,
+  animation,
   thumbnailUrl = "/mainModel.png",
 }: PortfolioCanvasProps) => {
   const [modelInfo, setModelInfo] = useState<ModelProps>();
@@ -48,10 +48,10 @@ const PortfolioCanvas = ({
   useEffect(() => {
     setModelInfo({
       modelUrl: modelUrl,
-      animationUrl: animationUrl,
+      animation: animation,
       setProgress,
     });
-  }, [modelUrl, animationUrl]);
+  }, [modelUrl, animation]);
 
   useEffect(() => {
     if (thumbnailViewer) setProgress(false);

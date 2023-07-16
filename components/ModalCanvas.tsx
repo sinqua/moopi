@@ -25,7 +25,7 @@ const ModelComponent = lazy(() => import("./Model"));
 interface ModalCanvasProps {
   userId: any;
   avatarId: any;
-  modelUrl: string | null;
+  modelUrl: string | undefined;
   animation: number | null;
 }
 

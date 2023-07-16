@@ -20,13 +20,14 @@ export default function Portfolio(props: PortfolioProps) {
             work.user_id,
             work.thumbnail
           );
+          const avatar = await getAvatarInfo(work.id);
 
           return (
             <PortfolioCanvas
               userId={user}
               avatarId={work.id}
               modelUrl={modelUrl?.signedUrl}
-              animationUrl={animationUrl?.signedUrl}
+              animation={avatar?.animation}
               thumbnailUrl={thumbnailUrl?.signedUrl}
               key={index}
             />
@@ -35,6 +36,20 @@ export default function Portfolio(props: PortfolioProps) {
       </div>
     </div>
   );
+}
+
+async function getAvatarInfo(id: string) {
+  const { data, error } = await supabase
+    .from("avatars")
+    .select(`*, animations(*)`)
+    .eq("id", id)
+    .limit(1)
+    .single();
+
+    if(data) return data;
+    else {
+      throw new Error("Avatar not found");
+    }
 }
 
 async function CreateImageUrl(userId: string, filename: any) {
