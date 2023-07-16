@@ -24,22 +24,25 @@ const getUserPortfolios = async (id: string) => {
       .from("tags")
       .select("tag")
       .eq("avatar_id", portfolio.id);
-
+    
     const tags = tagData?.map((tag: any) => Object.values(tag)[0]) || [];
-    portfolio.tags = tags;
 
     const { data: anmiationData, error: animationError } = await supabase
       .from("animations")
       .select()
       .eq("id", portfolio.animation);
-    portfolio.animation = anmiationData![0];
 
     const url = await CreateImageUrl(
       portfolio.user_id + "/" + portfolio.thumbnail
     );
-    portfolio.thumbnailUrl = url!.signedUrl;
 
-    portfolios.push(portfolio);
+    const newPortfolio = {
+      ...portfolio,
+      tags,
+      animation: anmiationData![0],
+      thumbnailUrl: url!.signedUrl,
+    }
+    portfolios.push(newPortfolio);
   }
 
   return portfolios;
