@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  if(session) redirect(`${session.user.id}/description`);
+  if(session) redirect(`${session.user.id}`);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -50,7 +50,7 @@ export default async function Home() {
 
       <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
         <a
-          href="/6064c1dd-071b-42e4-92e4-d0989aed4ebc/description"
+          href="/6064c1dd-071b-42e4-92e4-d0989aed4ebc"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
           target="_self"
           rel="noopener noreferrer"
