@@ -82,7 +82,7 @@ export const Avatar = (props: AvatarProps) => {
                     return (
                       <div
                         className="inline-flex h-[35px] px-[22px] py-[8px] bg-[#E9E9E9] rounded-full whitespace-nowrap cursor-grabbing"
-                        key={tag}
+                        key={index}
                       >
                         {tag}
                       </div>

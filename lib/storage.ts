@@ -61,16 +61,12 @@ export async function UploadProfileImage(
 ) {
   const filepath = `${userId}/${filename}`;
 
-  console.log(filepath);
-
   const { data, error } = await supabase.storage
     .from("image")
     .upload(filepath, file, {
       cacheControl: "3600",
       upsert: true,
     });
-
-  console.log(error);
 
   return data;
 }
