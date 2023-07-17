@@ -18,10 +18,10 @@ const Avatar = (props: AvatarProps) => {
   const [avatarImg, setAvatarImg] = useState<string>();
 
   useEffect(() => {
+    const SupabasePublicURL =
+      "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
     const filePath = `${avatar.user_id}/${avatar.thumbnail}`;
-    CreateImageUrl(filePath).then((data) => {
-      setAvatarImg(data?.signedUrl);
-    });
+    setAvatarImg(`${SupabasePublicURL}/thumbnail/${filePath}`);
   }, []);
 
   return (
