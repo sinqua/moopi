@@ -2,7 +2,7 @@
 import { UploadBase64Image } from "@/lib/storage";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Modal } from "../modal";
 import { useRouter } from "next/navigation";
@@ -23,8 +23,6 @@ export default function Description(props: DescriptionProps) {
 
   const [userDetail, setUserDetail] = useState<any>(detail);
   const [htmlStr, setHtmlStr] = useState<any>(null);
-  const [imgFiles, setImgFiles] = useState<any>([]);
-  const [tempPaths, setTempPaths] = useState<any>([]);
 
   const [modal, setModal] = useState(false);
 
@@ -67,14 +65,9 @@ export default function Description(props: DescriptionProps) {
         </p>
         <div className="h-[500px]">
           <Editor
-            session={profile}
             content={userDetail.description}
             htmlStr={htmlStr}
             setHtmlStr={setHtmlStr}
-            imgFiles={imgFiles}
-            setImgFiles={setImgFiles}
-            tempPaths={tempPaths}
-            setTempPaths={setTempPaths}
           />
         </div>
       </div>

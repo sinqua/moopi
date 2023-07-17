@@ -16,10 +16,6 @@ interface IEditor {
   content: any;
   htmlStr: any;
   setHtmlStr: any;
-  imgFiles: any;
-  setImgFiles: any;
-  tempPaths: any;
-  setTempPaths: any;
 }
 
 const Editor: NextPage<IEditor> = ({ content, htmlStr, setHtmlStr }) => {
