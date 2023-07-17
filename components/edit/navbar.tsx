@@ -25,7 +25,7 @@ export default function Navbar() {
         ref={dragRef}
       >
         <Link
-          href={`${session?.user.id}/edit/profile-card`}
+          href={`/${session?.user.id}/edit/profile-card`}
           className={
             selected === "profile-card"
               ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer"
@@ -36,7 +36,7 @@ export default function Navbar() {
           프로필 카드
         </Link>
         <Link
-          href={`${session?.user.id}/edit/description`}
+          href={`/${session?.user.id}/edit/description`}
           className={
             selected === "description"
               ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer"
@@ -47,7 +47,7 @@ export default function Navbar() {
           설명
         </Link>
         <Link
-          href={`${session?.user.id}/edit/portfolio`}
+          href={`/${session?.user.id}/edit/portfolio`}
           className={
             selected === "portfolio"
               ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer"
@@ -58,7 +58,7 @@ export default function Navbar() {
           포트폴리오
         </Link>
         <Link
-          href={`${session?.user.id}/edit/price-info`}
+          href={`/${session?.user.id}/edit/price-info`}
           className={
             selected === "price-info"
               ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer"
@@ -69,7 +69,7 @@ export default function Navbar() {
           가격정보
         </Link>
         <Link
-          href={`${session?.user.id}/edit/bill`}
+          href={`/${session?.user.id}/edit/bill`}
           className={
             selected === "bill"
               ? "font-semibold underline underline-offset-8 decoration-2 cursor-pointer"

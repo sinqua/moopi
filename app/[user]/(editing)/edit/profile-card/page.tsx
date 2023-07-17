@@ -33,7 +33,7 @@ const getMainAvatar = async (id: string) => {
     .eq("is_profile", true);
 
   return data;
-}
+};
 
 const getUserProfile = async (id: string) => {
   const { data, error } = await supabase
@@ -45,6 +45,8 @@ const getUserProfile = async (id: string) => {
 };
 
 const getUserProfileImage = async (id: string) => {
+  const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+
   const { data: profileData, error: error1 } = await supabase
     .from("profiles")
     .select(`image`)
@@ -56,10 +58,11 @@ const getUserProfileImage = async (id: string) => {
     .eq("id", id);
 
   if (profileData![0].image) {
-    const url = await CreateImageUrl(profileData![0].image);
-    return { image: url!.signedUrl };
+    // const url = await CreateImageUrl(profileData![0].image);
+    return { image: `${SupabasePublicURL}/profile-image/${profileData![0].image}`}
+  } else {
+    return authData![0];
   }
-  return authData![0];
 };
 
 const getMostUsedTags = async () => {
