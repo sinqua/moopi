@@ -26,13 +26,14 @@ export const Avatar = (props: AvatarProps) => {
           height="512"
           src={portfolio ? portfolio.thumbnailUrl : emptyImg}
           alt=""
+          style={{ objectFit: "contain" }}
         />
         <div className="inline-flex flex-col grow w-full md:h-[512px] h-auto overflow-hidden">
           <div className="w-full h-full md:space-y-[50px] space-y-[30px]">
             <div className="flex flex-col space-y-[15px] mb-[50px]">
               <p className="text-[20px] font-semibold">{portfolio.name}</p>
               <div className="flex flex-wrap">
-                <div className="flex space-x-[8px] md:mr-[200px] mr-[30px]">
+                <div className="flex space-x-[8px] md:mr-[150px] mr-[30px]">
                   <p className="text-[#7B7B7B]">업로드</p>
                   <p className="font-semibold ">
                     {new Date(portfolio.created_at).getFullYear() +
@@ -42,13 +43,13 @@ export const Avatar = (props: AvatarProps) => {
                       new Date(portfolio.created_at).getDate()}
                   </p>
                 </div>
-                <div className="flex space-x-[8px] md:mr-[200px] mr-[30px]">
+                <div className="flex space-x-[8px] md:mr-[150px] mr-[30px]">
                   <p className="text-[#7B7B7B]">상태</p>
                   <p className="font-semibold ">
                     {portfolio.visible ? "공개" : "비공개"}
                   </p>
                 </div>
-                <div className="flex space-x-[8px] md:mr-[200px] mr-[30px]">
+                <div className="flex space-x-[8px] md:mr-[150px] mr-[30px]">
                   <p className="text-[#7B7B7B]">애니메이션</p>
                   <p className="font-semibold ">{portfolio.animation.name}</p>
                 </div>
@@ -98,7 +99,7 @@ export const Avatar = (props: AvatarProps) => {
             </div>
             <div
               className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-              onClick={() => console.log("good")}
+              onClick={() => console.log("good3")}
             >
               수정하기
             </div>

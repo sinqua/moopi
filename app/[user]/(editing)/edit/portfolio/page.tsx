@@ -34,7 +34,10 @@ const getUserPortfolios = async (id: string) => {
 
 
     const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
-    const url = `${SupabasePublicURL}/thumbnail/${portfolio.user_id + "/" + portfolio.thumbnail}`
+
+    let url = `${SupabasePublicURL}/thumbnail/${portfolio.user_id + "/" + portfolio.thumbnail}`
+    if(portfolio.thumbnail === null)
+      url =  '/VerticalModel.png'
 
     const newPortfolio = {
       ...portfolio,
