@@ -21,22 +21,18 @@ import cameraBlack from "@/app/assets/images/camera-black.svg";
 import cameraFill from "@/app/assets/images/camera-fill.svg";
 import smileBlack from "@/app/assets/images/smile.svg";
 import smileFill from "@/app/assets/images/smile-fill.svg";
+import { avatarTable } from "./Upload";
 
 interface InputProps {
+  avatar: avatarTable;
+  tags: { tag: any }[] | null;
   setModelUrl: any;
   animationUrl: any;
   setAnimationUrl: any;
-  mostUsedTags: any;
+  popularTags: any;
   cameraActive: any;
   setCameraActive: any;
   resetCamera: any;
-  avatarNameRef: any;
-  avatarFile: any;
-  setAvatarFile: any;
-  avatarDescriptionRef: any;
-  avatarStatus: any;
-  setAvatarStatus: any;
-  setAvatarAnimation: any;
   thumbnailImage: any;
   setThumbnailImage: any;
   setProgress: any;
@@ -47,21 +43,28 @@ export default function Input(props: InputProps) {
     setModelUrl,
     animationUrl,
     setAnimationUrl,
-    mostUsedTags,
+    popularTags,
     cameraActive,
     setCameraActive,
     resetCamera,
-    avatarNameRef,
-    avatarFile,
-    setAvatarFile,
-    avatarDescriptionRef,
-    avatarStatus,
-    setAvatarStatus,
-    setAvatarAnimation,
     thumbnailImage,
     setThumbnailImage,
     setProgress,
   } = props;
+
+  useEffect(() => {
+    avatarNameRef.current.value = props.avatar.name;
+    avatarDescriptionRef.current.value = props.avatar.description;
+  }, []);
+  
+  const avatarNameRef = useRef<any>(null);
+  const [avatarFile, setAvatarFile] = useState<any>(null);
+  const avatarDescriptionRef = useRef<any>(null);
+  const [avatarStatus, setAvatarStatus] = useState({
+    value: "공개",
+    label: "공개",
+  });
+  const [avatarAnimation, setAvatarAnimation] = useState<any>(null);
 
   const [done, setDone] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
@@ -340,7 +343,7 @@ export default function Input(props: InputProps) {
                 <p className="font-semibold">태그</p>
                 <CreatableSelect
                   isMulti
-                  options={mostUsedTags}
+                  options={popularTags}
                   instanceId={""}
                   onChange={(e: any) => {
                     setAvatarTags(e);

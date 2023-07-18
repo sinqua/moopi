@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import emptyImg from "@/app/assets/images/empty.png";
 import useDrag from "@/hooks/useDrag";
+import Link from "next/link";
 
 interface AvatarProps {
   portfolio: any;
@@ -51,7 +52,7 @@ export const Avatar = (props: AvatarProps) => {
                 </div>
                 <div className="flex space-x-[8px] md:mr-[150px] mr-[30px]">
                   <p className="text-[#7B7B7B]">애니메이션</p>
-                  <p className="font-semibold ">{portfolio.animation.name}</p>
+                  <p className="font-semibold ">{portfolio.animation}</p>
                 </div>
               </div>
             </div>
@@ -97,12 +98,12 @@ export const Avatar = (props: AvatarProps) => {
             <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">
               삭제하기
             </div>
-            <div
+            <Link
+              href={`/change/${portfolio.id}`}
               className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-              onClick={() => console.log("good3")}
             >
               수정하기
-            </div>
+            </Link>
           </div>
         </div>
       </div>
@@ -110,12 +111,12 @@ export const Avatar = (props: AvatarProps) => {
         <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">
           삭제하기
         </div>
-        <div
+        <Link
+          href={`/change/${portfolio.id}`}
           className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-          onClick={() => console.log("good")}
         >
           수정하기
-        </div>
+        </Link>
       </div>
     </div>
   );

@@ -1,12 +1,10 @@
 import { supabase, supabaseAuth } from "@/lib/database";
 import Upload from "@/components/upload/Upload";
 
-const IframeUrl = `${process.env.NEXT_PUBLIC_WEBSITE}/threejs-full`;
-
 export default async function Page({ params }: { params: { user: string } }) {
   const mostUsedTags = await getMostUsedTags();
 
-  return <Upload IframeUrl={IframeUrl} mostUsedTags={mostUsedTags} />;
+  return <Upload mostUsedTags={mostUsedTags} />;
 }
 
 const getMostUsedTags = async () => {

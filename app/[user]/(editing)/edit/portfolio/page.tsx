@@ -27,12 +27,6 @@ const getUserPortfolios = async (id: string) => {
     
     const tags = tagData?.map((tag: any) => Object.values(tag)[0]) || [];
 
-    const { data: anmiationData, error: animationError } = await supabase
-      .from("animations")
-      .select()
-      .eq("id", portfolio.animation);
-
-
     const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
 
     let url = `${SupabasePublicURL}/thumbnail/${portfolio.user_id + "/" + portfolio.thumbnail}`
@@ -42,7 +36,6 @@ const getUserPortfolios = async (id: string) => {
     const newPortfolio = {
       ...portfolio,
       tags,
-      animation: anmiationData![0],
       thumbnailUrl: url,
     }
     portfolios.push(newPortfolio);

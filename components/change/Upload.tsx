@@ -1,39 +1,53 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-
 import { CameraControls } from "@react-three/drei";
 
-import Input from "@/components/upload/Input";
-import Camera from "@/components/upload/Camera";
-import FullCanvas from "@/components/upload/FullCanvas";
+import Input from "@/components/change/Input";
+import Camera from "@/components/change/Camera";
+import FullCanvas from "@/components/change/FullCanvas";
 
 import tempImage from "@/app/assets/images/mainModel.png";
+import { CreateModelUrl } from "@/lib/storage";
+
+export interface avatarTable {
+  animation: number | null;
+  created_at: string | null;
+  description: string | null;
+  id: number;
+  is_profile: boolean | null;
+  name: string | null;
+  thumbnail: string | null;
+  user_id: string | null;
+  visible: boolean | null;
+  vrm: string | null;
+}
 
 interface UploadProps {
-  mostUsedTags: any;
+  popularTags: {
+    value: any;
+    label: any;
+  }[];
+  tags: { tag: any }[] | null;
+  avatar: avatarTable
 }
 
 export default function Upload(props: UploadProps) {
-  const { mostUsedTags } = props;
+  const { popularTags, tags, avatar } = props;
 
-  const [modelUrl, setModelUrl] = useState(undefined);
+  useEffect(() => {
+    CreateModelUrl(props.avatar.user_id!, props.avatar.vrm!).then((result) => {
+      if (result) setModelUrl(result.signedUrl);
+    });
+  }, []);
+
+  const [modelUrl, setModelUrl] = useState<string>();
   const [animationUrl, setAnimationUrl] = useState("Idle");
   const [progress, setProgress] = useState(true);
+  const [cameraActive, setCameraActive] = useState(false);
+  const [thumbnailImage, setThumbnailImage] = useState<any>(tempImage);
 
   const cameraControlsRef = useRef<CameraControls>(null);
   const canvasRef = useRef<any>();
-
-  const [cameraActive, setCameraActive] = useState(false);
-
-  const avatarNameRef = useRef<any>(null);
-  const [avatarFile, setAvatarFile] = useState<any>(null);
-  const avatarDescriptionRef = useRef<any>(null);
-  const [avatarStatus, setAvatarStatus] = useState({
-    value: "공개",
-    label: "공개",
-  });
-  const [avatarAnimation, setAvatarAnimation] = useState<any>(null);
-  const [thumbnailImage, setThumbnailImage] = useState<any>(tempImage);
 
   const resetCamera = () => {
     cameraControlsRef.current?.reset(true);
@@ -62,21 +76,16 @@ export default function Upload(props: UploadProps) {
         />
       </div>
       <Input
+        avatar={avatar}
+        tags={tags}
         setModelUrl={setModelUrl}
         animationUrl={animationUrl}
         setAnimationUrl={setAnimationUrl}
-        mostUsedTags={mostUsedTags}
+        popularTags={popularTags}
         cameraActive={cameraActive}
         setCameraActive={setCameraActive}
         resetCamera={resetCamera}
         setProgress={setProgress}
-        avatarNameRef={avatarNameRef}
-        avatarFile={avatarFile}
-        setAvatarFile={setAvatarFile}
-        avatarDescriptionRef={avatarDescriptionRef}
-        avatarStatus={avatarStatus}
-        setAvatarStatus={setAvatarStatus}
-        setAvatarAnimation={setAvatarAnimation}
         thumbnailImage={thumbnailImage}
         setThumbnailImage={setThumbnailImage}
       />
