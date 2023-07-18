@@ -22,13 +22,20 @@ export interface avatarTable {
   vrm: string | null;
 }
 
+const lookUpTable = [
+  { value: 1, label: "HipHopDancing" },
+  { value: 2, label: "PutYourHandsUp" },
+  { value: 3, label: "Thankful" },
+  { value: 4, label: "Idle" },
+];
+
 interface UploadProps {
   popularTags: {
     value: any;
     label: any;
   }[];
-  tags: { tag: any }[] | null;
-  avatar: avatarTable
+  tags: { label: any; value: any }[] | null;
+  avatar: avatarTable;
 }
 
 export default function Upload(props: UploadProps) {
@@ -41,7 +48,7 @@ export default function Upload(props: UploadProps) {
   }, []);
 
   const [modelUrl, setModelUrl] = useState<string>();
-  const [animationUrl, setAnimationUrl] = useState("Idle");
+  const [animationUrl, setAnimationUrl] = useState(lookUpTable.find((item) => item.value === avatar.animation)?.label);
   const [progress, setProgress] = useState(true);
   const [cameraActive, setCameraActive] = useState(false);
   const [thumbnailImage, setThumbnailImage] = useState<any>(tempImage);
@@ -79,7 +86,6 @@ export default function Upload(props: UploadProps) {
         avatar={avatar}
         tags={tags}
         setModelUrl={setModelUrl}
-        animationUrl={animationUrl}
         setAnimationUrl={setAnimationUrl}
         popularTags={popularTags}
         cameraActive={cameraActive}

@@ -22,12 +22,12 @@ import cameraFill from "@/app/assets/images/camera-fill.svg";
 import smileBlack from "@/app/assets/images/smile.svg";
 import smileFill from "@/app/assets/images/smile-fill.svg";
 import { avatarTable } from "./Upload";
+import { formatDate } from "@/lib/string";
 
 interface InputProps {
   avatar: avatarTable;
-  tags: { tag: any }[] | null;
+  tags: { label: any; value: any }[] | null;
   setModelUrl: any;
-  animationUrl: any;
   setAnimationUrl: any;
   popularTags: any;
   cameraActive: any;
@@ -41,7 +41,6 @@ interface InputProps {
 export default function Input(props: InputProps) {
   const {
     setModelUrl,
-    animationUrl,
     setAnimationUrl,
     popularTags,
     cameraActive,
@@ -55,16 +54,25 @@ export default function Input(props: InputProps) {
   useEffect(() => {
     avatarNameRef.current.value = props.avatar.name;
     avatarDescriptionRef.current.value = props.avatar.description;
+    avatarFileNameRef.current.value = props.avatar.vrm;
+    setAvatarTags(props.tags);
+    setAvatarStatus({
+      value: props.avatar.visible!,
+      label: props.avatar.visible! ? "공개" : "비공개",
+    });
+    setAvatarAnimation(animationOptions.find((option: any) => {
+      return option.value === props.avatar.animation;
+    }));
   }, []);
-  
+
   const avatarNameRef = useRef<any>(null);
   const [avatarFile, setAvatarFile] = useState<any>(null);
   const avatarDescriptionRef = useRef<any>(null);
-  const [avatarStatus, setAvatarStatus] = useState({
-    value: "공개",
-    label: "공개",
-  });
-  const [avatarAnimation, setAvatarAnimation] = useState<any>(null);
+  const [avatarStatus, setAvatarStatus] = useState<{
+    value: boolean;
+    label: string;
+  }>();
+  const [avatarAnimation, setAvatarAnimation] = useState<{ value: number, label: string }>();
 
   const [done, setDone] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
@@ -82,12 +90,13 @@ export default function Input(props: InputProps) {
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const { data: session, status } = useSession();
+
   const options = [
-    { value: "공개", label: "공개" },
-    { value: "비공개", label: "비공개" },
+    { value: true, label: "공개" },
+    { value: false, label: "비공개" },
   ];
 
-  const [animationOptions, setAnimationOptions] = useState<any>([
+  const [animationOptions, setAnimationOptions] = useState<{ value: number, label: string }[]>([
     { value: 4, label: "Idle" },
     { value: 1, label: "HipHopDancing" },
     { value: 2, label: "PutYourHandsUp" },
@@ -342,13 +351,14 @@ export default function Input(props: InputProps) {
               <div className="flex flex-col space-y-[20px]">
                 <p className="font-semibold">태그</p>
                 <CreatableSelect
+                  value={avatarTags}
                   isMulti
                   options={popularTags}
                   instanceId={""}
                   onChange={(e: any) => {
                     setAvatarTags(e);
                   }}
-                  className="flex w-full items-center h-[47px] ring-0"
+                  className="w-full items-center h-[47px] ring-0 inline-table"
                   placeholder={"태그를 입력해주세요"}
                   theme={(theme) => ({
                     ...theme,
@@ -390,17 +400,16 @@ export default function Input(props: InputProps) {
               <div className="flex flex-col w-[242px] space-y-[30px]">
                 <div className="flex flex-col space-y-[20px]">
                   <p className="font-semibold">업로드 날짜</p>
-                  <p>{moment().format("YYYY.MM.DD")}</p>
+                  <p>{formatDate(props.avatar.created_at!)}</p>
                 </div>
                 <div className="flex flex-col w-[125px] space-y-[20px]">
                   <p className="font-semibold">상태 설정</p>
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    defaultValue={avatarStatus}
+                    value={avatarStatus}
                     isSearchable={false}
                     onChange={(e: any) => setAvatarStatus(e)}
-                    // name="color"
                     options={options}
                     theme={(theme) => ({
                       ...theme,
@@ -426,9 +435,7 @@ export default function Input(props: InputProps) {
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    value={animationOptions.filter((option: any) => {
-                      return option.label === animationUrl;
-                    })}
+                    value={avatarAnimation}
                     options={animationOptions}
                     onChange={(e: any) => loadAnimation(e)}
                     isSearchable={false}

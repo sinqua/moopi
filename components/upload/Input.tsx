@@ -345,7 +345,7 @@ export default function Input(props: InputProps) {
                   onChange={(e: any) => {
                     setAvatarTags(e);
                   }}
-                  className="flex w-full items-center h-[47px] ring-0"
+                  className="inline-table w-full items-center h-[47px] ring-0"
                   placeholder={"태그를 입력해주세요"}
                   theme={(theme) => ({
                     ...theme,

@@ -12,13 +12,13 @@ export default async function Page({ params }: { params: { avatar: number }}) {
 
 async function getTags(avatar_id: number) {
   const { data, error } = await supabase
-    .from("avatar_tags")
-    .select("tag")
+    .from("tags")
+    .select()
     .eq("avatar_id", avatar_id);
 
   if (data)
     return data.map((tag: any) => ({
-      tag: tag.tag,
+      label: tag.tag, value: tag.tag
     }));
   else {
     return null;
