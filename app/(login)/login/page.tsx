@@ -7,7 +7,7 @@ import TwitterLogin from "@/components/login/TwitterLogin";
 import GoogleLogin from "@/components/login/GoogleLogin";
 import DiscordLogin from "@/components/login/DiscordLogin";
 import NaverLogin from "@/components/login/NaverLogin";
-import loginBg from "@/app/assets/images/loginBackground2.png";
+import loginBg from "@/public/LoginBackground.png";
 
 export default function Page() {
   return (

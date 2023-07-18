@@ -32,15 +32,18 @@ const getUserPortfolios = async (id: string) => {
       .select()
       .eq("id", portfolio.animation);
 
-    const url = await CreateImageUrl(
-      portfolio.user_id + "/" + portfolio.thumbnail
-    );
+
+    const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+
+    let url = `${SupabasePublicURL}/thumbnail/${portfolio.user_id + "/" + portfolio.thumbnail}`
+    if(portfolio.thumbnail === null)
+      url =  '/VerticalModel.png'
 
     const newPortfolio = {
       ...portfolio,
       tags,
       animation: anmiationData![0],
-      thumbnailUrl: url!.signedUrl,
+      thumbnailUrl: url,
     }
     portfolios.push(newPortfolio);
   }

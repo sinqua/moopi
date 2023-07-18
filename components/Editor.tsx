@@ -77,10 +77,6 @@ const Editor: NextPage<IEditor> = ({ content, htmlStr, setHtmlStr }) => {
     };
   };
 
-  useEffect(() => {
-    // console.log("htmlStr", htmlStr);
-  }, [htmlStr]);
-
   // useMemo를 사용하지 않고 handler를 등록할 경우 타이핑 할때마다 focus가 벗어남
   const modules = useMemo(
     () => ({

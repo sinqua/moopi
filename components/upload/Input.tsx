@@ -142,53 +142,51 @@ export default function Input(props: InputProps) {
       return;
     }
 
-    if (avatarFile) {
-      setModal(true);
-      UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
-        async (data) => {
-          const { data: avatarData, error: avatarError } = await supabase
-            .from("avatars")
-            .insert([
-              {
-                vrm: avatarFile.name,
-                user_id: session?.user.id,
-                is_profile: false,
-                name: avatarNameRef.current.value,
-                description: avatarDescriptionRef.current.value,
-                visible: true,
-                animation: selectedAnime,
-              },
-            ])
-            .select();
+    setModal(true);
+    UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
+      async (data) => {
+        const { data: avatarData, error: avatarError } = await supabase
+          .from("avatars")
+          .insert([
+            {
+              vrm: avatarFile.name,
+              user_id: session?.user.id,
+              is_profile: false,
+              name: avatarNameRef.current.value,
+              description: avatarDescriptionRef.current.value,
+              visible: true,
+              animation: selectedAnime,
+            },
+          ])
+          .select();
 
-          if (avatarTags) {
-            const { data: tagsData, error: tagsError } = await supabase
-              .from("tags")
-              .insert(
-                avatarTags
-                  .map((tag: any) => {
-                    return tag.value;
-                  })
-                  .map((tag: any) => {
-                    return { tag: tag, avatar_id: avatarData![0].id };
-                  })
-              );
-          }
-          if (typeof thumbnailImage === "string") {
-            UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
-              const { data, error } = await supabase
-                .from("avatars")
-                .update({
-                  thumbnail: uuid,
+        if (avatarTags) {
+          const { data: tagsData, error: tagsError } = await supabase
+            .from("tags")
+            .insert(
+              avatarTags
+                .map((tag: any) => {
+                  return tag.value;
                 })
-                .eq("user_id", session?.user.id);
-            });
-          }
-
-          setDone(true);
+                .map((tag: any) => {
+                  return { tag: tag, avatar_id: avatarData![0].id };
+                })
+            );
         }
-      );
-    }
+        if (typeof thumbnailImage === "string") {
+          UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
+            const { data, error } = await supabase
+              .from("avatars")
+              .update({
+                thumbnail: uuid,
+              })
+              .eq("user_id", session?.user.id);
+          });
+        }
+
+        setDone(true);
+      }
+    );
   };
 
   return (

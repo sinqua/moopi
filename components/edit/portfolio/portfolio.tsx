@@ -20,10 +20,6 @@ export default function Portfolio(props: PortfolioProps) {
 
   const [modal, setModal] = useState(false);
   const [currentPortfolios, setCurrentPortfolios] = useState(portfolios);
-
-  useEffect(() => {
-    console.log(currentPortfolios);
-  }, [currentPortfolios]);
   
   const onSavePortfolio = async () => {};
 
