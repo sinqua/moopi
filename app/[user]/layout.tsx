@@ -9,8 +9,12 @@ export default async function Layout(props: any) {
 
   return (
     <div className="relative flex flex-col items-center h-auto min-h-full">
+      <Suspense>
       {session ? <HeaderAfterLogin /> : <HeaderBeforeLogin />}
-      <Suspense fallback={"Children is loading"}>{props.children}</Suspense>
+      </Suspense>
+      <Suspense>
+      {props.children}
+      </Suspense>
     </div>
   );
 }

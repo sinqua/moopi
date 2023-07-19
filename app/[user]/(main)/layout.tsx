@@ -1,15 +1,22 @@
 import Footer from "@/components/basic-layout/Footer";
 import TabBar from "@/components/user/TabBar";
-import { Suspense } from "react";
 
-export default function Layout(props: any) {
+export default function Layout({
+  children,
+  info,
+  modal,
+}: {
+  children: React.ReactNode;
+  info: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   return (
     <>
-      <Suspense fallback={"User Children is loading"}>{props.children}</Suspense>
+      {children}
       <TabBar />
-      <Suspense fallback={"Info is loading"}>{props.info}</Suspense>
+      {info}
       <Footer />
-      {props.modal}
+      {modal}
     </>
   );
 }
