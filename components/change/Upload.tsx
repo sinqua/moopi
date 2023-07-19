@@ -6,7 +6,6 @@ import Input from "@/components/change/Input";
 import Camera from "@/components/change/Camera";
 import FullCanvas from "@/components/change/FullCanvas";
 
-import tempImage from "@/app/assets/images/mainModel.png";
 import { CreateModelUrl } from "@/lib/storage";
 
 export interface avatarTable {
@@ -51,7 +50,7 @@ export default function Upload(props: UploadProps) {
   const [animationUrl, setAnimationUrl] = useState(lookUpTable.find((item) => item.value === avatar.animation)?.label);
   const [progress, setProgress] = useState(true);
   const [cameraActive, setCameraActive] = useState(false);
-  const [thumbnailImage, setThumbnailImage] = useState<any>(tempImage);
+  const [thumbnailImage, setThumbnailImage] = useState<any>(avatar.thumbnail);
 
   const cameraControlsRef = useRef<CameraControls>(null);
   const canvasRef = useRef<any>();

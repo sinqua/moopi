@@ -3,9 +3,15 @@ import { getMostUsedTags } from "@/utils/Tags";
 import Upload from "@/components/change/Upload";
 
 export default async function Page({ params }: { params: { avatar: number }}) {
-  const popularTags = await getMostUsedTags();
-  const tags = await getTags(params.avatar);
-  const avatar = await getAvatar(params.avatar);
+  const popularTagsData = getMostUsedTags();
+  const tagsData = getTags(params.avatar);
+  const avatarData = getAvatar(params.avatar);
+
+  const [popularTags, tags, avatar] = await Promise.all([
+    popularTagsData,
+    tagsData,
+    avatarData,
+  ]);
 
   return <Upload popularTags={popularTags} tags={tags} avatar={avatar}/>;
 }

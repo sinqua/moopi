@@ -17,12 +17,15 @@ import { supabase, supabaseAuth } from "@/lib/database";
 import { UploadAvatar } from "@/lib/storage";
 import { Modal } from "./modal";
 
+import tempImage from "@/public/og-image.png";
 import cameraBlack from "@/app/assets/images/camera-black.svg";
 import cameraFill from "@/app/assets/images/camera-fill.svg";
 import smileBlack from "@/app/assets/images/smile.svg";
 import smileFill from "@/app/assets/images/smile-fill.svg";
 import { avatarTable } from "./Upload";
 import { formatDate } from "@/lib/string";
+
+const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
 
 interface InputProps {
   avatar: avatarTable;
@@ -63,6 +66,8 @@ export default function Input(props: InputProps) {
     setAvatarAnimation(animationOptions.find((option: any) => {
       return option.value === props.avatar.animation;
     }));
+    if(thumbnailImage === null) setThumbnailImage(tempImage);
+    else setThumbnailImage(`${SupabasePublicURL}/thumbnail/${props.avatar.user_id}/${props.avatar.thumbnail}`);
   }, []);
 
   const avatarNameRef = useRef<any>(null);
