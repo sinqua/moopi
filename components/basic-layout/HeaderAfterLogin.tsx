@@ -10,6 +10,7 @@ import messageImg from "@/app/assets/images/message.svg";
 import alertImg from "@/app/assets/images/alert.svg";
 import profileImg from "@/app/assets/images/profile.svg";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function HeaderAfterLogin() {
   const [callbackUrl, setCallbackUrl] = useState<string>();
@@ -62,25 +63,21 @@ export default function HeaderAfterLogin() {
         />
         {modal && (
           <div className="absolute top-[60px] right-0 w-[144px] rounded-[10px] bg-white border-solid border-[1px] border-[#ECECEC] overflow-hidden z-10">
-            <div
+            <Link
+              href={`/${session!.user.id}/description`}
               className="flex items-center h-[43px] px-[15px] cursor-pointer"
-              onClick={() => {
-                router.push(`/${session!.user.id}/description`);
-                setModal(false);
-              }}
+              onClick={() => setModal(false)}
             >
               프로필
-            </div>
+            </Link>
             <div className="w-full h-[1px] bg-[#ECECEC]"></div>
-            <div
+            <Link
+              href={`/${session!.user.id}/edit/profile-card`}
               className="flex items-center h-[43px] px-[15px] cursor-pointer"
-              onClick={() => {
-                router.push(`/${session!.user.id}/edit/profile-card`);
-                setModal(false);
-              }}
+              onClick={() => setModal(false)}
             >
               프로필 수정
-            </div>
+            </Link>
             <div className="w-full h-[1px] bg-[#ECECEC]"></div>
             <div
               className="flex items-center h-[43px] px-[15px] cursor-pointer"
