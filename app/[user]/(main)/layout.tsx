@@ -1,12 +1,13 @@
 import Footer from "@/components/basic-layout/Footer";
 import TabBar from "@/components/user/TabBar";
+import { Suspense } from "react";
 
 export default function Layout(props: any) {
   return (
     <>
-      {props.children}
+      <Suspense>{props.children}</Suspense>
       <TabBar />
-      {props.info}
+      <Suspense>{props.info}</Suspense>
       <Footer />
       {props.modal}
     </>
