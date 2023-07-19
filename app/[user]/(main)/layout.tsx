@@ -5,9 +5,9 @@ import { Suspense } from "react";
 export default function Layout(props: any) {
   return (
     <>
-      <Suspense>{props.children}</Suspense>
+      <Suspense fallback={"Children is loading"}>{props.children}</Suspense>
       <TabBar />
-      <Suspense>{props.info}</Suspense>
+      <Suspense fallback={"Info is loading"}>{props.info}</Suspense>
       <Footer />
       {props.modal}
     </>
