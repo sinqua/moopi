@@ -3,6 +3,8 @@ import User from "@/components/user/User";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
+export const runtime = 'edge'; 
+
 // export async function generateStaticParams() {
 //   const { data, error } = await supabase.from("profiles").select();
 
