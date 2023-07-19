@@ -169,20 +169,26 @@ export default function Input(props: InputProps) {
   const onSavePortfolio = async () => {
     setModal(true);
 
+    const { error: avatarError } = await supabase
+      .from("avatars")
+      .update({
+        name: avatarNameRef.current.value,
+        description: avatarDescriptionRef.current.value,
+        visible: avatarStatus?.value,
+        animation: selectedAnime,
+      })
+      .eq("id", props.avatar.id);
+
     if (avatarFile) {
       await UploadAvatar(session?.user.id, avatarFile.name, avatarFile);
 
       const { error: avatarError } = await supabase
         .from("avatars")
         .update({
-          name: avatarNameRef.current.value,
-          description: avatarDescriptionRef.current.value,
-          visible: avatarStatus?.value,
-          animation: selectedAnime,
           vrm: avatarFile.name,
         })
         .eq("id", props.avatar.id);
-      if(avatarError) throw avatarError;
+      if (avatarError) throw avatarError;
     }
 
     if (thumbnailImage.includes("data:image/png;base64,")) {
@@ -203,21 +209,19 @@ export default function Input(props: InputProps) {
       .from("tags")
       .delete()
       .eq("avatar_id", props.avatar.id);
-    if(tagsError) throw tagsError;
+    if (tagsError) throw tagsError;
 
     if (avatarTags) {
-      const { error: error } = await supabase
-        .from("tags")
-        .insert(
-          avatarTags
-            .map((tag: any) => {
-              return tag.value;
-            })
-            .map((tag: any) => {
-              return { tag: tag, avatar_id: props.avatar.id };
-            })
-        );
-      if(error) throw error;
+      const { error: error } = await supabase.from("tags").insert(
+        avatarTags
+          .map((tag: any) => {
+            return tag.value;
+          })
+          .map((tag: any) => {
+            return { tag: tag, avatar_id: props.avatar.id };
+          })
+      );
+      if (error) throw error;
     }
 
     setDone(true);

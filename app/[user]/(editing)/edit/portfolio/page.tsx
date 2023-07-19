@@ -1,6 +1,5 @@
 import Portfolio from "@/components/edit/portfolio/portfolio";
-import { supabase, supabaseAuth } from "@/lib/database";
-import { CreateImageUrl } from "@/lib/storage";
+import { supabase } from "@/lib/database";
 
 export default async function Page({ params }: { params: { user: string } }) {
   const portfolios = await getUserPortfolios(params.user);
@@ -12,7 +11,7 @@ export default async function Page({ params }: { params: { user: string } }) {
   );
 }
 
-const getUserPortfolios = async (id: string) => {
+export async function getUserPortfolios(id: string){
   const { data: portfoiloData, error: portfolioError } = await supabase
     .from("avatars")
     .select()
@@ -40,6 +39,12 @@ const getUserPortfolios = async (id: string) => {
     }
     portfolios.push(newPortfolio);
   }
+  
+  portfolios.sort((a, b) => {
+    const dateA = new Date(a.updated_at!);
+    const dateB = new Date(b.updated_at!);
+    return dateB.getTime() - dateA.getTime();
+  });
 
   return portfolios;
 };

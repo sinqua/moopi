@@ -1,16 +1,33 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import emptyImg from "@/app/assets/images/empty.png";
 import useDrag from "@/hooks/useDrag";
 import Link from "next/link";
-
+import { supabase } from "@/lib/database";
+import { useSession } from "next-auth/react";
+import { getUserPortfolios } from "@/app/[user]/(editing)/edit/portfolio/page";
+import { Session } from "next-auth";
 interface AvatarProps {
   portfolio: any;
+  setCurrentPortfolios: any;
+  setLoading: any;
+}
+
+async function refreshPortfolio(
+  avatar_id: number,
+  session: Session,
+  setCurrentPortfolios: any
+) {
+  await supabase.from("avatars").delete().eq("id", avatar_id);
+  const newPortfolio = await getUserPortfolios(session?.user.id);
+  setCurrentPortfolios(newPortfolio);
 }
 
 export const Avatar = (props: AvatarProps) => {
-  const { portfolio } = props;
+  const { portfolio, setCurrentPortfolios, setLoading } = props;
+  const { data: session } = useSession();
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
@@ -95,7 +112,14 @@ export const Avatar = (props: AvatarProps) => {
             </div>
           </div>
           <div className="md:flex hidden justify-center space-x-[15px]">
-            <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">
+            <div
+              className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer"
+              onClick={() => {
+                setLoading(true);
+                session &&
+                  refreshPortfolio(portfolio.id, session, setCurrentPortfolios);
+              }}
+            >
               삭제하기
             </div>
             <Link
@@ -108,7 +132,14 @@ export const Avatar = (props: AvatarProps) => {
         </div>
       </div>
       <div className="md:hidden flex justify-center md:pt-0 pt-[50px] space-x-[15px]">
-        <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">
+        <div
+          className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer"
+          onClick={() => {
+            setLoading(true);
+            session &&
+              refreshPortfolio(portfolio.id, session, setCurrentPortfolios);
+          }}
+        >
           삭제하기
         </div>
         <Link

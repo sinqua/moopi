@@ -1,17 +1,10 @@
 "use client";
-import { UploadBase64Image } from "@/lib/storage";
-import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { Suspense, useEffect, useState } from "react";
 import { Modal } from "../modal";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/database";
 import { Avatar } from "./avatar";
+import LoadingModal from "./LoadingModal";
 
 interface PortfolioProps {
-  // profile: any;
-  // detail: any;
   portfolios: any;
 }
 
@@ -19,8 +12,13 @@ export default function Portfolio(props: PortfolioProps) {
   const { portfolios } = props;
 
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentPortfolios, setCurrentPortfolios] = useState(portfolios);
-  
+
+  useEffect(() => {
+    if (loading) setLoading(false);
+  }, [currentPortfolios]);
+
   const onSavePortfolio = async () => {};
 
   return (
@@ -33,7 +31,14 @@ export default function Portfolio(props: PortfolioProps) {
       </div>
       <div className="sm:space-y-[80px] space-y-[60px] ">
         {currentPortfolios.map((portfolio: any, index: any) => {
-          return <Avatar portfolio={portfolio} key={index} />;
+          return (
+            <Avatar
+              portfolio={portfolio}
+              key={index}
+              setCurrentPortfolios={setCurrentPortfolios}
+              setLoading={setLoading}
+            />
+          );
         })}
       </div>
       <div className="flex justify-center pt-[120px] space-x-[15px]">
@@ -45,6 +50,7 @@ export default function Portfolio(props: PortfolioProps) {
         </div>
       </div>
       <Modal modal={modal} setModal={setModal} onSaveData={onSavePortfolio} />
+      <LoadingModal modal={loading} />
     </>
   );
 }
