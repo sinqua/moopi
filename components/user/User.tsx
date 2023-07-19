@@ -19,8 +19,8 @@ interface UserProps {
   session: any;
 }
 
-export default function User(
-  props: UserProps ) {
+
+export default function User(props: UserProps) {
   const {
     profileImage,
     nickname,
@@ -29,7 +29,6 @@ export default function User(
     profile,
     id,
     slot,
-    avatarID,
     modelUrl,
     animation,
     thumbnailUrl,
@@ -44,8 +43,6 @@ export default function User(
         <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
           <div className="md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
             <AvatarCanvas
-              userId={id}
-              avatarId={avatarID}
               modelUrl={modelUrl}
               animation={animation}
               thumbnailUrl={thumbnailUrl}

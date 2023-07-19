@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { lazy, useEffect, useRef, useState, FC } from "react";
+import { lazy, useEffect, useRef, useState, FC, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, useGLTF } from "@react-three/drei";
 import MenuButton from "./MenuButton";
@@ -10,18 +10,15 @@ import { ModelProps } from "../Model";
 import BounceLoader from "react-spinners/BounceLoader";
 const ModelComponent = lazy(() => import("../Model"));
 
-const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+const SupabasePublicURL =
+  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 interface AvatarCanvasProps {
-  userId: any;
-  avatarId: any;
   modelUrl: string | undefined;
   animation: number | undefined;
   thumbnailUrl: string | undefined;
 }
 
 const AvatarCanvas = ({
-  userId,
-  avatarId,
   modelUrl,
   animation,
   thumbnailUrl = "/mainModel.png",
@@ -35,7 +32,6 @@ const AvatarCanvas = ({
   const cameraControlsRef = useRef<CameraControls>(null);
 
   useEffect(() => {
-
     setModelInfo({
       modelUrl: modelUrl,
       animation: animation!,
@@ -57,10 +53,6 @@ const AvatarCanvas = ({
   const resetCamera = () => {
     cameraControlsRef.current?.reset(true);
     cameraControlsRef.current!.polarAngle = 1.35;
-  };
-
-  const handleTemp = () => {
-    window.parent.postMessage({ type: "MODAL", message: {userId: userId, avatarId: avatarId} }, "*");
   };
 
   const postMessage = () => {
@@ -95,19 +87,21 @@ const AvatarCanvas = ({
           {helpViewer && (
             <HelpViewer setHelpViewer={setHelpViewer} isMobile={isMobile} />
           )}
-          <Canvas
-            camera={{ position: [0, 0, 1.1] }}
-            style={{ backgroundColor: "#FAF9F6" }}
-            shadows
-          >
-            <CameraControls
-              ref={cameraControlsRef}
-              maxDistance={5}
-              polarAngle={1.35}
-            />
-            <directionalLight position={[0, 1, 0]} castShadow />
-            {modelInfo && <ModelComponent {...modelInfo!} />}
-          </Canvas>
+          <Suspense fallback={""}>
+            <Canvas
+              camera={{ position: [0, 0, 1.1] }}
+              style={{ backgroundColor: "#FAF9F6" }}
+              shadows
+            >
+              <CameraControls
+                ref={cameraControlsRef}
+                maxDistance={5}
+                polarAngle={1.35}
+              />
+              <directionalLight position={[0, 1, 0]} castShadow />
+              {modelInfo && <ModelComponent {...modelInfo!} />}
+            </Canvas>
+          </Suspense>
           {!progress && (
             <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
               <BounceLoader color="#2778C7" />
