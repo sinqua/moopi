@@ -40,10 +40,6 @@ const FullCanvas = (props: FullCanvasProps) => {
     canvasRef,
   } = props;
 
-  useEffect(() => {
-    console.log(animationUrl)
-  }, [animationUrl])
-
   const [fullScreen, setFullScreen] = useState(false);
   const [helpViewer, setHelpViewer] = useState(false);
 

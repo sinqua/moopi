@@ -25,7 +25,8 @@ import smileFill from "@/app/assets/images/smile-fill.svg";
 import { avatarTable } from "./Upload";
 import { formatDate } from "@/lib/string";
 
-const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+const SupabasePublicURL =
+  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 
 interface InputProps {
   avatar: avatarTable;
@@ -63,11 +64,16 @@ export default function Input(props: InputProps) {
       value: props.avatar.visible!,
       label: props.avatar.visible! ? "공개" : "비공개",
     });
-    setAvatarAnimation(animationOptions.find((option: any) => {
-      return option.value === props.avatar.animation;
-    }));
-    if(thumbnailImage === null) setThumbnailImage(tempImage);
-    else setThumbnailImage(`${SupabasePublicURL}/thumbnail/${props.avatar.user_id}/${props.avatar.thumbnail}`);
+    setAvatarAnimation(
+      animationOptions.find((option: any) => {
+        return option.value === props.avatar.animation;
+      })
+    );
+    if (thumbnailImage === null) setThumbnailImage(tempImage);
+    else
+      setThumbnailImage(
+        `${SupabasePublicURL}/thumbnail/${props.avatar.user_id}/${props.avatar.thumbnail}`
+      );
   }, []);
 
   const avatarNameRef = useRef<any>(null);
@@ -77,7 +83,10 @@ export default function Input(props: InputProps) {
     value: boolean;
     label: string;
   }>();
-  const [avatarAnimation, setAvatarAnimation] = useState<{ value: number, label: string }>();
+  const [avatarAnimation, setAvatarAnimation] = useState<{
+    value: number;
+    label: string;
+  }>();
 
   const [done, setDone] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
@@ -101,7 +110,9 @@ export default function Input(props: InputProps) {
     { value: false, label: "비공개" },
   ];
 
-  const [animationOptions, setAnimationOptions] = useState<{ value: number, label: string }[]>([
+  const [animationOptions, setAnimationOptions] = useState<
+    { value: number; label: string }[]
+  >([
     { value: 4, label: "Idle" },
     { value: 1, label: "HipHopDancing" },
     { value: 2, label: "PutYourHandsUp" },
@@ -156,57 +167,60 @@ export default function Input(props: InputProps) {
   };
 
   const onSavePortfolio = async () => {
-    if (!avatarNameRef.current.value || !avatarFile) {
-      setBorderColor("border-red-500 shadow-[inset_0_0_0_1px_rgb(239,68,68)]");
-      setIsEmpty(true);
-      return;
+    setModal(true);
+
+    if (avatarFile) {
+      await UploadAvatar(session?.user.id, avatarFile.name, avatarFile);
+
+      const { error: avatarError } = await supabase
+        .from("avatars")
+        .update({
+          name: avatarNameRef.current.value,
+          description: avatarDescriptionRef.current.value,
+          visible: avatarStatus?.value,
+          animation: selectedAnime,
+          vrm: avatarFile.name,
+        })
+        .eq("id", props.avatar.id);
+      if(avatarError) throw avatarError;
     }
 
-    setModal(true);
-    UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
-      async (data) => {
-        const { data: avatarData, error: avatarError } = await supabase
+    if (thumbnailImage.includes("data:image/png;base64,")) {
+      uploadThumbnailImage(session, thumbnailImage).then(async (uuid) => {
+        const { error } = await supabase
           .from("avatars")
-          .insert([
-            {
-              vrm: avatarFile.name,
-              user_id: session?.user.id,
-              is_profile: false,
-              name: avatarNameRef.current.value,
-              description: avatarDescriptionRef.current.value,
-              visible: true,
-              animation: selectedAnime,
-            },
-          ])
-          .select();
+          .update({
+            thumbnail: `${uuid}.png`,
+          })
+          .eq("id", props.avatar.id);
+        if (error) throw error;
+      });
+    } else {
+      console.log("User did not change thumbnail image");
+    }
 
-        if (avatarTags) {
-          const { data: tagsData, error: tagsError } = await supabase
-            .from("tags")
-            .insert(
-              avatarTags
-                .map((tag: any) => {
-                  return tag.value;
-                })
-                .map((tag: any) => {
-                  return { tag: tag, avatar_id: avatarData![0].id };
-                })
-            );
-        }
-        if (typeof thumbnailImage === "string") {
-          UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
-            const { data, error } = await supabase
-              .from("avatars")
-              .update({
-                thumbnail: uuid,
-              })
-              .eq("user_id", session?.user.id);
-          });
-        }
+    const { error: tagsError } = await supabase
+      .from("tags")
+      .delete()
+      .eq("avatar_id", props.avatar.id);
+    if(tagsError) throw tagsError;
 
-        setDone(true);
-      }
-    );
+    if (avatarTags) {
+      const { error: error } = await supabase
+        .from("tags")
+        .insert(
+          avatarTags
+            .map((tag: any) => {
+              return tag.value;
+            })
+            .map((tag: any) => {
+              return { tag: tag, avatar_id: props.avatar.id };
+            })
+        );
+      if(error) throw error;
+    }
+
+    setDone(true);
   };
 
   return (
@@ -484,16 +498,17 @@ export default function Input(props: InputProps) {
   );
 }
 
-const UploadBase64Image = async (session: any, url: string) => {
+const uploadThumbnailImage = async (session: any, url: string) => {
   const base64Data = url.split(",")[1];
 
   const uuid = uuidv4();
 
   const { data, error } = await supabase.storage
-    .from("image")
+    .from("thumbnail")
     .upload(`${session?.user.id}/${uuid}.png`, decode(base64Data), {
       contentType: "image/png",
     });
 
-  return uuid;
+  if (data) return uuid;
+  else throw error;
 };
