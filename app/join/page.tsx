@@ -66,56 +66,6 @@ export default function JoinPage() {
 
     update();
     router.push(callbackUrl);
-
-    // await fetch("/join", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     id: session?.user.id,
-    //     nickname: inputRef.current.value,
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then(async (data) => {
-    //     if (data.status === 200) {
-    //       const userId = data.body.user.id;
-
-    //       await fetch("/join/profile", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //           user_id: userId,
-    //         }),
-    //       })
-    //         .then((res) => res.json())
-    //         .then(async (data) => {
-    //           if (data.status === 200) {
-    //             await fetch("/join/detail", {
-    //               method: "POST",
-    //               body: JSON.stringify({
-    //                 user_id: userId,
-    //               }),
-    //             })
-    //               .then((res) => res.json())
-    //               .then(async (data) => {
-    //                 if (data.status === 200) {
-    //                   await fetch("/join/slot", {
-    //                     method: "POST",
-    //                     body: JSON.stringify({
-    //                       user_id: userId,
-    //                     }),
-    //                   })
-    //                     .then((res) => res.json())
-    //                     .then((data) => {
-    //                       if (data.status === 200) {
-    //                         update();
-    //                         router.push(callbackUrl);
-    //                       }
-    //                     });
-    //                 }
-    //               });
-    //           }
-    //         });
-    //     }
-    //   });
   };
 
   return (
