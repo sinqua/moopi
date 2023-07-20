@@ -11,7 +11,7 @@ export default function HeaderCSR({ children }: { children: React.ReactNode }) {
       <Link href="/" title="Go to homepage">
         <Image src={moopiLogo} className="w-auto sm:h-[40px] h-[30px]" alt="" priority/>
       </Link>
-      <div className="h-[30px] flex flex-row items-center sm:space-x-[30px] space-x-[20px]">
+      <div className="h-[30px] flex flex-row items-center">
         <div className="sm:relative absolute grow sm:w-auto w-full flex justify-end sm:top-0 bottom-[0] sm:px-0 px-[20px] left-0 md:text-right sm:text-center">
           <div className="flex items-center md:w-[450px] sm:w-[335px] w-full h-[40px] px-[25px] rounded-full bg-white border-solid border-[1px] border-[#CCCCCC]">
             <input
