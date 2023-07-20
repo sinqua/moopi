@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { user: string } }) {
   );
 }
 
-export async function getUserPortfolios(id: string){
+async function getUserPortfolios(id: string){
   const { data: portfoiloData, error: portfolioError } = await supabase
     .from("avatars")
     .select()

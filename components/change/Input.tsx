@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import moment from "moment";
 import { twMerge } from "tailwind-merge";
 
 import clipImg from "@/app/assets/images/clip.svg";
@@ -17,7 +16,7 @@ import { supabase, supabaseAuth } from "@/lib/database";
 import { UploadAvatar } from "@/lib/storage";
 import { Modal } from "./modal";
 
-import tempImage from "@/public/og-image.png";
+import tempImage from "@/public/VerticalModel.png";
 import cameraBlack from "@/app/assets/images/camera-black.svg";
 import cameraFill from "@/app/assets/images/camera-fill.svg";
 import smileBlack from "@/app/assets/images/smile.svg";

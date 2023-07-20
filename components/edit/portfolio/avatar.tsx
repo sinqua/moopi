@@ -7,7 +7,6 @@ import useDrag from "@/hooks/useDrag";
 import Link from "next/link";
 import { supabase } from "@/lib/database";
 import { useSession } from "next-auth/react";
-import { getUserPortfolios } from "@/app/[user]/(editing)/edit/portfolio/page";
 import { Session } from "next-auth";
 interface AvatarProps {
   portfolio: any;
@@ -151,4 +150,42 @@ export const Avatar = (props: AvatarProps) => {
       </div>
     </div>
   );
+};
+
+async function getUserPortfolios(id: string){
+  const { data: portfoiloData, error: portfolioError } = await supabase
+    .from("avatars")
+    .select()
+    .eq("user_id", id);
+
+  const portfolios = [];
+  for (const portfolio of portfoiloData!) {
+    const { data: tagData, error: tagError } = await supabase
+      .from("tags")
+      .select("tag")
+      .eq("avatar_id", portfolio.id);
+    
+    const tags = tagData?.map((tag: any) => Object.values(tag)[0]) || [];
+
+    const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+
+    let url = `${SupabasePublicURL}/thumbnail/${portfolio.user_id + "/" + portfolio.thumbnail}`
+    if(portfolio.thumbnail === null)
+      url =  '/VerticalModel.png'
+
+    const newPortfolio = {
+      ...portfolio,
+      tags,
+      thumbnailUrl: url,
+    }
+    portfolios.push(newPortfolio);
+  }
+  
+  portfolios.sort((a, b) => {
+    const dateA = new Date(a.updated_at!);
+    const dateB = new Date(b.updated_at!);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return portfolios;
 };
