@@ -1,4 +1,4 @@
-import Price from "@/components/user/Price";
+import Price from "@/components/user/info/Price";
 import { supabase } from "@/lib/database";
 
 export default async function Page(props: any) {
