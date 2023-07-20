@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import moopiLogo from "@/app/assets/logos/moopi.svg";
 import offingLogo from "@/app/assets/logos/offing.svg";
@@ -22,14 +23,14 @@ export default function Page() {
         />
       </div>
       <div className="grow sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
-        <a href="/" className="w-[106px] h-[30px]">
+        <Link href="/" className="w-[106px] h-[30px]">
           <Image
             className="w-[106px] h-[30px]"
             src={moopiLogo}
             alt=""
             loading="eager"
           />
-        </a>
+        </Link>
         <div className="sm:h-[95px] h-[40px]" />
         <p className="font-semibold text-xl">moopi에 오신 것을 환영합니다</p>
         <div className="sm:h-[60px] h-[80px]" />

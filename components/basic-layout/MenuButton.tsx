@@ -14,7 +14,7 @@ export default function MenuButton(props: any) {
   return (
     <>
       {status === "authenticated" ? (
-        <>
+        <div className="sm:space-x-[30px] space-x-[20px] ml-[30px]">
           <Image
             src={messageImg}
             className="inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer"
@@ -60,11 +60,11 @@ export default function MenuButton(props: any) {
               </div>
             </div>
           )}
-        </>
+        </div>
       ) : (
         <Link
           href="/login"
-          className="flex justify-center items-center w-[82px] h-[40px] bg-white font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer"
+          className="flex justify-center items-center w-[82px] h-[40px] ml-[98px] bg-white font-semibold rounded-[11px] border-solid border-[1px] border-[#333333] cursor-pointer"
         >
           로그인
         </Link>
