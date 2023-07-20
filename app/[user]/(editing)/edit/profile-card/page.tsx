@@ -30,7 +30,9 @@ const getMainAvatar = async (id: string) => {
     .from("avatars")
     .select(`*, animations(*)`)
     .eq("user_id", id)
-    .eq("is_profile", true);
+    .eq("is_profile", true)
+    .limit(1)
+    .single();
 
   return data;
 };
@@ -58,7 +60,6 @@ const getUserProfileImage = async (id: string) => {
     .eq("id", id);
 
   if (profileData![0].image) {
-    // const url = await CreateImageUrl(profileData![0].image);
     return { image: `${SupabasePublicURL}/profile-image/${profileData![0].image}`}
   } else {
     return authData![0];
