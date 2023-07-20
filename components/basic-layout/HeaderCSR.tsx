@@ -3,6 +3,8 @@ import moopiLogo from "@/app/assets/logos/moopi.svg";
 import searchImg from "@/app/assets/images/search.svg";
 import Link from "next/link";
 
+
+
 export default function HeaderCSR({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative md:max-w-[1312px] w-full sm:h-[69px] h-[106px] flex justify-between sm:items-center items-start md:px-0 sm:px-[30px] px-[20px] py-[15px] bg-white font-sans font-sm text-[14px]">
