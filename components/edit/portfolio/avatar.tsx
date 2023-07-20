@@ -1,15 +1,32 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import emptyImg from "@/app/assets/images/empty.png";
 import useDrag from "@/hooks/useDrag";
-
+import Link from "next/link";
+import { supabase } from "@/lib/database";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 interface AvatarProps {
   portfolio: any;
+  setCurrentPortfolios: any;
+  setLoading: any;
+}
+
+async function refreshPortfolio(
+  avatar_id: number,
+  session: Session,
+  setCurrentPortfolios: any
+) {
+  await supabase.from("avatars").delete().eq("id", avatar_id);
+  const newPortfolio = await getUserPortfolios(session?.user.id);
+  setCurrentPortfolios(newPortfolio);
 }
 
 export const Avatar = (props: AvatarProps) => {
-  const { portfolio } = props;
+  const { portfolio, setCurrentPortfolios, setLoading } = props;
+  const { data: session } = useSession();
 
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
@@ -51,7 +68,7 @@ export const Avatar = (props: AvatarProps) => {
                 </div>
                 <div className="flex space-x-[8px] md:mr-[150px] mr-[30px]">
                   <p className="text-[#7B7B7B]">애니메이션</p>
-                  <p className="font-semibold ">{portfolio.animation.name}</p>
+                  <p className="font-semibold ">{portfolio.animation}</p>
                 </div>
               </div>
             </div>
@@ -94,29 +111,81 @@ export const Avatar = (props: AvatarProps) => {
             </div>
           </div>
           <div className="md:flex hidden justify-center space-x-[15px]">
-            <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">
+            <div
+              className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer"
+              onClick={() => {
+                setLoading(true);
+                session &&
+                  refreshPortfolio(portfolio.id, session, setCurrentPortfolios);
+              }}
+            >
               삭제하기
             </div>
-            <div
+            <Link
+              href={`/change/${portfolio.id}`}
               className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-              onClick={() => console.log("good3")}
             >
               수정하기
-            </div>
+            </Link>
           </div>
         </div>
       </div>
       <div className="md:hidden flex justify-center md:pt-0 pt-[50px] space-x-[15px]">
-        <div className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer">
+        <div
+          className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-white border-solid border-[1px] border-[#333333] cursor-pointer"
+          onClick={() => {
+            setLoading(true);
+            session &&
+              refreshPortfolio(portfolio.id, session, setCurrentPortfolios);
+          }}
+        >
           삭제하기
         </div>
-        <div
+        <Link
+          href={`/change/${portfolio.id}`}
           className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-          onClick={() => console.log("good")}
         >
           수정하기
-        </div>
+        </Link>
       </div>
     </div>
   );
+};
+
+async function getUserPortfolios(id: string){
+  const { data: portfoiloData, error: portfolioError } = await supabase
+    .from("avatars")
+    .select()
+    .eq("user_id", id);
+
+  const portfolios = [];
+  for (const portfolio of portfoiloData!) {
+    const { data: tagData, error: tagError } = await supabase
+      .from("tags")
+      .select("tag")
+      .eq("avatar_id", portfolio.id);
+    
+    const tags = tagData?.map((tag: any) => Object.values(tag)[0]) || [];
+
+    const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+
+    let url = `${SupabasePublicURL}/thumbnail/${portfolio.user_id + "/" + portfolio.thumbnail}`
+    if(portfolio.thumbnail === null)
+      url =  '/VerticalModel.png'
+
+    const newPortfolio = {
+      ...portfolio,
+      tags,
+      thumbnailUrl: url,
+    }
+    portfolios.push(newPortfolio);
+  }
+  
+  portfolios.sort((a, b) => {
+    const dateA = new Date(a.updated_at!);
+    const dateB = new Date(b.updated_at!);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return portfolios;
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { lazy, useState} from "react";
+import { lazy, useEffect, useState} from "react";
 import { Canvas } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -13,7 +13,7 @@ import moveImg from "@/app/assets/images/move.svg";
 import refreshImg from "@/app/assets/images/refresh.svg";
 import helpImg from "@/app/assets/images/help.svg";
 
-const ModelComponent = lazy(() => import("../Model2"));
+const ModelComponent = lazy(() => import("../Model3"));
 
 interface FullCanvasProps {
   modelUrl: any;

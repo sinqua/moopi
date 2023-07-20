@@ -1,20 +1,17 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import HeaderBeforeLogin from "@/components/basic-layout/HeaderBeforeLogin";
-import HeaderAfterLogin from "@/components/basic-layout/HeaderAfterLogin";
-import { Suspense } from "react";
+import HeaderCSR from "@/components/basic-layout/HeaderCSR";
+import MenuButton from "@/components/basic-layout/MenuButton";
 
-export default async function Layout(props: any) {
-  const session = await getServerSession(authOptions);
-
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative flex flex-col items-center h-auto min-h-full">
-      <Suspense>
-      {session ? <HeaderAfterLogin /> : <HeaderBeforeLogin />}
-      </Suspense>
-      <Suspense>
-      {props.children}
-      </Suspense>
+      <HeaderCSR>
+        <MenuButton />
+      </HeaderCSR>
+      {children}
     </div>
   );
 }

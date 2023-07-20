@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import moment from "moment";
 import { twMerge } from "tailwind-merge";
 
 import clipImg from "@/app/assets/images/clip.svg";
@@ -17,26 +16,26 @@ import { supabase, supabaseAuth } from "@/lib/database";
 import { UploadAvatar } from "@/lib/storage";
 import { Modal } from "./modal";
 
+import tempImage from "@/public/VerticalModel.png";
 import cameraBlack from "@/app/assets/images/camera-black.svg";
 import cameraFill from "@/app/assets/images/camera-fill.svg";
 import smileBlack from "@/app/assets/images/smile.svg";
 import smileFill from "@/app/assets/images/smile-fill.svg";
+import { avatarTable } from "./Upload";
+import { formatDate } from "@/lib/string";
+
+const SupabasePublicURL =
+  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 
 interface InputProps {
+  avatar: avatarTable;
+  tags: { label: any; value: any }[] | null;
   setModelUrl: any;
-  animationUrl: any;
   setAnimationUrl: any;
-  mostUsedTags: any;
+  popularTags: any;
   cameraActive: any;
   setCameraActive: any;
   resetCamera: any;
-  avatarNameRef: any;
-  avatarFile: any;
-  setAvatarFile: any;
-  avatarDescriptionRef: any;
-  avatarStatus: any;
-  setAvatarStatus: any;
-  setAvatarAnimation: any;
   thumbnailImage: any;
   setThumbnailImage: any;
   setProgress: any;
@@ -45,23 +44,48 @@ interface InputProps {
 export default function Input(props: InputProps) {
   const {
     setModelUrl,
-    animationUrl,
     setAnimationUrl,
-    mostUsedTags,
+    popularTags,
     cameraActive,
     setCameraActive,
     resetCamera,
-    avatarNameRef,
-    avatarFile,
-    setAvatarFile,
-    avatarDescriptionRef,
-    avatarStatus,
-    setAvatarStatus,
-    setAvatarAnimation,
     thumbnailImage,
     setThumbnailImage,
     setProgress,
   } = props;
+
+  useEffect(() => {
+    avatarNameRef.current.value = props.avatar.name;
+    avatarDescriptionRef.current.value = props.avatar.description;
+    avatarFileNameRef.current.value = props.avatar.vrm;
+    setAvatarTags(props.tags);
+    setAvatarStatus({
+      value: props.avatar.visible!,
+      label: props.avatar.visible! ? "공개" : "비공개",
+    });
+    setAvatarAnimation(
+      animationOptions.find((option: any) => {
+        return option.value === props.avatar.animation;
+      })
+    );
+    if (thumbnailImage === null) setThumbnailImage(tempImage);
+    else
+      setThumbnailImage(
+        `${SupabasePublicURL}/thumbnail/${props.avatar.user_id}/${props.avatar.thumbnail}`
+      );
+  }, []);
+
+  const avatarNameRef = useRef<any>(null);
+  const [avatarFile, setAvatarFile] = useState<any>(null);
+  const avatarDescriptionRef = useRef<any>(null);
+  const [avatarStatus, setAvatarStatus] = useState<{
+    value: boolean;
+    label: string;
+  }>();
+  const [avatarAnimation, setAvatarAnimation] = useState<{
+    value: number;
+    label: string;
+  }>();
 
   const [done, setDone] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
@@ -79,12 +103,15 @@ export default function Input(props: InputProps) {
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const { data: session, status } = useSession();
+
   const options = [
-    { value: "공개", label: "공개" },
-    { value: "비공개", label: "비공개" },
+    { value: true, label: "공개" },
+    { value: false, label: "비공개" },
   ];
 
-  const [animationOptions, setAnimationOptions] = useState<any>([
+  const [animationOptions, setAnimationOptions] = useState<
+    { value: number; label: string }[]
+  >([
     { value: 4, label: "Idle" },
     { value: 1, label: "HipHopDancing" },
     { value: 2, label: "PutYourHandsUp" },
@@ -139,57 +166,64 @@ export default function Input(props: InputProps) {
   };
 
   const onSavePortfolio = async () => {
-    if (!avatarNameRef.current.value || !avatarFile) {
-      setBorderColor("border-red-500 shadow-[inset_0_0_0_1px_rgb(239,68,68)]");
-      setIsEmpty(true);
-      return;
+    setModal(true);
+
+    const { error: avatarError } = await supabase
+      .from("avatars")
+      .update({
+        name: avatarNameRef.current.value,
+        description: avatarDescriptionRef.current.value,
+        visible: avatarStatus?.value,
+        animation: selectedAnime,
+      })
+      .eq("id", props.avatar.id);
+
+    if (avatarFile) {
+      await UploadAvatar(session?.user.id, avatarFile.name, avatarFile);
+
+      const { error: avatarError } = await supabase
+        .from("avatars")
+        .update({
+          vrm: avatarFile.name,
+        })
+        .eq("id", props.avatar.id);
+      if (avatarError) throw avatarError;
     }
 
-    setModal(true);
-    UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
-      async (data) => {
-        const { data: avatarData, error: avatarError } = await supabase
+    if (thumbnailImage.includes("data:image/png;base64,")) {
+      uploadThumbnailImage(session, thumbnailImage).then(async (uuid) => {
+        const { error } = await supabase
           .from("avatars")
-          .insert([
-            {
-              vrm: avatarFile.name,
-              user_id: session?.user.id,
-              is_profile: false,
-              name: avatarNameRef.current.value,
-              description: avatarDescriptionRef.current.value,
-              visible: true,
-              animation: selectedAnime,
-            },
-          ])
-          .select();
+          .update({
+            thumbnail: `${uuid}.png`,
+          })
+          .eq("id", props.avatar.id);
+        if (error) throw error;
+      });
+    } else {
+      console.log("User did not change thumbnail image");
+    }
 
-        if (avatarTags) {
-          const { data: tagsData, error: tagsError } = await supabase
-            .from("tags")
-            .insert(
-              avatarTags
-                .map((tag: any) => {
-                  return tag.value;
-                })
-                .map((tag: any) => {
-                  return { tag: tag, avatar_id: avatarData![0].id };
-                })
-            );
-        }
-        if (typeof thumbnailImage === "string") {
-          UploadBase64Image(session, thumbnailImage).then(async (uuid) => {
-            const { data, error } = await supabase
-              .from("avatars")
-              .update({
-                thumbnail: uuid,
-              })
-              .eq("user_id", session?.user.id);
-          });
-        }
+    const { error: tagsError } = await supabase
+      .from("tags")
+      .delete()
+      .eq("avatar_id", props.avatar.id);
+    if (tagsError) throw tagsError;
 
-        setDone(true);
-      }
-    );
+    if (avatarTags) {
+      const { error: error } = await supabase.from("tags").insert(
+        avatarTags
+          .map((tag: any) => {
+            return tag.value;
+          })
+          .map((tag: any) => {
+            return { tag: tag, avatar_id: props.avatar.id };
+          })
+      );
+      if (error) throw error;
+    }
+
+    setDone(true);
   };
 
   return (
@@ -339,13 +373,14 @@ export default function Input(props: InputProps) {
               <div className="flex flex-col space-y-[20px]">
                 <p className="font-semibold">태그</p>
                 <CreatableSelect
+                  value={avatarTags}
                   isMulti
-                  options={mostUsedTags}
+                  options={popularTags}
                   instanceId={""}
                   onChange={(e: any) => {
                     setAvatarTags(e);
                   }}
-                  className="inline-table w-full items-center h-[47px] ring-0"
+                  className="w-full items-center h-[47px] ring-0 inline-table"
                   placeholder={"태그를 입력해주세요"}
                   theme={(theme) => ({
                     ...theme,
@@ -387,17 +422,16 @@ export default function Input(props: InputProps) {
               <div className="flex flex-col w-[242px] space-y-[30px]">
                 <div className="flex flex-col space-y-[20px]">
                   <p className="font-semibold">업로드 날짜</p>
-                  <p>{moment().format("YYYY.MM.DD")}</p>
+                  <p>{formatDate(props.avatar.created_at!)}</p>
                 </div>
                 <div className="flex flex-col w-[125px] space-y-[20px]">
                   <p className="font-semibold">상태 설정</p>
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    defaultValue={avatarStatus}
+                    value={avatarStatus}
                     isSearchable={false}
                     onChange={(e: any) => setAvatarStatus(e)}
-                    // name="color"
                     options={options}
                     theme={(theme) => ({
                       ...theme,
@@ -423,9 +457,7 @@ export default function Input(props: InputProps) {
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    value={animationOptions.filter((option: any) => {
-                      return option.label === animationUrl;
-                    })}
+                    value={avatarAnimation}
                     options={animationOptions}
                     onChange={(e: any) => loadAnimation(e)}
                     isSearchable={false}
@@ -469,16 +501,17 @@ export default function Input(props: InputProps) {
   );
 }
 
-const UploadBase64Image = async (session: any, url: string) => {
+const uploadThumbnailImage = async (session: any, url: string) => {
   const base64Data = url.split(",")[1];
 
   const uuid = uuidv4();
 
   const { data, error } = await supabase.storage
-    .from("image")
+    .from("thumbnail")
     .upload(`${session?.user.id}/${uuid}.png`, decode(base64Data), {
       contentType: "image/png",
     });
 
-  return uuid;
+  if (data) return uuid;
+  else throw error;
 };

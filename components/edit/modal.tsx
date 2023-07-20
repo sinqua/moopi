@@ -1,7 +1,4 @@
 "use client";
-import { useState } from "react";
-import CreatableSelect from "react-select/creatable";
-
 interface ModalProps {
   modal: any;
   setModal: any;

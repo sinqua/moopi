@@ -70,6 +70,7 @@ export interface Database {
           user_id: string | null
           visible: boolean | null
           vrm: string | null
+          updated_at: string | null
         }
         Insert: {
           animation?: number | null
