@@ -3,6 +3,7 @@ import { useState } from "react";
 import ProfileCard from "./info/ProfileCard";
 import { Modal } from "./Modal";
 import AvatarCanvas from "./profile/AvatarCanvas";
+import EmptyCanvas from "./profile/EmptyCanvas";
 
 interface UserProps {
   profileImage: any;
@@ -12,13 +13,11 @@ interface UserProps {
   profile: any;
   id: any;
   slot: any;
-  avatarID: any;
   modelUrl: any;
   animation: any;
   thumbnailUrl: any;
   session: any;
 }
-
 
 export default function User(props: UserProps) {
   const {
@@ -42,11 +41,15 @@ export default function User(props: UserProps) {
       <div className="w-full flex flex-col items-center font-sans">
         <div className="flex md:flex-row flex-col justify-center w-full max-w-[1920px] sm:pt-[50px] pt-[20px] md:pb-[60px] md:space-x-[16px] md:space-y-0 sm:space-y-[40px] space-y-[30px]">
           <div className="flex justify-center md:w-[814px] md:h-[526px] h-[470px] md:rounded-[10px] rounded-none bg-[#FAF9F6] shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
-            <AvatarCanvas
-              modelUrl={modelUrl}
-              animation={animation}
-              thumbnailUrl={thumbnailUrl}
-            />
+            {animation ? (
+              <AvatarCanvas
+                modelUrl={modelUrl}
+                animation={animation}
+                thumbnailUrl={thumbnailUrl}
+              />
+            ) : (
+              <EmptyCanvas />
+            )}
           </div>
           <ProfileCard
             session={session}

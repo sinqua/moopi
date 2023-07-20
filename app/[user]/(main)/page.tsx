@@ -15,7 +15,7 @@ import { authOptions } from "@/lib/auth";
 //   }
 // }
 
-export default async function Page({ params } : { params: { user: string }}) {
+export default async function Page({ params }: { params: { user: string } }) {
   const slotData = getSlot(params.user);
   const avatarData = getAvatar(params.user);
   const profileData = getProfile(params.user);
@@ -46,10 +46,9 @@ export default async function Page({ params } : { params: { user: string }}) {
       profile={profile}
       id={params.user}
       slot={slot}
-      avatarID={avatar.id}
       modelUrl={modelUrl.signedUrl}
-      animation={avatar.animation}
-      thumbnailUrl={`${params.user}/${avatar.thumbnail}`}
+      animation={avatar?.animation}
+      thumbnailUrl={`${params.user}/${avatar?.thumbnail}`}
     />
   );
 }
@@ -64,9 +63,6 @@ const getAvatar = async (id: string) => {
     .single();
 
   if (data) return data;
-  else {
-    throw new Error("Avatar not found");
-  }
 };
 
 const getAuth = async (id: string) => {
@@ -112,6 +108,8 @@ const getSlot = async (id: string) => {
 };
 
 async function createModelUrl(userId: string, filename: any) {
+  if(!filename) return { signedUrl: "" };
+
   const filepath = `${userId}/${filename}`;
 
   const { data, error } = await supabase.storage
