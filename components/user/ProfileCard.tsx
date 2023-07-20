@@ -148,7 +148,7 @@ export default function ProfileCard(props: ProfileCardProps) {
                 src={discordLogo}
                 alt=""
               />
-              디스코드
+              서비스 문의
             </Link>
             <Link
               href={kakaoUrl}
@@ -161,7 +161,7 @@ export default function ProfileCard(props: ProfileCardProps) {
                 src={kakaoLogo}
                 alt=""
               />
-              오픈채팅
+              커미션 문의
             </Link>
             {/* <div className="absolute flex justify-center w-full bottom-[-10px]">
               <div className="inline-flex justify-center items-end w-[330px] h-[71px] pb-[20px] bg-slot bg-no-repeat bg-cover text-[14px] text-center align-text-bottom">

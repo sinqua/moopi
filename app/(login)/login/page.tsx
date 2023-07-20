@@ -18,6 +18,7 @@ export default function Page() {
           src={loginBg}
           alt=""
           loading="eager"
+          priority
         />
       </div>
       <div className="grow sm:py-[100px] pt-[60px] pb-[50px] flex flex-col items-center">
