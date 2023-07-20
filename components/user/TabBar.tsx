@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function TabBar() {
   const pathname = usePathname();
-  const [selected, setSelected] = useState<string>(undefined);
+  const [selected, setSelected] = useState<string>();
 
   useEffect(() => {
     setSelected(pathname.split("/")[2]);
