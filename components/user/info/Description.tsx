@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import parse from "html-react-parser";
 import { CreateImageUrl, CreateQuillUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+
 interface DescriptionProps {
   descriptionObject: string | undefined;
 }
@@ -14,6 +15,10 @@ export default function Description(props: DescriptionProps) {
 
   useEffect(() => {
     CreateHtml(descriptionObject).then((html) => setDescription(html));
+
+    return () => {
+      setDescription(null);
+    }
   }, [descriptionObject]);
 
 
@@ -44,14 +49,13 @@ const CreateHtml = async (descriptionObject: any) => {
     }
   }
 
-  var cfg = {};
-  var converter = new QuillDeltaToHtmlConverter(arr, cfg);
+  const converter = new QuillDeltaToHtmlConverter(arr);
 
   converter.afterRender((groupType: any, htmlString: string) => {
     htmlString = htmlString.replace(/<img/g, '<img loading="lazy"');
     return htmlString;
   });
 
-  var html = converter.convert();
+  const html = converter.convert();
   return html;
 };

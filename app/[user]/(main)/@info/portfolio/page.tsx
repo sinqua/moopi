@@ -1,4 +1,4 @@
-import Portfolio from "@/components/user/Portfolio";
+import Portfolio from "@/components/user/info/Portfolio";
 import { supabase } from "@/lib/database";
 
 export const revalidate = 0;

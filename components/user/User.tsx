@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import ProfileCard from "./ProfileCard";
+import ProfileCard from "./info/ProfileCard";
 import { Modal } from "./Modal";
-import AvatarCanvas from "../profile/AvatarCanvas";
+import AvatarCanvas from "./profile/AvatarCanvas";
 
 interface UserProps {
   profileImage: any;

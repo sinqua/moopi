@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function TabBar() {
   const pathname = usePathname();
-  const [selected, setSelected] = useState("home");
+  const [selected, setSelected] = useState(undefined);
 
   useEffect(() => {
     setSelected(pathname.split("/")[2]);
@@ -19,7 +19,7 @@ export default function TabBar() {
           className={
             selected === undefined ? selectedBtn : normalBtn
           }
-          onClick={() => setSelected("home")}
+          onClick={() => setSelected(undefined)}
         >
           설명
         </Link>

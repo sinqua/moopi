@@ -6,9 +6,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, useGLTF } from "@react-three/drei";
 import MenuButton from "./MenuButton";
 import HelpViewer from "./HelpViewer";
-import { ModelProps } from "../Model";
+import { ModelProps } from "../../Model";
 import BounceLoader from "react-spinners/BounceLoader";
-const ModelComponent = lazy(() => import("../Model"));
+const ModelComponent = lazy(() => import("../../Model"));
 
 const SupabasePublicURL =
   "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";

@@ -1,8 +1,9 @@
-import Description from "@/components/user/Description";
+import Description from "@/components/user/info/Description";
 import { supabase } from "@/lib/database";
 
 export default async function Page({ params }: { params: { user: string } }) {
   const detail = await getUserDetail(params.user);
+  console.log(detail);
   const descriptionObject =
     detail.description && JSON.parse(detail.description);
 
