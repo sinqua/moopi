@@ -2,7 +2,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
-import ProgressBar from "@/components/basic-layout/ProgressBar";
 import GoogleAnalytics from "@/components/etc/GoogleAnalytics";
 import Provider from "@/components/etc/Provider";
 
@@ -18,7 +17,6 @@ export default function RootLayout({
       <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} />
       <Provider>
         <body className={inter.className}>
-          <ProgressBar />
           {children}
           <Analytics />
         </body>
