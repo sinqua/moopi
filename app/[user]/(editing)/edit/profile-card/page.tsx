@@ -4,7 +4,7 @@ import ProfileCard from "@/components/edit//profileCard/profileCard";
 
 export default async function Page({ params }: { params: { user: string } }) {
   const profileImage = await getUserProfileImage(params.user);
-  const profile = await getUserProfile(params.user);
+  const profile = await getProfile(params.user);
   const avatar = await getMainAvatar(params.user);
   const tags = profile.tags.map((tag: any) => {
     return { value: tag.tag, label: tag.tag };
@@ -37,15 +37,18 @@ const getMainAvatar = async (id: string) => {
   return data;
 };
 
-const getUserProfile = async (id: string) => {
+const getProfile = async (id: string) => {
   const { data, error } = await supabase
     .from("profiles")
-    .select(`id, description, image, tags (tag)`)
-    .eq("user_id", id);
+    .select(`*,  tags (tag)`)
+    .eq("user_id", id)
+    .limit(1)
+    .single();
 
-  console.log(data);
-
-  return data![0];
+  if (data) return data;
+  else {
+    throw new Error("Profile not found");
+  }
 };
 
 const getUserProfileImage = async (id: string) => {
