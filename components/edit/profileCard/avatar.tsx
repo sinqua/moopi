@@ -20,7 +20,7 @@ const Avatar = (props: AvatarProps) => {
   useEffect(() => {
     const SupabasePublicURL =
       "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
-    const filePath = `${avatar.user_id}/${avatar.thumbnail}`;
+    const filePath = `${avatar?.user_id}/${avatar?.thumbnail}`;
     setAvatarImg(`${SupabasePublicURL}/thumbnail/${filePath}`);
   }, []);
 

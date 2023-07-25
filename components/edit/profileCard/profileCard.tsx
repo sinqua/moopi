@@ -1,12 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import heartImg from "@/app/assets/images/heart.svg";
-import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
-import activeHeartImg from "@/app/assets/images/activeheart.svg";
-import useDrag from "@/hooks/useDrag";
 import { ProfileImage } from "./profileImage";
 import { Nickname } from "./nickname";
 import { Description } from "./description";
@@ -116,7 +111,7 @@ export default function ProfileCard(props: ProfileCardProps) {
           setCurrentTags={setCurrentTags}
           mostUsedTags={mostUsedTags}
         />
-        <Avatar session={session} profile={profile} avatar={avatar[0]} tags={tags}/>
+        <Avatar session={session} profile={profile} avatar={avatar} tags={tags}/>
         <div className="flex justify-center pt-[40px] space-x-[15px]">
           <div
             className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"

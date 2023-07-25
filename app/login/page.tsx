@@ -10,7 +10,15 @@ import DiscordLogin from "@/components/login/DiscordLogin";
 import NaverLogin from "@/components/login/NaverLogin";
 import loginBg from "@/public/LoginBackground.png";
 
-export default function Page() {
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
+
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+
+  if(session) redirect(`${session.user.id}`);
+
   return (
     <div className="flex flex-row sm:h-full h-[812px] font-sans">
       <div className="md:block hidden grow-0 w-[514px]">
