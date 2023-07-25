@@ -27,7 +27,7 @@ export const Description = (props: DescriptionProps) => {
         <textarea
           ref={inputDescriptionRef}
           className="sm:w-[482px] w-full h-[260px] sm:p-[30px] p-[20px] rounded-[10px] resize-none bg-white border-solid border-[1px] border-[#CCCCCC]"
-          placeholder="자기소개를 입력해주세요."
+          placeholder=""
           value={profile.description}
           onChange={() =>
             setTextareaCount(inputDescriptionRef.current.value.length)
