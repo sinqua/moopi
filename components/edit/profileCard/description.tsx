@@ -4,6 +4,7 @@ interface DescriptionProps {
 	session: any;
     profile: any;
     inputDescriptionRef: any;
+    initialData: any;
 }
 
 export const Description = (props: DescriptionProps) => {
