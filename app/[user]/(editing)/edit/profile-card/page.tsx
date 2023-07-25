@@ -43,6 +43,8 @@ const getUserProfile = async (id: string) => {
     .select(`id, description, image, tags (tag)`)
     .eq("user_id", id);
 
+  console.log(data);
+
   return data![0];
 };
 
