@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 interface DescriptionProps {
   session: any;
@@ -12,13 +12,12 @@ export const Description = (props: DescriptionProps) => {
 
   const [textareaCount, setTextareaCount] = useState(0);
 
+  useLayoutEffect(() => {
+    inputDescriptionRef.current.value = profile.description;
+    }, []);
+
   useEffect(() => {
-    if (inputDescriptionRef.current) {
-      inputDescriptionRef.current.value = profile
-        ? profile.description
-        : "ehhh?";
-      setTextareaCount(inputDescriptionRef.current.value.length);
-    }
+    setTextareaCount(inputDescriptionRef.current.value.length);
   }, [profile, inputDescriptionRef]);
 
   return (
