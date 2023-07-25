@@ -27,7 +27,7 @@ export default function RootLayout({
 
 export const metadata: Metadata = {
   title: {
-    default: "무피 - 3D 크리에이터를 위한 포트폴리오 서비스",
+    default: "무피 -  ",
     template: "%s | 무피",
   },
   description: "무피는 3D 뷰어 기반의 크리에이터 포트폴리오 서비스입니다.",
