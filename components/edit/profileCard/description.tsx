@@ -12,11 +12,8 @@ export const Description = (props: DescriptionProps) => {
 
   const [textareaCount, setTextareaCount] = useState(0);
 
-  useLayoutEffect(() => {
-    inputDescriptionRef.current.value = profile.description;
-    }, []);
-
   useEffect(() => {
+    inputDescriptionRef.current.value = profile.description;
     setTextareaCount(inputDescriptionRef.current.value.length);
   }, [profile, inputDescriptionRef]);
 
@@ -31,11 +28,11 @@ export const Description = (props: DescriptionProps) => {
           ref={inputDescriptionRef}
           className="sm:w-[482px] w-full h-[260px] sm:p-[30px] p-[20px] rounded-[10px] resize-none bg-white border-solid border-[1px] border-[#CCCCCC]"
           placeholder="자기소개를 입력해주세요."
-          defaultValue={profile ? profile.description : "ehhh?"}
+          value={profile.description}
           onChange={() =>
             setTextareaCount(inputDescriptionRef.current.value.length)
           }
-        ></textarea>
+        />
         <span className="absolute bottom-[20px] sm:right-[30px] right-[20px] text-[#7B7B7B]">
           {textareaCount} / 200
         </span>
