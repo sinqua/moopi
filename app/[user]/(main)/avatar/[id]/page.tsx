@@ -74,6 +74,8 @@ const getAvatarInfo = async (id: string) => {
     .select(`id, description, name, tags (tag), created_at`)
     .eq("id", id);
 
+    console.log("getAvatarInfo", data);
+
   return data![0];
 };
 
@@ -118,7 +120,7 @@ async function GetFileName(avatar: number) {
     .select("vrm, animation, thumbnail")
     .eq("id", avatar);
 
-  console.log(data);
+  console.log("getFileName", data);
 
   return data![0];
 }
