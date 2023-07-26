@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { lazy, useEffect, useRef, useState, FC } from "react";
+import { lazy, useEffect, useRef, useState, FC, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, useGLTF } from "@react-three/drei";
 
@@ -62,7 +62,6 @@ const ModalCanvas = ({
     cameraControlsRef.current!.polarAngle = 1.35;
   };
 
-
   const postMessage = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -81,29 +80,31 @@ const ModalCanvas = ({
       onContextMenu={handleContextMenu}
     >
       {helpViewer && HelpViewer(setHelpViewer, isMobile)}
-      <Canvas
-        camera={{ position: [0, 0, 1.1] }}
-        style={{ backgroundColor: "#FAF9F6" }}
-        shadows
-      >
-        <CameraControls
-          ref={cameraControlsRef}
-          maxDistance={5}
-          polarAngle={1.35}
-        />
-        <directionalLight position={[0, 1, 0]} castShadow />
-        {modelInfo && <ModelComponent {...modelInfo!} />}
-      </Canvas>
+      <Suspense fallback={null}>
+        <Canvas
+          camera={{ position: [0, 0, 1.1] }}
+          style={{ backgroundColor: "#FAF9F6" }}
+          shadows
+        >
+          <CameraControls
+            ref={cameraControlsRef}
+            maxDistance={5}
+            polarAngle={1.35}
+          />
+          <directionalLight position={[0, 1, 0]} castShadow />
+          {modelInfo && <ModelComponent {...modelInfo!} />}
+        </Canvas>
+      </Suspense>
       {!progress && (
         <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
           <BounceLoader color="#2778C7" />
         </div>
       )}
       <div className="absolute flex justify-center top-0 w-full h-full pointer-events-none z-10">
-          <div className="absolute top-0 flex justify-end sm:items-start items-end max-w-[1312px] w-full h-full md:px-0 sm:px-[30px] px-[20px]">
-            {MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
-          </div>
+        <div className="absolute top-0 flex justify-end sm:items-start items-end max-w-[1312px] w-full h-full md:px-0 sm:px-[30px] px-[20px]">
+          {MenuButton(resetCamera, setHelpViewer, postMessage, fullScreen)}
         </div>
+      </div>
     </div>
   );
 };
@@ -114,7 +115,7 @@ function MenuButton(
   resetCamera: () => void,
   setHelpViewer: any,
   postMessage: () => void,
-  fullScreen: boolean,
+  fullScreen: boolean
 ) {
   return (
     <div className="absolute flex flex-row top-[50px] right-0 space-x-[20px] pointer-events-auto">

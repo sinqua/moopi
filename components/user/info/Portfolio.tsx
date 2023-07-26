@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PortfolioCanvas from "../../portfolio/PortfolioCanvas";
 import { supabase } from "@/lib/database";
 
@@ -22,14 +23,15 @@ export default function Portfolio(props: PortfolioProps) {
           const avatar = await getAvatarInfo(work.id);
 
           return (
-            <PortfolioCanvas
-              userId={user}
-              avatarId={work.id}
-              modelUrl={modelUrl?.signedUrl}
-              animation={avatar?.animation}
-              thumbnailUrl={thumbnailUrl?.signedUrl}
-              key={index}
-            />
+            <Suspense fallback={''} key={index}>
+              <PortfolioCanvas
+                userId={user}
+                avatarId={work.id}
+                modelUrl={modelUrl?.signedUrl}
+                animation={avatar?.animation}
+                thumbnailUrl={thumbnailUrl?.signedUrl}
+              />
+            </Suspense>
           );
         })}
       </div>
@@ -45,10 +47,10 @@ async function getAvatarInfo(id: string) {
     .limit(1)
     .single();
 
-    if(data) return data;
-    else {
-      throw new Error("Avatar not found");
-    }
+  if (data) return data;
+  else {
+    throw new Error("Avatar not found");
+  }
 }
 
 async function CreateImageUrl(userId: string, filename: any) {
