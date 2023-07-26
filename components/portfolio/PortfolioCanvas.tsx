@@ -115,6 +115,8 @@ const PortfolioCanvas = ({
             </div>
           )}
           <MenuButton
+          userID={userId}
+            avatarID={avatarId}
             resetCamera={resetCamera}
             setHelpViewer={setHelpViewer}
             postMessage={postMessage}
