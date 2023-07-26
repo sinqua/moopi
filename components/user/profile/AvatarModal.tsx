@@ -9,6 +9,7 @@ import useDrag from "@/hooks/useDrag";
 import { Suspense, useEffect, useState } from "react";
 import ModalCanvas from "@/components/ModalCanvas";
 import PortfolioItem from "../../portfolio/PortfolioItem";
+import { formatDate } from "@/lib/string";
 
 const SupabasePublicURL =
   "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
@@ -42,7 +43,7 @@ export default function AvatarModal(props: AvatarModalProps) {
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
   const [leftTabActive, setLeftTabActive] = useState(true);
-  const [rightTabActive, setRightTabActive] = useState(true);
+  const [rightTabActive, setRightTabActive] = useState(false);
 
   useEffect(() => {
     setMountedStatus(true);
@@ -118,8 +119,8 @@ export default function AvatarModal(props: AvatarModalProps) {
                         {nickname ?? ""}
                       </p>
                       <div className="flex space-x-[10px]">
-                        <p>2023.01.01</p>
-                        <p>14:21</p>
+                        <p>{formatDate(avatarInfo.created_at)}</p>
+                        <p>{avatarInfo.created_at.substring(11,16)}</p>
                       </div>
                       <Image
                         className="absolute top-0 right-0 h-[18px] w-[18px] !m-0 cursor-pointer"
