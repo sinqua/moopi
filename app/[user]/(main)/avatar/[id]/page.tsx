@@ -3,6 +3,8 @@ import AvatarModal from "@/components/user/profile/AvatarModal";
 import { supabase, supabaseAuth } from "@/lib/database";
 import { CreateImageUrl } from "@/lib/storage";
 
+export const revalidate = 0;
+
 export default async function Avatar(props: any) {
   const { params } = props;
 
