@@ -52,7 +52,7 @@ const MenuButton = (props: MenuButtonProps) => {
         />
       </div>
       <Link
-        href={`${userID}/avatar/${avatarID}`}
+        href={`/${userID}/avatar/${avatarID}`}
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
       >
         <Image
