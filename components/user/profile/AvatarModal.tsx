@@ -6,14 +6,16 @@ import infoIcon from "@/app/assets/images/info.svg";
 import listIcon from "@/app/assets/images/list.svg";
 import { useRouter } from "next/navigation";
 import useDrag from "@/hooks/useDrag";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ModalCanvas from "@/components/ModalCanvas";
 import PortfolioItem from "../../portfolio/PortfolioItem";
 
+const SupabasePublicURL =
+  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 interface AvatarModalProps {
   userId: any;
   avatarId: any;
-  profileImage: any;
+  profile: any;
   nickname: any;
   tags: any;
   avatarInfo: any;
@@ -26,13 +28,13 @@ export default function AvatarModal(props: AvatarModalProps) {
   const {
     userId,
     avatarId,
-    profileImage,
     nickname,
     tags,
     avatarInfo,
     portfolios,
     modelUrl,
     animationUrl,
+    profile,
   } = props;
 
   const router = useRouter();
@@ -49,7 +51,7 @@ export default function AvatarModal(props: AvatarModalProps) {
     return () => {
       setMountedStatus(false);
       document.body.style.overflow = "unset";
-    }
+    };
   }, []);
 
   return (
@@ -103,7 +105,7 @@ export default function AvatarModal(props: AvatarModalProps) {
                 >
                   <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
                     <Image
-                      src={profileImage}
+                      src={`${SupabasePublicURL}/profile-image/${profile.image}`}
                       width={100}
                       height={100}
                       className="h-[100px] w-[100px] rounded-full border-none"
@@ -188,17 +190,18 @@ export default function AvatarModal(props: AvatarModalProps) {
                   </div>
 
                   <div className="flex flex-col grow">
-                    {portfolios && portfolios.map((item: any, index: any) => {
-                      return (
-                        <PortfolioItem
-                          key={index}
-                          thumbnail={item.thumbnailUrl}
-                          name={item.name}
-                          tags={item.tags}
-                          index={index}
-                        />
-                      );
-                    })}
+                    {portfolios &&
+                      portfolios.map((item: any, index: any) => {
+                        return (
+                          <PortfolioItem
+                            key={index}
+                            thumbnail={item.thumbnailUrl}
+                            name={item.name}
+                            tags={item.tags}
+                            index={index}
+                          />
+                        );
+                      })}
                   </div>
                 </div>
               </div>

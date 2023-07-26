@@ -1,7 +1,7 @@
 import React from "react";
 import AvatarModal from "@/components/user/profile/AvatarModal";
 import { supabase, supabaseAuth } from "@/lib/database";
-import { CreateImageUrl } from "@/lib/storage";
+import { profile } from "console";
 
 export default async function Avatar(props: any) {
   const { params } = props;
@@ -9,15 +9,15 @@ export default async function Avatar(props: any) {
   const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
   const modelUrlData = CreateModelUrl(params.user, vrm);
   const animationUrlData = CreateAnimationUrl(animation!);
-  const profileImageData = getUserProfileImage(params.user);
+  const profileData = getProfile(params.user);
   const nicknameData = getUserNickname(params.user);
   const avatarInfoData = getAvatarInfo(params.id);
 
-  const [modelUrl, animationUrl, profileImage, nickname, avatarInfo] =
+  const [modelUrl, animationUrl, profile, nickname, avatarInfo] =
     await Promise.all([
       modelUrlData,
       animationUrlData,
-      profileImageData,
+      profileData,
       nicknameData,
       avatarInfoData,
     ]);
@@ -30,7 +30,7 @@ export default async function Avatar(props: any) {
     <AvatarModal
       userId={props.params.user}
       avatarId={props.params.avatar}
-      profileImage={profileImage.image}
+      profile={profile}
       nickname={nickname.nickname}
       avatarInfo={avatarInfo}
       tags={tags}
@@ -41,22 +41,18 @@ export default async function Avatar(props: any) {
   );
 }
 
-const getUserProfileImage = async (id: string) => {
-  const { data: profileData, error: error1 } = await supabase
+const getProfile = async (id: string) => {
+  const { data, error } = await supabase
     .from("profiles")
-    .select(`image`)
-    .eq("user_id", id);
+    .select(`*,  tags (tag)`)
+    .eq("user_id", id)
+    .limit(1)
+    .single();
 
-  const { data: authData, error: error2 } = await supabaseAuth
-    .from("users")
-    .select(`image`)
-    .eq("id", id);
-
-  if (profileData![0].image) {
-    const url = await CreateImageUrl(profileData![0].image);
-    return { image: url!.signedUrl };
+  if (data) return data;
+  else {
+    throw new Error("Profile not found");
   }
-  return authData![0];
 };
 
 const getUserNickname = async (id: string) => {

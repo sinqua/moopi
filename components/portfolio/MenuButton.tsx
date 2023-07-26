@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import refreshImg from "@/app/assets/images/refresh.svg";
 import helpImg from "@/app/assets/images/help.svg";
@@ -13,6 +14,8 @@ interface MenuButtonProps {
   postMessage: () => void;
   fullScreen: boolean;
   setThumbnailViewer: any;
+  avatarID: number;
+  userID: string;
 }
 
 const MenuButton = (props: MenuButtonProps) => {
@@ -22,10 +25,12 @@ const MenuButton = (props: MenuButtonProps) => {
     postMessage,
     fullScreen,
     setThumbnailViewer,
+    avatarID,
+    userID
   } = props;
 
   return (
-    <div className="absolute flex flex-row bottom-0 right-0 space-x-[20px] px-[35px] py-[20px]">
+    <div className="absolute flex flex-row bottom-0 right-0 left-0 space-x-[20px] px-[20px] py-[20px]">
       <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={resetCamera}
@@ -46,7 +51,8 @@ const MenuButton = (props: MenuButtonProps) => {
           alt=""
         />
       </div>
-      <div
+      <Link
+        href={`${userID}/avatar/${avatarID}`}
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
       >
         <Image
@@ -54,7 +60,7 @@ const MenuButton = (props: MenuButtonProps) => {
           src={descriptionImg}
           alt=""
         />
-      </div>
+      </Link>
       <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={postMessage}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { lazy, useEffect, useRef, useState, FC } from "react";
+import { lazy, useEffect, useRef, useState, FC, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, useGLTF } from "@react-three/drei";
 import MenuButton from "./MenuButton";
@@ -96,25 +96,29 @@ const PortfolioCanvas = ({
           {helpViewer && (
             <HelpViewer setHelpViewer={setHelpViewer} isMobile={isMobile} />
           )}
-          <Canvas
-            camera={{ position: [0, 0, 1.1] }}
-            style={{ backgroundColor: "#FAF9F6" }}
-            shadows
-          >
-            <CameraControls
-              ref={cameraControlsRef}
-              maxDistance={5}
-              polarAngle={1.35}
-            />
-            <directionalLight position={[0, 1, 0]} castShadow />
-            {modelInfo && <ModelComponent {...modelInfo!} />}
-          </Canvas>
+          <Suspense fallback={null}>
+            <Canvas
+              camera={{ position: [0, 0, 1.1] }}
+              style={{ backgroundColor: "#FAF9F6" }}
+              shadows
+            >
+              <CameraControls
+                ref={cameraControlsRef}
+                maxDistance={5}
+                polarAngle={1.35}
+              />
+              <directionalLight position={[0, 1, 0]} castShadow />
+              {modelInfo && <ModelComponent {...modelInfo!} />}
+            </Canvas>
+          </Suspense>
           {!progress && (
             <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
               <BounceLoader color="#2778C7" />
             </div>
           )}
           <MenuButton
+            userID={userId}
+            avatarID={avatarId}
             resetCamera={resetCamera}
             setHelpViewer={setHelpViewer}
             postMessage={postMessage}
