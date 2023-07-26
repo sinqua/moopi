@@ -1,13 +1,8 @@
 "use client";
 import { useEffect } from "react";
-import {
-  redirect,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
   const router = useRouter();
@@ -21,7 +16,7 @@ export default function Page() {
   useEffect(() => {
     if (status !== "loading") {
       if (session?.user.nickname) {
-        router.push(searchParams.get("callbackUrl") ?? "/");
+        router.push(searchParams.get("callbackUrl") ?? `/${session?.user.id}}`);
       } else {
         router.push(callbackUrl);
       }
