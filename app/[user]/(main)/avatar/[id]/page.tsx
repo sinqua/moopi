@@ -1,7 +1,7 @@
 import React from "react";
 import AvatarModal from "@/components/user/profile/AvatarModal";
 import { supabase, supabaseAuth } from "@/lib/database";
-import { profile } from "console";
+import { CreateImageUrl } from "@/lib/storage";
 
 export default async function Avatar(props: any) {
   const { params } = props;
@@ -9,15 +9,15 @@ export default async function Avatar(props: any) {
   const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
   const modelUrlData = CreateModelUrl(params.user, vrm);
   const animationUrlData = CreateAnimationUrl(animation!);
-  const profileData = getProfile(params.user);
+  const profileImageData = getUserProfileImage(params.user);
   const nicknameData = getUserNickname(params.user);
   const avatarInfoData = getAvatarInfo(params.id);
 
-  const [modelUrl, animationUrl, profile, nickname, avatarInfo] =
+  const [modelUrl, animationUrl, profileImage, nickname, avatarInfo] =
     await Promise.all([
       modelUrlData,
       animationUrlData,
-      profileData,
+      profileImageData,
       nicknameData,
       avatarInfoData,
     ]);
@@ -30,7 +30,7 @@ export default async function Avatar(props: any) {
     <AvatarModal
       userId={props.params.user}
       avatarId={props.params.avatar}
-      profile={profile}
+      profile={profileImage.image}
       nickname={nickname.nickname}
       avatarInfo={avatarInfo}
       tags={tags}
@@ -41,18 +41,22 @@ export default async function Avatar(props: any) {
   );
 }
 
-const getProfile = async (id: string) => {
-  const { data, error } = await supabase
+const getUserProfileImage = async (id: string) => {
+  const { data: profileData, error: error1 } = await supabase
     .from("profiles")
-    .select(`*,  tags (tag)`)
-    .eq("user_id", id)
-    .limit(1)
-    .single();
+    .select(`image`)
+    .eq("user_id", id);
 
-  if (data) return data;
-  else {
-    throw new Error("Profile not found");
+  const { data: authData, error: error2 } = await supabaseAuth
+    .from("users")
+    .select(`image`)
+    .eq("id", id);
+
+  if (profileData![0].image) {
+    const url = await CreateImageUrl(profileData![0].image);
+    return { image: url!.signedUrl };
   }
+  return authData![0];
 };
 
 const getUserNickname = async (id: string) => {
@@ -69,6 +73,8 @@ const getAvatarInfo = async (id: string) => {
     .from("avatars")
     .select(`id, description, name, tags (tag), created_at`)
     .eq("id", id);
+
+    console.log("getAvatarInfo", data);
 
   return data![0];
 };
@@ -106,13 +112,15 @@ async function CreateAnimationUrl(animationId: number) {
 }
 
 async function GetFileName(avatar: number) {
-  if (process.env.NEXT_PUBLIC_ENV === "Development") {
-    return { vrm: undefined, animation: undefined, thumbnail: undefined };
-  }
+  // if (process.env.NEXT_PUBLIC_ENV === "Development") {
+  //   return { vrm: undefined, animation: undefined, thumbnail: undefined };
+  // }
   const { data, error } = await supabase
     .from("avatars")
     .select("vrm, animation, thumbnail")
     .eq("id", avatar);
+
+  console.log("getFileName", data);
 
   return data![0];
 }
