@@ -11,6 +11,7 @@ import { Modal } from "../modal";
 import { UploadProfileImage } from "@/lib/storage";
 import { v4 as uuidv4 } from "uuid";
 import { supabase, supabaseAuth } from "@/lib/database";
+import Waiting from "../Waiting";
 
 export interface ProfileCardProps {
   profileImage: string;
@@ -27,6 +28,8 @@ export default function ProfileCard(props: ProfileCardProps) {
   const router = useRouter();
 
   const [modal, setModal] = useState(false);
+  const [done, setDone] = useState<boolean>(false);
+  const [waitModal, setWaitModal] = useState<boolean>(false);
 
   const [imgFile, setImgFile] = useState(null);
 
@@ -37,52 +40,58 @@ export default function ProfileCard(props: ProfileCardProps) {
   const [currentTags, setCurrentTags] = useState(tags);
 
   const onSaveProfileCard = async () => {
-    if (!duplication) {
-      if (imgFile) {
-        var uuid = uuidv4();
-        UploadProfileImage(session?.user.id, `${uuid}.png`, imgFile).then(
-          async (data) => {
-            const { data: profileImageData, error: profileImageError } =
-              await supabase
-                .from("profiles")
-                .update({ image: data?.path })
-                .eq("user_id", session?.user.id);
-          }
-        );
-      }
+    setModal(false)
+    setWaitModal(true)
 
-      const { data: nicknameData, error: nicknameError } = await supabaseAuth
-        .from("users")
-        .update({ nickname: inputNicknameRef.current.value })
-        .eq("id", session?.user.id);
-
-      const { data: descriptionData, error: descriptionError } = await supabase
-        .from("profiles")
-        .update({ description: inputDescriptionRef.current.value })
-        .eq("user_id", session?.user.id)
-        .select();
-
-      const { data: deleteTagsData, error: deleteTagsError } = await supabase
-        .from("tags")
-        .delete()
-        .eq("profile_id", descriptionData![0].id);
-
-      const { data: tagsData, error: tagsError } = await supabase
-        .from("tags")
-        .insert(
-          currentTags
-            .map((tag: any) => {
-              return tag.value;
-            })
-            .map((tag: any) => {
-              return { tag: tag, profile_id: descriptionData![0].id };
-            })
-        );
-
-      router.push(`/${session?.user.id}`);
-    } else {
+    if (duplication) {
       alert("이미 사용중인 닉네임입니다.");
+      return;
     }
+
+    if (imgFile) {
+      var uuid = uuidv4();
+      UploadProfileImage(session?.user.id, `${uuid}.png`, imgFile).then(
+        async (data) => {
+          const { data: profileImageData, error: profileImageError } =
+            await supabase
+              .from("profiles")
+              .update({ image: data?.path })
+              .eq("user_id", session?.user.id);
+        }
+      );
+    }
+
+    const { data: nicknameData, error: nicknameError } = await supabaseAuth
+      .from("users")
+      .update({ nickname: inputNicknameRef.current.value })
+      .eq("id", session?.user.id);
+
+    const { data: descriptionData, error: descriptionError } = await supabase
+      .from("profiles")
+      .update({ description: inputDescriptionRef.current.value })
+      .eq("user_id", session?.user.id)
+      .select();
+
+    const { data: deleteTagsData, error: deleteTagsError } = await supabase
+      .from("tags")
+      .delete()
+      .eq("profile_id", descriptionData![0].id);
+
+    const { data: tagsData, error: tagsError } = await supabase
+      .from("tags")
+      .insert(
+        currentTags
+          .map((tag: any) => {
+            return tag.value;
+          })
+          .map((tag: any) => {
+            return { tag: tag, profile_id: descriptionData![0].id };
+          })
+      );
+
+    setDone(true)
+    setWaitModal(false)
+    router.push(`/${session?.user.id}`);
   };
 
   return (
@@ -111,7 +120,12 @@ export default function ProfileCard(props: ProfileCardProps) {
           setCurrentTags={setCurrentTags}
           mostUsedTags={mostUsedTags}
         />
-        <Avatar session={session} profile={profile} avatar={avatar} tags={tags}/>
+        <Avatar
+          session={session}
+          profile={profile}
+          avatar={avatar}
+          tags={tags}
+        />
         <div className="flex justify-center pt-[40px] space-x-[15px]">
           <div
             className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
@@ -122,6 +136,7 @@ export default function ProfileCard(props: ProfileCardProps) {
         </div>
       </div>
       <Modal modal={modal} setModal={setModal} onSaveData={onSaveProfileCard} />
+      <Waiting show={waitModal} done={done} />
     </>
   );
 }

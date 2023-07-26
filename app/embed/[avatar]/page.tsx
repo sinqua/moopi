@@ -35,7 +35,7 @@ async function getAvatarInfo(id: string) {
 
 
 async function CreateModelUrl(userId: string, filename: any) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+  if (process.env.NEXT_PUBLIC_ENV === "Development") {
     return { signedUrl: undefined };
   }
 

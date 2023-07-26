@@ -78,7 +78,7 @@ const getAvatarInfo = async (id: string) => {
 };
 
 async function CreateModelUrl(userId: string, filename: any) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+  if (process.env.NEXT_PUBLIC_ENV === "Development") {
     return { signedUrl: undefined };
   }
   const filepath = `${userId}/${filename}`;
@@ -91,7 +91,7 @@ async function CreateModelUrl(userId: string, filename: any) {
 }
 
 async function CreateAnimationUrl(animationId: number) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+  if (process.env.NEXT_PUBLIC_ENV === "Development") {
     return { signedUrl: undefined };
   }
 
@@ -110,7 +110,7 @@ async function CreateAnimationUrl(animationId: number) {
 }
 
 async function GetFileName(avatar: number) {
-  if (process.env.NEXT_PUBLIC_WEBSITE === "http://localhost:3000") {
+  if (process.env.NEXT_PUBLIC_ENV === "Development") {
     return { vrm: undefined, animation: undefined, thumbnail: undefined };
   }
   const { data, error } = await supabase
