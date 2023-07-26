@@ -1,7 +1,6 @@
 import React from "react";
 import AvatarModal from "@/components/user/profile/AvatarModal";
 import { supabase, supabaseAuth } from "@/lib/database";
-import { CreateImageUrl } from "@/lib/storage";
 
 export default async function Avatar(props: any) {
   const { params } = props;
