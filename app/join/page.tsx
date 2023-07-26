@@ -1,8 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
-  redirect,
-  usePathname,
   useRouter,
   useSearchParams,
 } from "next/navigation";
@@ -13,7 +11,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import moopiLogo from "@/app/assets/logos/moopi.svg";
 
-export default function JoinPage() {
+export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = (searchParams.get("callbackUrl") ?? "/") as string;
@@ -65,7 +63,7 @@ export default function JoinPage() {
       .select();
 
     update();
-    router.push(callbackUrl);
+    router.push(`/${session?.user.id}`);
   };
 
   return (

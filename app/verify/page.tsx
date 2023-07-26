@@ -16,7 +16,7 @@ export default function Page() {
   useEffect(() => {
     if (status !== "loading") {
       if (session?.user.nickname) {
-        router.push(searchParams.get("callbackUrl") ?? `/${session?.user.id}}`);
+        router.push(searchParams.get("callbackUrl") ?? `/`);
       } else {
         router.push(callbackUrl);
       }
