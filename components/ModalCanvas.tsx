@@ -12,10 +12,9 @@ import moveImg from "@/app/assets/images/move.svg";
 
 import refreshImg from "@/app/assets/images/refresh.svg";
 import helpImg from "@/app/assets/images/help.svg";
-import descriptionImg from "@/app/assets/images/description.svg";
 import fullscreenImg from "@/app/assets/images/fullscreen.svg";
 import originalscreenImg from "@/app/assets/images/originalscreen.svg";
-import powerImg from "@/app/assets/images/power.svg";
+
 
 import { ModelProps } from "./Model";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -23,15 +22,11 @@ import BounceLoader from "react-spinners/BounceLoader";
 const ModelComponent = lazy(() => import("./Model"));
 
 interface ModalCanvasProps {
-  userId: any;
-  avatarId: any;
   modelUrl: string | undefined;
   animation: number | null;
 }
 
 const ModalCanvas = ({
-  userId,
-  avatarId,
   modelUrl,
   animation,
 }: ModalCanvasProps) => {
