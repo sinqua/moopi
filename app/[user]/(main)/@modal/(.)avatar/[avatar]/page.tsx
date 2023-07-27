@@ -7,48 +7,55 @@ export const revalidate = 0;
 export default async function Avatar(props: any) {
   const { params } = props;
 
-  const { vrm, animation, thumbnail } = await GetFileName(params.avatar);
-  const modelUrlData = CreateModelUrl(params.user, vrm);
-  const animationUrlData = CreateAnimationUrl(animation!);
   const profileData = getProfile(params.user);
-  const nicknameData = getUserNickname(params.user);
-  const avatarInfoData = getAvatarInfo(params.avatar);
+  const authData = getAuth(params.user);
+  const avatarData = getAvatar(params.avatar);
   const portfoliosData = getUserPortfolios(params.user);
 
   const [
-    modelUrl,
-    animationUrl,
     profile,
-    nickname,
-    avatarInfo,
+    auth,
+    avatar,
     portfolios,
   ] = await Promise.all([
-    modelUrlData,
-    animationUrlData,
     profileData,
-    nicknameData,
-    avatarInfoData,
+    authData,
+    avatarData,
     portfoliosData,
   ]);
 
-  const tags = avatarInfo.tags.map((tag: any) => {
+  const tags = avatar.tags.map((tag: any) => {
     return tag.tag;
   });
+  const modelUrl = await createModelUrl(params.user, avatar?.vrm);
+
 
   return (
     <AvatarModal
-      userId={props.params.user}
-      avatarId={props.params.avatar}
       profile={profile}
-      nickname={nickname.nickname}
-      avatarInfo={avatarInfo}
+      nickname={auth.nickname}
+      avatar={avatar}
       tags={tags}
       portfolios={portfolios}
       modelUrl={modelUrl?.signedUrl}
-      animationUrl={animationUrl?.signedUrl}
+      animation={avatar?.animation}
     />
   );
 }
+
+const getAvatar = async (id: string) => {
+  const { data, error } = await supabase
+    .from("avatars")
+    .select('*, tags (tag)')
+    .eq("id", id)
+    .limit(1)
+    .single();
+
+  if (data) return data;
+  else {
+    throw new Error("Avatar not found");
+  }
+};
 
 const getProfile = async (id: string) => {
   const { data, error } = await supabase
@@ -64,68 +71,34 @@ const getProfile = async (id: string) => {
   }
 };
 
-const getUserNickname = async (id: string) => {
+const getAuth = async (id: string) => {
   const { data, error } = await supabaseAuth
     .from("users")
     .select()
     .eq("id", id)
+    .limit(1)
+    .single();
 
-  return data![0];
-};
-
-const getAvatarInfo = async (id: string) => {
-  const { data, error } = await supabase
-    .from("avatars")
-    .select(`id, description, name, tags (tag), created_at`)
-    .eq("id", id);
-
-  return data![0];
-};
-
-async function CreateModelUrl(userId: string, filename: any) {
-  if (process.env.NEXT_PUBLIC_ENV === "Development") {
-    return { signedUrl: undefined };
+  if (data) return data;
+  else {
+    throw new Error("User not found");
   }
+};
+
+async function createModelUrl(userId: string, filename: any) {
+  if(!filename) return { signedUrl: "" };
+
   const filepath = `${userId}/${filename}`;
 
   const { data, error } = await supabase.storage
     .from("model")
     .createSignedUrl(filepath, 3600);
 
-  return data;
-}
-
-async function CreateAnimationUrl(animationId: number) {
-  if (process.env.NEXT_PUBLIC_ENV === "Development") {
-    return { signedUrl: undefined };
+  if (data) return data;
+  else{
+    throw new Error("Model not found");
   }
-
-  const { data: filename, error: error1 } = await supabase
-    .from("animations")
-    .select("file")
-    .eq("id", animationId);
-
-  const filepath = `${filename![0].file}`;
-
-  const { data, error } = await supabase.storage
-    .from("animation")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
 }
-
-async function GetFileName(avatar: number) {
-  if (process.env.NEXT_PUBLIC_ENV === "Development") {
-    return { vrm: undefined, animation: undefined, thumbnail: undefined };
-  }
-  const { data, error } = await supabase
-    .from("avatars")
-    .select("vrm, animation, thumbnail")
-    .eq("id", avatar);
-
-  return data![0];
-}
-
 const getUserPortfolios = async (id: string) => {
   // const { data: portfoiloData, error: portfolioError } = await supabase
   //   .from("avatars")

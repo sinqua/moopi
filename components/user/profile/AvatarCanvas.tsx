@@ -87,7 +87,7 @@ const AvatarCanvas = ({
           {helpViewer && (
             <HelpViewer setHelpViewer={setHelpViewer} isMobile={isMobile} />
           )}
-          <Suspense fallback={""}>
+          <Suspense fallback={null}>
             <Canvas
               camera={{ position: [0, 0, 1.1] }}
               style={{ backgroundColor: "#FAF9F6" }}

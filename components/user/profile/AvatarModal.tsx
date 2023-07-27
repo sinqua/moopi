@@ -14,28 +14,24 @@ import { formatDate } from "@/lib/string";
 const SupabasePublicURL =
   "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 interface AvatarModalProps {
-  userId: any;
-  avatarId: any;
   profile: any;
   nickname: any;
   tags: any;
-  avatarInfo: any;
+  avatar: any;
   portfolios: any;
   modelUrl: any;
-  animationUrl: any;
+  animation: any;
 }
 
 export default function AvatarModal(props: AvatarModalProps) {
   const {
-    userId,
-    avatarId,
+    profile,
     nickname,
     tags,
-    avatarInfo,
+    avatar,
     portfolios,
     modelUrl,
-    animationUrl,
-    profile,
+    animation
   } = props;
 
   const router = useRouter();
@@ -68,15 +64,13 @@ export default function AvatarModal(props: AvatarModalProps) {
         <div className="relative flex justify-center w-full grow bg-white rounded-t-[10px] overflow-hidden">
           <div className="max-w-[1312px] w-full h-full pt-[50px]">
             <ModalCanvas
-              userId={userId}
-              avatarId={avatarId}
               modelUrl={modelUrl}
-              animation={animationUrl}
+              animation={animation}
             />
 
             <div className="relative flex justify-between h-full pointer-events-none">
               <div className="flex flex-col w-[348px] space-y-[30px] ">
-                <p className="font-semibold text-[30px]">{avatarInfo.name}</p>
+                <p className="font-semibold text-[30px]">{avatar.name}</p>
                 <div className="flex space-x-[20px] pointer-events-auto">
                   <div
                     className="sm:flex hidden justify-center items-center w-[40px] h-[40px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
@@ -119,8 +113,8 @@ export default function AvatarModal(props: AvatarModalProps) {
                         {nickname ?? ""}
                       </p>
                       <div className="flex space-x-[10px]">
-                        <p>{formatDate(avatarInfo.created_at)}</p>
-                        <p>{avatarInfo.created_at.substring(11,16)}</p>
+                        <p>{formatDate(avatar.created_at)}</p>
+                        <p>{avatar.created_at.substring(11,16)}</p>
                       </div>
                       <Image
                         className="absolute top-0 right-0 h-[18px] w-[18px] !m-0 cursor-pointer"
@@ -132,7 +126,7 @@ export default function AvatarModal(props: AvatarModalProps) {
                     </div>
                   </div>
                   <div className="text-[14px] grow whitespace-pre-line leading-[25px] md:mb-0 mb-[40px] overflow-hidden">
-                    {avatarInfo.description}
+                    {avatar.description}
                   </div>
                   <div className="text-[14px] space-y-[20px]">
                     <div
