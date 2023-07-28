@@ -1,6 +1,7 @@
 import { supabase, supabaseAuth } from "@/lib/database";
-import { CreateImageUrl } from "@/lib/storage";
 import ProfileCard from "@/components/edit//profileCard/profileCard";
+
+export const revalidate = 0;
 
 export default async function Page({ params }: { params: { user: string } }) {
   const profileImage = await getUserProfileImage(params.user);
