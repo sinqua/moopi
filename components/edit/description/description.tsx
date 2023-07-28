@@ -7,26 +7,28 @@ import { v4 as uuidv4 } from "uuid";
 import { Modal } from "../modal";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/database";
+import LoadingModal from "../LoadingModal";
 
 const Editor = dynamic(() => import("../../Editor"), { ssr: false });
 
 interface DescriptionProps {
-  profile: any;
   detail: any;
 }
 
 export default function Description(props: DescriptionProps) {
-  const { profile, detail } = props;
+  const { detail } = props;
   const router = useRouter();
-
   const { data: session, status } = useSession();
 
-  const [userDetail, setUserDetail] = useState<any>(detail);
   const [htmlStr, setHtmlStr] = useState<any>(null);
 
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSaveDescription = async () => {
+    setModal(false);
+    setLoading(true);
+
     for (let i = 0; i < htmlStr.ops.length; i++) {
       if (Object.keys(htmlStr.ops[i].insert).includes("image")) {
         if (htmlStr.ops[i].insert.image.includes("base64")) {
@@ -65,7 +67,7 @@ export default function Description(props: DescriptionProps) {
         </p>
         <div className="h-[500px]">
           <Editor
-            content={userDetail.description}
+            content={detail.description}
             htmlStr={htmlStr}
             setHtmlStr={setHtmlStr}
           />
@@ -80,6 +82,7 @@ export default function Description(props: DescriptionProps) {
         </div>
       </div>
       <Modal modal={modal} setModal={setModal} onSaveData={onSaveDescription} />
+      <LoadingModal modal={loading} />
     </>
   );
 }
