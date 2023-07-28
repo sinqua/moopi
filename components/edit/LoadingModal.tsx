@@ -19,7 +19,7 @@ export default function LoadingModal(props: ModalProps){
               <div
                 className="flex justify-center items-center py-[20px] cursor-pointer w-full"
               >
-                삭제중...
+                수정중...
               </div>
             </div>
           </div>

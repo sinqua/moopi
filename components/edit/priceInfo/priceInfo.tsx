@@ -7,26 +7,29 @@ import { v4 as uuidv4 } from "uuid";
 import { Modal } from "../modal";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/database";
+import LoadingModal from "../LoadingModal";
 
 const Editor = dynamic(() => import("../../Editor"), { ssr: false });
 
 interface PriceInfoProps {
-  profile: any;
   detail: any;
 }
 
 export default function PriceInfo(props: PriceInfoProps) {
-  const { profile, detail } = props;
+  const { detail } = props;
   const router = useRouter();
 
   const { data: session, status } = useSession();
 
-  const [userDetail, setUserDetail] = useState<any>(detail);
   const [htmlStr, setHtmlStr] = useState<any>(null);
 
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSavePriceInfo = async () => {
+    setModal(false);
+    setLoading(true);
+
     for (let i = 0; i < htmlStr.ops.length; i++) {
       if (Object.keys(htmlStr.ops[i].insert).includes("image")) {
         if (htmlStr.ops[i].insert.image.includes("base64")) {
@@ -53,8 +56,6 @@ export default function PriceInfo(props: PriceInfoProps) {
       .eq("user_id", session?.user.id)
       .select();
 
-      
-    console.log("success data", data);
     router.push(`/${session?.user.id}`);
   };
 
@@ -67,7 +68,7 @@ export default function PriceInfo(props: PriceInfoProps) {
         </p>
         <div className="h-[500px]">
           <Editor
-            content={userDetail.price_info}
+            content={detail.price_info}
             htmlStr={htmlStr}
             setHtmlStr={setHtmlStr}
           />
@@ -86,6 +87,7 @@ export default function PriceInfo(props: PriceInfoProps) {
         setModal={setModal}
         onSaveData={onSavePriceInfo}
       />
+      <LoadingModal modal={loading} />
     </>
   );
 }

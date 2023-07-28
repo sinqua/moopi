@@ -1,6 +1,8 @@
 import Portfolio from "@/components/edit/portfolio/portfolio";
 import { supabase } from "@/lib/database";
 
+export const revalidate = 0;
+
 export default async function Page({ params }: { params: { user: string } }) {
   const portfolios = await getUserPortfolios(params.user);
 
