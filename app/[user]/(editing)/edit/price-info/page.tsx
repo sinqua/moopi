@@ -1,6 +1,8 @@
 import PriceInfo from "@/components/edit/priceInfo/priceInfo";
 import { supabase, supabaseAuth } from "@/lib/database";
 
+export const revalidate = 0;
+
 export default async function Page({ params }: { params: { user: string } }) {
   const profile = await getUserProfile(params.user);
   const detail = await getUserDetail(params.user);
