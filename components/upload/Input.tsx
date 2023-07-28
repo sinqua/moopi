@@ -153,7 +153,7 @@ export default function Input(props: InputProps) {
 
     console.log("data ", formData);
     try {
-      const response = await fetch("http://43.201.223.157:8000", {
+      const response = await fetch("https://server.offing.me", {
         method: "POST",
         body: formData,
       });
