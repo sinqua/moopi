@@ -34,7 +34,7 @@ export default function MenuButton(props: any) {
           {modal && (
             <div className="absolute top-[60px] right-0 w-[144px] rounded-[10px] bg-white border-solid border-[1px] border-[#ECECEC] overflow-hidden z-10">
               <Link
-                href={`/${session!.user.id}/description`}
+                href={`/${session!.user.id}`}
                 className="flex items-center h-[43px] px-[15px] cursor-pointer"
                 onClick={() => setModal(false)}
               >
