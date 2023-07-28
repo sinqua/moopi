@@ -71,7 +71,7 @@ const ModalCanvas = ({
 
   return (
     <div
-      className="absolute top-0 left-0 w-full h-full overflow-hidden"
+      className="sm:absolute relative top-0 left-0 w-full sm:h-full h-[550px]"
       onContextMenu={handleContextMenu}
     >
       {helpViewer && HelpViewer(setHelpViewer, isMobile)}
@@ -113,7 +113,7 @@ function MenuButton(
   fullScreen: boolean
 ) {
   return (
-    <div className="absolute flex flex-row top-[50px] right-0 space-x-[20px] pointer-events-auto">
+    <div className="absolute flex flex-row sm:top-[50px] sm:right-0 bottom-[20px] right-[20px] space-x-[20px] pointer-events-auto">
       <div
         className="flex justify-center items-center sm:w-[40px] sm:h-[40px] w-[30px] h-[30px] rounded-full bg-white hover:bg-[#E9E9E9] shadow-[0px_3px_6px_rgba(0,0,0,0.16)] cursor-pointer"
         onClick={resetCamera}
