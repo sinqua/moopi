@@ -17,6 +17,18 @@ body {
   display: inline-block;
 }
 
-/* input {
-  --tw-ring-shadow: 0 0 #000 !important;
-} */
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-left {
+  text-align: left;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}
