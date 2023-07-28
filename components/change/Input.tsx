@@ -179,6 +179,31 @@ export default function Input(props: InputProps) {
       .eq("id", props.avatar.id);
 
     if (avatarFile) {
+      
+      /* Python 서버 파일 업로드 */
+      const formData = new FormData();
+      formData.append("file", avatarFile);
+      formData.append("name", avatarFile.name);
+      if (session) formData.append("id", session?.user.id);
+
+      console.log("data ", formData);
+      try {
+        const response = await fetch("http://43.201.223.157:8000", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log("File uploaded successfully");
+        } else {
+          console.log("data ", formData);
+          console.error("Failed to upload file2");
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+      /* Python 서버 파일 업로드 끝 */
+
       await UploadAvatar(session?.user.id, avatarFile.name, avatarFile);
 
       const { error: avatarError } = await supabase
