@@ -2,7 +2,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { Modal } from "../modal";
 import { Avatar } from "./avatar";
-import LoadingModal from "./LoadingModal";
+import LoadingModal from "../LoadingModal";
 
 interface PortfolioProps {
   portfolios: any;
