@@ -145,6 +145,30 @@ export default function Input(props: InputProps) {
       return;
     }
 
+    /* Python 서버 파일 업로드 */
+    const formData = new FormData();
+    formData.append("file", avatarFile);
+    formData.append("name", avatarFile.name);
+    if (session) formData.append("id", session?.user.id);
+
+    console.log("data ", formData);
+    try {
+      const response = await fetch("https://server.offing.me", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log("File uploaded successfully");
+      } else {
+        console.log("data ", formData);
+        console.error("Failed to upload file2");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+    /* Python 서버 파일 업로드 끝 */
+
     setModal(true);
     UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
       async (data) => {
