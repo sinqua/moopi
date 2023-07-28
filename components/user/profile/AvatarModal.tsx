@@ -162,8 +162,8 @@ export default function AvatarModal(props: AvatarModalProps) {
                 <div className="sm:w-[348px] w-full flex items-end pb-[50px] justify-end pointer-events-auto">
                   <div
                     className={`relative ${
-                      rightTabActive ? "flex" : "sm:hidden flex"
-                    } flex-col w-full h-[488px] p-[24px]  md:rounded-[10px] rounded-none bg-[#FFFFFF80] overflow-hidden sm:shadow-[0px_3px_10px_rgba(0,0,0,0.16)] shadow-none`}
+                      rightTabActive ? "sm:flex hideen" : "hidden"
+                    } flex-col w-full h-[488px] p-[24px]  md:rounded-[10px] rounded-none bg-[#FFFFFF80] overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]`}
                   >
                     <div
                       className="relative flex flex-row h-[25px] space-x-[5px] mb-[30px] text-[18px]"
@@ -174,7 +174,7 @@ export default function AvatarModal(props: AvatarModalProps) {
                       <p className="font-semibold">{nickname ?? ""}</p>
                       <p>님의 다른 작품</p>
                       <Image
-                        className="absolute sm:block hidden top-0 right-0 h-[18px] w-[18px] !m-0 cursor-pointer"
+                        className="absolute top-0 right-0 h-[18px] w-[18px] !m-0 cursor-pointer"
                         width={18}
                         src={cancelGrayImg}
                         alt=""
