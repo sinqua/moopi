@@ -27,7 +27,7 @@ export default function RootLayout({
 
 export const metadata: Metadata = {
   title: {
-    default: "무피 -  ",
+    default: "무피 - 3D 크리에이터를 위한 포트폴리오",
     template: "%s | 무피",
   },
   description: "무피는 3D 뷰어 기반의 크리에이터 포트폴리오 서비스입니다.",
@@ -47,11 +47,10 @@ export const metadata: Metadata = {
   ],
   metadataBase: new URL("https://moopi.offing.me/"),
   openGraph: {
-    type: "website",
-    locale: "ko_KR",
+    title: "무피",
+    description: "3D 크리에이터를 위한 포트폴리오",
     url: "https://moopi.offing.me/",
     siteName: "무피",
-    description: "무피는 3D 뷰어 기반의 크리에이터 포트폴리오 서비스입니다.",
     images: [
       {
         url: "https://moopi.offing.me/og-image.png",
@@ -60,9 +59,11 @@ export const metadata: Metadata = {
         alt: "무피",
       },
     ],
+    type: "website",
+    locale: "ko_KR",
   },
   robots: {
-    index: false,
+    index: true,
     follow: true,
     nocache: true,
     googleBot: {
