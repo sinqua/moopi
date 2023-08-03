@@ -12,9 +12,12 @@ import { UploadProfileImage } from "@/lib/storage";
 import { v4 as uuidv4 } from "uuid";
 import { supabase, supabaseAuth } from "@/lib/database";
 import Waiting from "../Waiting";
+import { KakaoLink } from "./kakaoLink";
+import { TossLink } from "./tossLink";
 
 export interface ProfileCardProps {
   profileImage: string;
+  links: any;
   profile: any;
   tags: any;
   mostUsedTags: any;
@@ -22,7 +25,7 @@ export interface ProfileCardProps {
 }
 
 export default function ProfileCard(props: ProfileCardProps) {
-  const { profileImage, profile, tags, mostUsedTags, avatar } = props;
+  const { profileImage, links, profile, tags, mostUsedTags, avatar } = props;
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -35,13 +38,15 @@ export default function ProfileCard(props: ProfileCardProps) {
 
   const [duplication, setDuplication] = useState(false);
   const inputNicknameRef = useRef<any>(null);
+  const inputKakaoLinkRef = useRef<any>(null);
+  const inputTossLinkRef = useRef<any>(null);
   const inputDescriptionRef = useRef<any>(null);
 
   const [currentTags, setCurrentTags] = useState(tags);
 
   const onSaveProfileCard = async () => {
-    setModal(false)
-    setWaitModal(true)
+    setModal(false);
+    setWaitModal(true);
 
     if (duplication) {
       alert("이미 사용중인 닉네임입니다.");
@@ -66,6 +71,11 @@ export default function ProfileCard(props: ProfileCardProps) {
       .update({ nickname: inputNicknameRef.current.value })
       .eq("id", session?.user.id);
 
+    const { data: linkData, error: linkError } = await supabase
+      .from("links")
+      .update({ kakao: inputKakaoLinkRef.current.value ? inputKakaoLinkRef.current.value : null, toss: inputTossLinkRef.current.value ? inputTossLinkRef.current.value : null})
+      .eq("user_id", session?.user.id);
+
     const { data: descriptionData, error: descriptionError } = await supabase
       .from("profiles")
       .update({ description: inputDescriptionRef.current.value })
@@ -89,8 +99,8 @@ export default function ProfileCard(props: ProfileCardProps) {
           })
       );
 
-    setDone(true)
-    setWaitModal(false)
+    setDone(true);
+    setWaitModal(false);
     router.push(`/${session?.user.id}`);
   };
 
@@ -108,6 +118,16 @@ export default function ProfileCard(props: ProfileCardProps) {
           duplication={duplication}
           setDuplication={setDuplication}
           inputNicknameRef={inputNicknameRef}
+        />
+        <KakaoLink
+          session={session}
+          links={links}
+          inputKakaoLinkRef={inputKakaoLinkRef}
+        />
+        <TossLink
+          session={session}
+          links={links}
+          inputTossLinkRef={inputTossLinkRef}
         />
         <Description
           session={session}

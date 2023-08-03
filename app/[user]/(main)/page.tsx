@@ -6,13 +6,15 @@ import { authOptions } from "@/lib/auth";
 export default async function Page({ params }: { params: { user: string } }) {
   const slotData = getSlot(params.user);
   const avatarData = getAvatar(params.user);
+  const linksData = getLinks(params.user);
   const profileData = getProfile(params.user);
   const authData = getAuth(params.user);
   const sessionData = getServerSession(authOptions);
 
-  const [slot, avatar, profile, auth, session] = await Promise.all([
+  const [slot, avatar, links, profile, auth, session] = await Promise.all([
     slotData,
     avatarData,
+    linksData,
     profileData,
     authData,
     sessionData,
@@ -30,6 +32,7 @@ export default async function Page({ params }: { params: { user: string } }) {
       tags={tags}
       profileImage={auth.image}
       nickname={auth.nickname}
+      links={links}
       profileDescription={profile.description}
       profile={profile}
       id={params.user}
@@ -64,6 +67,22 @@ const getAuth = async (id: string) => {
   if (data) return data;
   else {
     throw new Error("User not found");
+  }
+};
+
+const getLinks = async (id: string) => {
+  const { data, error } = await supabase
+    .from("links")
+    .select(`*`)
+    .eq("user_id", id)
+    .limit(1)
+    .single();
+
+  console.log("links zzz", data);
+
+  if (data) return data;
+  else {
+    throw new Error("Links not found");
   }
 };
 
