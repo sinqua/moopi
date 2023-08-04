@@ -4,6 +4,9 @@ import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/etc/GoogleAnalytics";
 import Provider from "@/components/etc/Provider";
+import Header from "@/components/basic-layout/HeaderNew";
+import Footer from "@/components/basic-layout/Footer";
+import Navbar from "@/components/basic-layout/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,12 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} />
+    <html lang="en" className="font-sans">
+      {/* <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} /> */}
       <Provider>
         <body className={inter.className}>
           {children}
-          <Analytics />
         </body>
       </Provider>
     </html>

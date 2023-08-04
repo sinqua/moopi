@@ -13,7 +13,7 @@ module.exports = {
       // 'md': '768px',
       // // => @media (min-width: 768px) { ... }
 
-      'md': '1372px',
+      'md': '1352px',
       // => @media (min-width: 768px) { ... }
 
       // 'lg': '1024px',
