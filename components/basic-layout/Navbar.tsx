@@ -35,9 +35,9 @@ export default function Navbar(props: NavBarProps) {
           </Link>
         </div>
         <div className="grow flex flex-col">
-          <Link href={"/6064c1dd-071b-42e4-92e4-d0989aed4ebc"} className="flex items-center w-full h-[48px] px-[32px] space-x-[16px] bg-white hover:bg-[#F6F6F6] cursor-pointer">
+          <Link href={"/"} className="flex items-center w-full h-[48px] px-[32px] space-x-[16px] bg-white hover:bg-[#F6F6F6] cursor-pointer">
             <Image src={homeImg} className="w-[24px] h-[24px]" alt="" priority />
-            <p className="text-[16px]">예시페이지</p>
+            <p className="text-[16px]">홈</p>
           </Link>
           <div className="flex items-center w-full h-[48px] px-[32px] space-x-[16px] bg-white hover:bg-[#F6F6F6] cursor-pointer">
             <Image
