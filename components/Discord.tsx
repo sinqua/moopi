@@ -1,3 +1,4 @@
+'use client'
 import WidgetBot from "@widgetbot/react-embed";
 
 export default function Discord() {
