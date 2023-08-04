@@ -9,6 +9,7 @@ import WidgetBot from "@widgetbot/react-embed";
 import Navbar from "@/components/basic-layout/Navbar";
 import Header from "@/components/basic-layout/HeaderNew";
 import Footer from "@/components/basic-layout/Footer";
+import Discord from "@/components/Discord";
 
 
 
@@ -20,10 +21,12 @@ export default function Home() {
       <Navbar isActiveNavbar={isActiveNavbar} setIsActiveNavbar={setIsActiveNavbar} />
       <div className="relative flex flex-col grow h-auto min-h-full">
         <Header isActiveNavbar={isActiveNavbar} setIsActiveNavbar={setIsActiveNavbar} />
-          <div className="grow flex justify-center items-center md:px-0 px-[16px] py-[200px]">
+          {/* <div className="grow flex justify-center items-center md:px-0 px-[16px] py-[200px]">
+
             <WidgetBot server="1125351036740194336" channel="1125351038170443838" className="md:w-[1008px] w-full h-full"/>
 
-          </div>
+          </div> */}
+          <Discord />
         {/* <Footer /> */}
       </div>
     </div>
