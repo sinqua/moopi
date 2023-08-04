@@ -9,9 +9,9 @@ import WidgetBot from "@widgetbot/react-embed";
 import Navbar from "@/components/basic-layout/Navbar";
 import Header from "@/components/basic-layout/HeaderNew";
 import Footer from "@/components/basic-layout/Footer";
-import Discord from "@/components/Discord";
+import dynamic from "next/dynamic";
 
-
+const Discord = dynamic(() => import("@/components/Discord"), { ssr: false });
 
 export default function Home() {
   const [isActiveNavbar, setIsActiveNavbar] = useState(false);
