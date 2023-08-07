@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
@@ -90,7 +91,7 @@ export default function Input(props: InputProps) {
     { value: 2, label: "PutYourHandsUp" },
     { value: 3, label: "Thankful" },
   ]);
-  const [selectedAnime, setSelectedAnime] = useState<any>();
+  const [selectedAnime, setSelectedAnime] = useState<any>(4);
 
   const avatarFileRef = useRef<any>(null);
   const avatarFileNameRef = useRef<any>(null);
@@ -138,12 +139,16 @@ export default function Input(props: InputProps) {
     input.click();
   };
 
+  const params = useSearchParams();
+
   const onSavePortfolio = async () => {
     if (!avatarNameRef.current.value || !avatarFile) {
       setBorderColor("border-red-500 shadow-[inset_0_0_0_1px_rgb(239,68,68)]");
       setIsEmpty(true);
       return;
     }
+
+    setModal(true);
 
     /* Python 서버 파일 업로드 */
     const formData = new FormData();
@@ -169,7 +174,6 @@ export default function Input(props: InputProps) {
     }
     /* Python 서버 파일 업로드 끝 */
 
-    setModal(true);
     UploadAvatar(session?.user.id, avatarFile.name, avatarFile).then(
       async (data) => {
         const { data: avatarData, error: avatarError } = await supabase
@@ -178,7 +182,7 @@ export default function Input(props: InputProps) {
             {
               vrm: avatarFile.name,
               user_id: session?.user.id,
-              is_profile: false,
+              is_profile: params.get("is_profile") === "true" ? true : false,
               name: avatarNameRef.current.value,
               description: avatarDescriptionRef.current.value,
               visible: true,

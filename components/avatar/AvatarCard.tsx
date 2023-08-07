@@ -90,7 +90,7 @@ export default function AvatarCard(props: AvatarCardProps) {
               슬롯 설정
             </div>
             <Link
-              href={`/${session?.user.id}/upload}`}
+              href={`/${session?.user.id}/upload?is_profile=false`}
               className="inline-flex w-full justify-center items-center rounded-[10px] border-solid border-[1px] border-[#333333] bg-[#333333] text-white cursor-pointer"
             >
               게시하기
