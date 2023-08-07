@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import emptyImg from "@/app/assets/images/empty.png";
 import TagDrag from "@/components/TagDrag";
@@ -62,7 +63,7 @@ const Avatar = (props: AvatarProps) => {
                     </div>
                     <div className="flex space-x-[8px] md:mr-[150px] mr-[30px]">
                       <p className="text-[#7B7B7B]">애니메이션</p>
-                      <p className="font-semibold ">{avatar.animations.name}</p>
+                      <p className="font-semibold ">{avatar.animation}</p>
                     </div>
                   </div>
                 </div>
@@ -101,12 +102,12 @@ const Avatar = (props: AvatarProps) => {
           </div>
         </div>
       ) : (
-        <div
+        <Link
+          href={`/${session?.user.id}/upload?is_profile=true`}
           className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-          onClick={() => console.log("upload avatar")}
         >
           아바타 업로드
-        </div>
+        </Link>
       )}
     </div>
   );

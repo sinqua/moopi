@@ -149,6 +149,8 @@ export default function Input(props: InputProps) {
     }
     setModal(true);
 
+    setModal(true);
+
     /* Python 서버 파일 업로드 */
     const formData = new FormData();
     formData.append("file", avatarFile);
