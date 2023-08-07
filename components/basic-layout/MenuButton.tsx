@@ -14,7 +14,7 @@ export default function MenuButton(props: any) {
   return (
     <>
       {status === "authenticated" ? (
-        <div className="sm:space-x-[30px] space-x-[20px] ml-[30px]">
+        <div className="sm:space-x-[30px] space-x-[20px] ml-[30px] z-50">
           <Image
             src={messageImg}
             className="inline-flex sm:w-[30px] sm:h-[30px] w-[20px] h-[20px] cursor-pointer"
