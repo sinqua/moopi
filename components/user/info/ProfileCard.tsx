@@ -6,17 +6,20 @@ import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
 import activeHeartImg from "@/app/assets/images/activeheart.svg";
 import useDrag from "@/hooks/useDrag";
+import tossLogo from "@/app/assets/logos/toss.svg";
 import kakaoLogo from "@/app/assets/logos/kakao.svg";
 import discordLogo from "@/app/assets/logos/discord.svg";
 import Link from "next/link";
 
 const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`;
 const discordUrl = `https://discord.gg/TqQK4UNNW`;
-const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
+const SupabasePublicURL =
+  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 
 export interface ProfileCardProps {
   profileImage: string;
   nickname: string;
+  links: any;
   description: string;
   tags: string[];
   profile: any;
@@ -26,19 +29,18 @@ export interface ProfileCardProps {
   session: any;
 }
 
-
-
 export default function ProfileCard(props: ProfileCardProps) {
   const {
     profileImage,
     nickname,
+    links,
     description,
     tags,
     profile,
     id,
     modal,
     setModal,
-    session
+    session,
   } = props;
 
   const [hover, setHover] = useState(false);
@@ -52,18 +54,17 @@ export default function ProfileCard(props: ProfileCardProps) {
     setMountedStatus(true);
   }, []);
 
-
   return (
     <div className="relative md:w-[482px] md:h-[526px] h-auto sm:p-[30px] sm:pb-[20px] p-[20px] pb-[20px] flex flex-col md:rounded-[10px] rounded-none overflow-hidden shadow-[0px_3px_10px_rgba(0,0,0,0.16)]">
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         {profile.image ? (
           <Image
-          src={`${SupabasePublicURL}/profile-image/${profile.image}`}
-          width={100}
-          height={100}
-          className="h-[100px] w-[100px] rounded-full border-none"
-          alt=""
-        />
+            src={`${SupabasePublicURL}/profile-image/${profile.image}`}
+            width={100}
+            height={100}
+            className="h-[100px] w-[100px] rounded-full border-none"
+            alt=""
+          />
         ) : (
           <Image
             src={profileImage}
@@ -136,32 +137,36 @@ export default function ProfileCard(props: ProfileCardProps) {
             </Link>
           </div>
         ) : (
-          <div className="flex relative h-[50px]">
+          <div className="flex relative h-[50px] space-x-[16px]">
             <Link
-              href={discordUrl}
+              href={links.toss ? links.toss : ""}
               rel="noopener noreferrer"
               target="_blank"
-              className="flex justify-center items-center w-[50%] h-[47px] bg-[#5865F2] rounded-[10px] text-[14px] ml-1 mr-1 text-white cursor-pointer"
+              className={`${
+                links.toss ? "pointer-events-auto" : "pointer-events-none"
+              } flex justify-center items-center w-[50%] h-[47px] pl-[6px] bg-[#DBEAFF] rounded-[10px] text-[14px] text-[#0064FF] cursor-pointer`}
             >
               <Image
-                className="w-[22px] h-[22px] ml-[21px] absolute left-0"
-                src={discordLogo}
+                className="w-[20px] h-[20px] ml-[15px] absolute left-0"
+                src={tossLogo}
                 alt=""
               />
-              서비스 문의
+              송금하기
             </Link>
             <Link
-              href={kakaoUrl}
+              href={links.kakao ? links.kakao : ""}
               rel="noopener noreferrer"
               target="_blank"
-              className="flex relative justify-center items-center w-[50%] h-[47px] bg-[#FEE500] rounded-[10px] text-[14px] ml-1 mr-1 text-[#3C1E1E] cursor-pointer"
+              className={`${
+                links.kakao ? "pointer-events-auto" : "pointer-events-none"
+              } flex relative justify-center items-center w-[50%] h-[47px] pl-[6px] bg-[#FEE500] rounded-[10px] text-[14px] text-[#3C1E1E] cursor-pointer`}
             >
               <Image
-                className="w-[22px] h-[22px] ml-[21px] absolute left-0"
+                className="w-[20px] h-[20px] ml-[15px] absolute left-0"
                 src={kakaoLogo}
                 alt=""
               />
-              커미션 문의
+              오픈채팅
             </Link>
             {/* <div className="absolute flex justify-center w-full bottom-[-10px]">
               <div className="inline-flex justify-center items-end w-[330px] h-[71px] pb-[20px] bg-slot bg-no-repeat bg-cover text-[14px] text-center align-text-bottom">

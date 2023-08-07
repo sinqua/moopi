@@ -62,6 +62,11 @@ export default function Page() {
       .insert([{ user_id: session?.user.id }])
       .select();
 
+    await supabase
+      .from("links")
+      .insert([{ user_id: session?.user.id }])
+      .select();
+
     update();
     router.push(`/${session?.user.id}`);
   };

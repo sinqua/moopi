@@ -8,6 +8,7 @@ import EmptyCanvas from "./profile/EmptyCanvas";
 interface UserProps {
   profileImage: any;
   nickname: any;
+  links: any;
   profileDescription: any;
   tags: any;
   profile: any;
@@ -23,6 +24,7 @@ export default function User(props: UserProps) {
   const {
     profileImage,
     nickname,
+    links,
     profileDescription,
     tags,
     profile,
@@ -55,6 +57,7 @@ export default function User(props: UserProps) {
             session={session}
             profileImage={profileImage}
             nickname={nickname}
+            links={links}
             description={profileDescription}
             tags={tags}
             profile={profile}

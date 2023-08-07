@@ -5,6 +5,7 @@ export const revalidate = 0;
 
 export default async function Page({ params }: { params: { user: string } }) {
   const profileImage = await getUserProfileImage(params.user);
+  const links = await getLinks(params.user);
   const profile = await getProfile(params.user);
   const avatar = await getMainAvatar(params.user);
   const tags = profile.tags.map((tag: any) => {
@@ -18,6 +19,7 @@ export default async function Page({ params }: { params: { user: string } }) {
       <ProfileCard
         avatar={avatar}
         profileImage={profileImage.image}
+        links={links}
         profile={profile}
         tags={tags}
         mostUsedTags={mostUsedTags}
@@ -36,6 +38,20 @@ const getMainAvatar = async (id: string) => {
     .single();
 
   return data;
+};
+
+const getLinks = async (id: string) => {
+  const { data, error } = await supabase
+    .from("links")
+    .select(`*`)
+    .eq("user_id", id)
+    .limit(1)
+    .single();
+
+  if (data) return data;
+  else {
+    throw new Error("Links not found");
+  }
 };
 
 const getProfile = async (id: string) => {
