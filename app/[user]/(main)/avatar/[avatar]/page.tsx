@@ -7,6 +7,7 @@ export const revalidate = 0;
 export default async function Avatar(props: any) {
   const { params } = props;
 
+  console.log("params", params)
   const profileData = getProfile(params.user);
   const authData = getAuth(params.user);
   const avatarData = getAvatar(params.avatar);
@@ -50,6 +51,8 @@ const getAvatar = async (id: string) => {
     .eq("id", id)
     .limit(1)
     .single();
+    console.log("id", id)
+    console.log("data", data)
 
   if (data) return data;
   else {
