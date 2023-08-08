@@ -17,7 +17,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="font-sans">
-      {/* <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID!} /> */}
       <Provider>
         <body className={inter.className}>
           {children}
