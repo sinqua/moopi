@@ -8,6 +8,9 @@ interface PortfolioProps {
   portfolio: { [x: string]: any }[] | null;
 }
 
+const SupabasePublicURL =
+  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
+
 export default function Portfolio(props: PortfolioProps) {
   const { user, portfolio } = props;
 
@@ -16,10 +19,6 @@ export default function Portfolio(props: PortfolioProps) {
       <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-[16px]">
         {portfolio!.map(async (work: any, index: any) => {
           const modelUrl = await CreateModelUrl(work.user_id, work.vrm);
-          const thumbnailUrl = await CreateImageUrl(
-            work.user_id,
-            work.thumbnail
-          );
           const avatar = await getAvatarInfo(work.id);
 
           return (
@@ -29,7 +28,7 @@ export default function Portfolio(props: PortfolioProps) {
                 avatarId={work.id}
                 modelUrl={modelUrl?.signedUrl}
                 animation={avatar?.animation}
-                thumbnailUrl={thumbnailUrl?.signedUrl}
+                thumbnailUrl={`${SupabasePublicURL}/thumbnail/${work.user_id}/${work.thumbnail}`}
               />
             </Suspense>
           );
@@ -51,20 +50,6 @@ async function getAvatarInfo(id: string) {
   else {
     throw new Error("Avatar not found");
   }
-}
-
-async function CreateImageUrl(userId: string, filename: any) {
-  if (process.env.NEXT_PUBLIC_ENV === "Development") {
-    return { signedUrl: undefined };
-  }
-
-  const filepath = `${userId}/${filename}`;
-
-  const { data, error } = await supabase.storage
-    .from("image")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
 }
 
 async function CreateModelUrl(userId: string, filename: any) {

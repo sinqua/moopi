@@ -78,8 +78,6 @@ const getLinks = async (id: string) => {
     .limit(1)
     .single();
 
-  console.log("links zzz", data);
-
   if (data) return data;
   else {
     throw new Error("Links not found");

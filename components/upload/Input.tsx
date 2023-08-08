@@ -211,7 +211,7 @@ export default function Input(props: InputProps) {
             const { data, error } = await supabase
               .from("avatars")
               .update({
-                thumbnail: uuid,
+                thumbnail: `${uuid}.png`,
               })
               .eq("user_id", session?.user.id);
           });
@@ -505,7 +505,7 @@ const UploadBase64Image = async (session: any, url: string) => {
   const uuid = uuidv4();
 
   const { data, error } = await supabase.storage
-    .from("image")
+    .from("thumbnail")
     .upload(`${session?.user.id}/${uuid}.png`, decode(base64Data), {
       contentType: "image/png",
     });

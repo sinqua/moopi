@@ -14,6 +14,7 @@ const getPortfoilo = async (id: string) => {
   const { data, error } = await supabase
     .from("avatars")
     .select(`*, animations(*)`)
-    .eq("user_id", id);
+    .eq("user_id", id)
+    .eq("is_profile", false);
   return data;
 };

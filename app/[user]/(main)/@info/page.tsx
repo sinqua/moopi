@@ -1,6 +1,6 @@
 import Description from "@/components/user/info/Description";
 import { supabase } from "@/lib/database";
-import { CreateImageUrl, CreateQuillUrl } from "@/lib/storage";
+import { CreateQuillUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 export default async function Page({ params }: { params: { user: string } }) {

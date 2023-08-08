@@ -13,7 +13,6 @@ export const Description = (props: DescriptionProps) => {
   const [textareaCount, setTextareaCount] = useState(0);
 
   useEffect(() => {
-    console.log(profile)
     inputDescriptionRef.current.value = profile.description;
     setTextareaCount(inputDescriptionRef.current.value.length);
   }, [profile, inputDescriptionRef]);
