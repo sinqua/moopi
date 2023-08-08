@@ -5,7 +5,6 @@ import Image from "next/image";
 import emptyImg from "@/app/assets/images/empty.png";
 import TagDrag from "@/components/TagDrag";
 import { formatDate } from "@/lib/string";
-import { CreateImageUrl } from "@/lib/storage";
 
 interface AvatarProps {
   session: any;

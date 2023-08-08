@@ -26,15 +26,6 @@ export async function CreateModelUrl(userId: string, filename: any) {
   return data;
 }
 
-// Create file url
-export async function CreateImageUrl(filepath: any) {
-  const { data, error } = await supabase.storage
-    .from("image")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
-}
-
 // Upload file using standard upload
 export async function UploadAvatar(
   userId: any,
@@ -62,7 +53,7 @@ export async function UploadProfileImage(
   const filepath = `${userId}/${filename}`;
 
   const { data, error } = await supabase.storage
-    .from("image")
+    .from("profile-image")
     .upload(filepath, file, {
       cacheControl: "3600",
       upsert: true,
