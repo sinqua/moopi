@@ -58,13 +58,6 @@ const PortfolioCanvas = ({
     cameraControlsRef.current!.polarAngle = 1.35;
   };
 
-  const handleTemp = () => {
-    window.parent.postMessage(
-      { type: "MODAL", message: { userId: userId, avatarId: avatarId } },
-      "*"
-    );
-  };
-
   const postMessage = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();

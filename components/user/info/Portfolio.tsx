@@ -20,6 +20,7 @@ export default function Portfolio(props: PortfolioProps) {
         {portfolio!.map(async (work: any, index: any) => {
           const modelUrl = await CreateModelUrl(work.user_id, work.vrm);
           const avatar = await getAvatarInfo(work.id);
+          const thumbnailUrl = `${SupabasePublicURL}/thumbnail/${work.user_id}/${work.thumbnail}`
 
           return (
             <Suspense fallback={''} key={index}>
@@ -28,7 +29,7 @@ export default function Portfolio(props: PortfolioProps) {
                 avatarId={work.id}
                 modelUrl={modelUrl?.signedUrl}
                 animation={avatar?.animation}
-                thumbnailUrl={`${SupabasePublicURL}/thumbnail/${work.user_id}/${work.thumbnail}`}
+                thumbnailUrl={work.thumbnail ? thumbnailUrl : undefined}
               />
             </Suspense>
           );
