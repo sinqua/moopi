@@ -213,7 +213,7 @@ export default function Input(props: InputProps) {
               .update({
                 thumbnail: `${uuid}.png`,
               })
-              .eq("user_id", session?.user.id);
+              .eq("id", avatarData![0].id);
           });
         }
 
