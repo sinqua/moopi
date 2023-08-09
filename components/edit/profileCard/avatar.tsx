@@ -90,12 +90,12 @@ const Avatar = (props: AvatarProps) => {
                 </div>
               </div>
               <div className="md:flex justify-end mt-6">
-                <div
+                <Link
+                  href={`/change/${avatar.id}`}
                   className="flex justify-center items-center w-[203px] h-[47px] rounded-[10px] bg-[#333333] text-white cursor-pointer"
-                  onClick={() => console.log("edit main avatar")}
                 >
                   편집하기
-                </div>
+                </Link>
               </div>
             </div>
           </div>
