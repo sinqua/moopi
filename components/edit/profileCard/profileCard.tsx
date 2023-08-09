@@ -8,7 +8,6 @@ import { Description } from "./description";
 import { Tag } from "./tag";
 import Avatar from "./avatar";
 import { Modal } from "../modal";
-import { UploadProfileImage } from "@/lib/storage";
 import { v4 as uuidv4 } from "uuid";
 import { supabase, supabaseAuth } from "@/lib/database";
 import Waiting from "../Waiting";
@@ -159,4 +158,23 @@ export default function ProfileCard(props: ProfileCardProps) {
       <Waiting show={waitModal} done={done} />
     </>
   );
+}
+
+
+// Upload file using standard upload
+export async function UploadProfileImage(
+  userId: any,
+  filename: any,
+  file: any
+) {
+  const filepath = `${userId}/${filename}`;
+
+  const { data, error } = await supabase.storage
+    .from("profile-image")
+    .upload(filepath, file, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+
+  return data;
 }

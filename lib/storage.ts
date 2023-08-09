@@ -8,24 +8,6 @@ export const CreateQuillUrl = async (filename: any) => {
   return data;
 };
 
-export const supabasePublicImageLoader = ({ src, width, quality }: any) => {
-  const projectId = "tpwylybqvkzcsrmbctnj";
-
-  return `https://${projectId}.supabase.co/storage/v1/object/public/${src}?width=${width}&quality=${quality || 75
-    }`;
-};
-
-// Create file url
-export async function CreateModelUrl(userId: string, filename: any) {
-  const filepath = `${userId}/${filename}`;
-
-  const { data, error } = await supabase.storage
-    .from("model")
-    .createSignedUrl(filepath, 3600);
-
-  return data;
-}
-
 // Upload file using standard upload
 export async function UploadAvatar(
   userId: any,
@@ -36,24 +18,6 @@ export async function UploadAvatar(
 
   const { data, error } = await supabase.storage
     .from("model")
-    .upload(filepath, file, {
-      cacheControl: "3600",
-      upsert: true,
-    });
-
-  return data;
-}
-
-// Upload file using standard upload
-export async function UploadProfileImage(
-  userId: any,
-  filename: any,
-  file: any
-) {
-  const filepath = `${userId}/${filename}`;
-
-  const { data, error } = await supabase.storage
-    .from("profile-image")
     .upload(filepath, file, {
       cacheControl: "3600",
       upsert: true,

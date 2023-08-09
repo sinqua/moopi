@@ -1,13 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { CameraControls } from "@react-three/drei";
+import { supabase } from "@/lib/database";
 
 import Input from "@/components/change/Input";
 import Camera from "@/components/change/Camera";
 import FullCanvas from "@/components/change/FullCanvas";
-
-import { CreateModelUrl } from "@/lib/storage";
-
 export interface avatarTable {
   animation: number | null;
   created_at: string | null;
@@ -103,4 +101,15 @@ export default function Upload(props: UploadProps) {
       />
     </>
   );
+}
+
+// Create file url
+export async function CreateModelUrl(userId: string, filename: any) {
+  const filepath = `${userId}/${filename}`;
+
+  const { data, error } = await supabase.storage
+    .from("optimize")
+    .createSignedUrl(filepath, 3600);
+
+  return data;
 }
