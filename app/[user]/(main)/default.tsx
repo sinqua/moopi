@@ -118,7 +118,7 @@ async function createModelUrl(userId: string, filename: any) {
   const filepath = `${userId}/${filename}`;
 
   const { data, error } = await supabase.storage
-    .from("model")
+    .from("optimize")
     .createSignedUrl(filepath, 3600);
 
   if (data) return data;
