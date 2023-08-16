@@ -2,6 +2,8 @@ import { supabase } from "@/lib/database";
 import { getMostUsedTags } from "@/utils/Tags";
 import Upload from "@/components/change/Upload";
 
+export const revalidate = 0;
+
 export default async function Page({ params }: { params: { avatar: number }}) {
   const popularTagsData = getMostUsedTags();
   const tagsData = getTags(params.avatar);
