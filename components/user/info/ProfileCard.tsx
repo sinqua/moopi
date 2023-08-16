@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import heartImg from "@/app/assets/images/heart.svg";
 import hoverHeartImg from "@/app/assets/images/hoverheart.svg";
@@ -8,13 +7,7 @@ import activeHeartImg from "@/app/assets/images/activeheart.svg";
 import useDrag from "@/hooks/useDrag";
 import tossLogo from "@/app/assets/logos/toss.svg";
 import kakaoLogo from "@/app/assets/logos/kakao.svg";
-import discordLogo from "@/app/assets/logos/discord.svg";
 import Link from "next/link";
-
-const kakaoUrl = `https://open.kakao.com/o/s7l8njtf`;
-const discordUrl = `https://discord.gg/TqQK4UNNW`;
-const SupabasePublicURL =
-  "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public";
 
 export interface ProfileCardProps {
   profileImage: string;
@@ -46,8 +39,6 @@ export default function ProfileCard(props: ProfileCardProps) {
   const [hover, setHover] = useState(false);
   const [like, setLike] = useState(false);
 
-  const router = useRouter();
-
   const { dragRef, dragEvents, mountedStatus, setMountedStatus } = useDrag();
 
   useEffect(() => {
@@ -59,7 +50,7 @@ export default function ProfileCard(props: ProfileCardProps) {
       <div className="flex flex-row md:space-x-[20px] sm:space-x-[30px] space-x-[20px] mb-[30px] relative">
         {profile.image ? (
           <Image
-            src={`${SupabasePublicURL}/profile-image/${profile.image}`}
+            src={profile.image}
             width={100}
             height={100}
             className="h-[100px] w-[100px] rounded-full border-none"
