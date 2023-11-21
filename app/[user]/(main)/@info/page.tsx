@@ -4,12 +4,12 @@ import { CreateQuillUrl } from "@/lib/storage";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 export default async function Page({ params }: { params: { user: string } }) {
-  const detail = await getUserDetail(params.user);
-  const descriptionObject =
-    detail.description && JSON.parse(detail.description);
-  const description = await CreateHtml(descriptionObject);
+  // const detail = await getUserDetail(params.user);
+  // const descriptionObject =
+  //   detail.description && JSON.parse(detail.description);
+  // const description = await CreateHtml(descriptionObject);
 
-  return <Description description={description} />;
+  // return <Description description={description} />;
 }
 
 const getUserDetail = async (id: string) => {

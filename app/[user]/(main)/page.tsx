@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { user: string } }) {
     sessionData,
   ]);
 
-  const tags = profile.tags.map((tag: any) => {
+  const tags = profile.older_tags.map((tag: any) => {
     return tag.tag;
   });
 
@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { user: string } }) {
       session={session}
       tags={tags}
       profileImage={auth.image}
-      nickname={auth.nickname}
+      nickname={profile.nickname}
       links={links}
       profileDescription={profile.description}
       profile={profile}
@@ -72,7 +72,7 @@ const getAuth = async (id: string) => {
 
 const getLinks = async (id: string) => {
   const { data, error } = await supabase
-    .from("links")
+    .from("older_links")
     .select(`*`)
     .eq("user_id", id)
     .limit(1)
@@ -86,8 +86,8 @@ const getLinks = async (id: string) => {
 
 const getProfile = async (id: string) => {
   const { data, error } = await supabase
-    .from("profiles")
-    .select(`*,  tags (tag)`)
+    .from("older_profiles")
+    .select(`*,  older_tags (tag)`)
     .eq("user_id", id)
     .limit(1)
     .single();
@@ -100,7 +100,7 @@ const getProfile = async (id: string) => {
 
 const getSlot = async (id: string) => {
   const { data, error } = await supabase
-    .from("slots")
+    .from("older_slots")
     .select()
     .eq("user_id", id)
     .limit(1)

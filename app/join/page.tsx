@@ -23,51 +23,51 @@ export default function Page() {
   const [duplication, setDuplication] = useState(false);
 
   const onChangeNickname = async (nickname: string) => {
-    setEmpty(nickname.length === 0 ? true : false);
+    // setEmpty(nickname.length === 0 ? true : false);
 
-    const { data, error } = await supabaseAuth
-      .from("users")
-      .select()
-      .eq("nickname", nickname);
+    // const { data, error } = await supabaseAuth
+    //   .from("users")
+    //   .select()
+    //   .eq("nickname", nickname);
 
-    const result = data?.length === 0 ? false : true;
-    setDuplication(result);
+    // const result = data?.length === 0 ? false : true;
+    // setDuplication(result);
   };
 
   const onSubmit = async () => {
     if (status === "loading") return;
-    if (duplication) {
-      alert("이미 사용중인 닉네임입니다.");
-      return;
-    }
+    // if (duplication) {
+    //   alert("이미 사용중인 닉네임입니다.");
+    //   return;
+    // }
 
-    await supabaseAuth
-      .from("users")
-      .update({ nickname: inputRef.current.value })
-      .eq("id", session?.user.id)
-      .select();
+    // await supabaseAuth
+    //   .from("users")
+    //   .update({ nickname: inputRef.current.value })
+    //   .eq("id", session?.user.id)
+    //   .select();
 
-    await supabase
-      .from("profiles")
-      .insert([{ user_id: session?.user.id }])
-      .select();
+    // await supabase
+    //   .from("profiles")
+    //   .insert([{ user_id: session?.user.id }])
+    //   .select();
 
-    await supabase
-      .from("user_details")
-      .insert([{ user_id: session?.user.id }])
-      .select();
+    // await supabase
+    //   .from("user_details")
+    //   .insert([{ user_id: session?.user.id }])
+    //   .select();
 
-    await supabase
-      .from("slots")
-      .insert([{ user_id: session?.user.id }])
-      .select();
+    // await supabase
+    //   .from("slots")
+    //   .insert([{ user_id: session?.user.id }])
+    //   .select();
 
-    await supabase
-      .from("links")
-      .insert([{ user_id: session?.user.id }])
-      .select();
+    // await supabase
+    //   .from("links")
+    //   .insert([{ user_id: session?.user.id }])
+    //   .select();
 
-    update();
+    // update();
     router.push(`/${session?.user.id}`);
   };
 

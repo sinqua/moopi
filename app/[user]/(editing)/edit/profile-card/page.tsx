@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: { user: string } }) {
   const links = await getLinks(params.user);
   const profile = await getProfile(params.user);
   const avatar = await getMainAvatar(params.user);
-  const tags = profile.tags.map((tag: any) => {
+  const tags = profile.older_tags.map((tag: any) => {
     return { value: tag.tag, label: tag.tag };
   });
 
@@ -42,7 +42,7 @@ const getMainAvatar = async (id: string) => {
 
 const getLinks = async (id: string) => {
   const { data, error } = await supabase
-    .from("links")
+    .from("older_links")
     .select(`*`)
     .eq("user_id", id)
     .limit(1)
@@ -56,8 +56,8 @@ const getLinks = async (id: string) => {
 
 const getProfile = async (id: string) => {
   const { data, error } = await supabase
-    .from("profiles")
-    .select(`*,  tags (tag)`)
+    .from("older_profiles")
+    .select(`*,  older_tags (tag)`)
     .eq("user_id", id)
     .limit(1)
     .single();
@@ -72,7 +72,7 @@ const getUserProfileImage = async (id: string) => {
   const SupabasePublicURL = "https://tpwylybqvkzcsrmbctnj.supabase.co/storage/v1/object/public"
 
   const { data: profileData, error: error1 } = await supabase
-    .from("profiles")
+    .from("older_profiles")
     .select(`image`)
     .eq("user_id", id);
 

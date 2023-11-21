@@ -67,7 +67,7 @@ export default function User(props: UserProps) {
           />
         </div>
       </div>
-      <Modal modal={modal} setModal={setModal} slot={slot} />
+      {/* <Modal modal={modal} setModal={setModal} slot={slot} /> */}
     </>
   );
 }
